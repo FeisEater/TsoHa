@@ -1,1 +1,2 @@
-\contentsline {section}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {section}{\numberline {2}General view of the application}{3}
