@@ -17,7 +17,7 @@
     <body>
       <div class="container">
         <h1>Register to the QuesAns</h1>
-        <form class="form-horizontal" role="form" action="muutettunimi.html" method="POST">
+        <form class="form-horizontal" role="form" action="account.jsp" method="POST">
           <div class="form-group">
             <label for="inputNick" class="col-md-2 control-label">User Name</label>
             <div class="col-md-10">
