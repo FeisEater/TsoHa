@@ -20,25 +20,25 @@
         <form class="form-horizontal" role="form" action="account.jsp" method="POST">
           <div class="form-group">
             <label for="inputNick" class="col-md-2 control-label">User Name</label>
-            <div class="col-md-10">
+            <div class="col-md-8">
               <input type="text" class="form-control" id="inputNick" name="userName" placeholder="User Name">
             </div>
           </div>
         <div class="form-group">
             <label for="inputEmail" class="col-md-2 control-label">E-mail</label>
-            <div class="col-md-10">
+            <div class="col-md-8">
               <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email">
             </div>
           </div>
           <div class="form-group">
             <label for="inputPassword1" class="col-md-2 control-label">Password</label>
-            <div class="col-md-10">
+            <div class="col-md-8">
               <input type="password" class="form-control" id="inputPassword1" name="password" placeholder="Password">
             </div>
           </div>
           <div class="form-group">
             <label for="inputPassword2" class="col-md-2 control-label">Password again</label>
-            <div class="col-md-10">
+            <div class="col-md-8">
               <input type="password" class="form-control" id="inputPassword2" name="password2" placeholder="Same password">
             </div>
           </div>
