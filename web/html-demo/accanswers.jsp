@@ -40,6 +40,7 @@
                     <div class="panel panel-default">
                         <img src="defavatar.png" class="img-responsive" alt="avatar">
                     </div>
+                    <a href="">myemail@zmail.com</a>
                 </div>
                 <div class="col-md-9">
                     <ul class="nav nav-pills">
@@ -81,6 +82,15 @@
                             </tr>
                         </tbody>
                     </table>
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

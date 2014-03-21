@@ -40,6 +40,7 @@
                     <div class="panel panel-default">
                         <img src="defavatar.png" class="img-responsive" alt="avatar">
                     </div>
+                    <a href="">myemail@zmail.com</a>
                 </div>
                 <div class="col-md-9">
                     <ul class="nav nav-pills">

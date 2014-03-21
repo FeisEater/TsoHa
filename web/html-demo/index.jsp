@@ -37,7 +37,7 @@
                     <p>Ask a question! Answer a question!</p>
                 </div>
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-primary btn-lg">Ask a question!</button>
+                    <a href="ask.jsp" type="button" class="btn btn-primary btn-lg">Ask a question!</a>
                 </div>
                 <div class="col-md-12"><br></div>
                 <div class="col-md-12"><br></div>
