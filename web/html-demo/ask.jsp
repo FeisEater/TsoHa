@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-offset-6 col-md-2">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-primary">Sign in</button>
+                        <a href="signin.jsp" type="button" class="btn btn-primary">Sign in</a>
                     </div>
                     <div class="col-md-12">
                         <a href="register.jsp" type="button" class="btn btn-primary">Sign up</a>
@@ -35,7 +35,7 @@
                 <div class="col-md-12">
                     <h1>Ask your question</h1>
                     <div class="col-md-offset-10 col-md-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Ask away!</button>
+                        <a href="question.jsp" type="submit" class="btn btn-primary btn-lg">Ask away!</a>
                     </div>
                     <br>
                     <label for="title" class="control-label">Short title for your question. This text will show up in the search results. A good title fits within one line.</label>

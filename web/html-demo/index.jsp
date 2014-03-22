@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-offset-6 col-md-2">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-primary">Sign in</button>
+                        <a href="signin.jsp" type="button" class="btn btn-primary">Sign in</a>
                     </div>
                     <div class="col-md-12">
                         <a href="register.jsp" type="button" class="btn btn-primary">Sign up</a>
@@ -67,32 +67,32 @@
                             <tr>
                                 <td width="80%">How to dispose of a body?</td>
                                 <td width="15%">4</td>
-                                <td width="5%"><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                                <td width="5%"><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                             </tr>
                             <tr>
                                 <td>What's the meaning of life?</td>
                                 <td>42</td>
-                                <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                                <td><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                             </tr>
                             <tr>
                                 <td>How do I read?</td>
                                 <td>12</td>
-                                <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                                <td><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                             </tr>
                             <tr>
                                 <td>Can I go out tonight?</td>
                                 <td>1</td>
-                                <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                                <td><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                             </tr>
                             <tr>
                                 <td>HELP! Code doesn't compile!</td>
                                 <td>71</td>
-                                <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                                <td><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                             </tr>
                             <tr>
                                 <td>Parents won't talk to me.</td>
                                 <td>1337</td>
-                                <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></button></td>
+                                <td><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                             </tr>
                         </tbody>
                     </table>

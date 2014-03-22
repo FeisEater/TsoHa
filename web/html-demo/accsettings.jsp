@@ -57,7 +57,7 @@
                         </p>
                     </div>
                     <div class="col-md-12"><br></div>
-                    <form class="form-horizontal" role="form" action="account.jsp" method="POST">
+                    <form class="form-horizontal" role="form" action="accquestions.jsp" method="POST">
                         <div class="form-group">
                             <label for="inputNick" class="col-md-3 control-label">Change user Name</label>
                             <div class="col-md-6">
