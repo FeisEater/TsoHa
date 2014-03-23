@@ -37,4 +37,5 @@ CREATE TABLE answers (
     answered timestamp,
     lastedited timestamp,
     r_id integer REFERENCES regusers
+    q_id integer REFERENCES questions
 );

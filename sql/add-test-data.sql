@@ -91,6 +91,7 @@ INSERT INTO answers VALUES (
     true,
     TIMESTAMP '2012-12-25 05:23:54',
     TIMESTAMP '2012-12-25 06:23:54',
+    0,
     0
 );
 
@@ -102,5 +103,6 @@ INSERT INTO answers VALUES (
     false,
     TIMESTAMP '2013-01-01 13:23:54',
     TIMESTAMP '2013-01-01 13:23:54',
+    1,
     1
 );
