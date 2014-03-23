@@ -4,7 +4,7 @@
               type="javax.sql.DataSource" removeAbandoned="true"
               removeAbandonedTimeout="30" maxActive="100"
               maxIdle="30" maxWait="10000" username="pasmpasm"
-              password="thisshouldntshowup"
+              password="nopasswordforyoumisterhacker"
               driverClassName="org.postgresql.Driver"
               url="jdbc:postgresql://localhost/pasmpasm" />
 </Context>
