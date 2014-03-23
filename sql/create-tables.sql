@@ -36,6 +36,6 @@ CREATE TABLE answers (
     approvedbyasker boolean DEFAULT false,
     answered timestamp,
     lastedited timestamp,
-    r_id integer REFERENCES regusers
+    r_id integer REFERENCES regusers,
     q_id integer REFERENCES questions
 );
