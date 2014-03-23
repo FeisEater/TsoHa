@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.14)  14 MAR 2014 22:36
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.1.15)  23 MAR 2014 20:20
 entering extended mode
-**C:/Codez/tsoha/docs/sourcefiles/Documentation.tex
-(C:/Codez/tsoha/docs/sourcefiles/Documentation.tex
+**C:/Opiskelu/NetBeansProjects/tsoha/docs/sourcefiles/Documentation.tex
+(C:/Opiskelu/NetBeansProjects/tsoha/docs/sourcefiles/Documentation.tex
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -13,9 +13,9 @@ german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
 ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
 an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
 ishmax, welsh, loaded.
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\article.cls"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\size12.clo"
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\size12.clo"
 File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -30,31 +30,31 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
 File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
 )
 Package graphics Info: Driver file: pdftex.def on input line 91.
 
-("c:\Program Files (x86)\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+("C:\Program Files\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-("c:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-("c:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count87
@@ -62,7 +62,7 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
 )
-(C:\Codez\tsoha\docs\sourcefiles\Documentation.aux)
+(C:\Opiskelu\NetBeansProjects\tsoha\docs\sourcefiles\Documentation.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 3.
@@ -76,7 +76,7 @@ LaTeX Font Info:    ... okay on input line 3.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 3.
 LaTeX Font Info:    ... okay on input line 3.
 
-("c:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count88
 \scratchdimen=\dimen105
@@ -94,9 +94,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 6--9
 
  []
 
-(C:\Codez\tsoha\docs\sourcefiles\Documentation.toc)
+(C:\Opiskelu\NetBeansProjects\tsoha\docs\sourcefiles\Documentation.toc)
 \tf@toc=\write3
- [1
+
+[1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
 <ActorChart.png, id=11, 686.565pt x 729.72626pt>
@@ -114,7 +115,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 21--24
 
  []
 
-[3 <C:/Codez/tsoha/docs/sourcefiles/ActorChart.png>]
+[3 <C:/Opiskelu/NetBeansProjects/tsoha/docs/sourcefiles/ActorChart.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 25--46
 
  []
@@ -129,22 +130,149 @@ Underfull \hbox (badness 10000) in paragraph at lines 25--46
 
  []
 
-[4] (C:\Codez\tsoha\docs\sourcefiles\Documentation.aux) ) 
+[4] <ConceptChart.png, id=20, 365.365pt x 498.86375pt>
+File: ConceptChart.png Graphic file (type png)
+ <use ConceptChart.png>
+Package pdftex.def Info: ConceptChart.png used on input line 50.
+(pdftex.def)             Requested size: 365.3641pt x 498.86253pt.
+
+[5 <C:/Opiskelu/NetBeansProjects/tsoha/docs/sourcefiles/ConceptChart.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 52--55
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 56.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 56.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 56.
+
+Underfull \hbox (badness 2680) in paragraph at lines 61--62
+\OT1/cmr/m/n/12 the ac-count. Can't be
+ []
+
+
+Underfull \hbox (badness 1048) in paragraph at lines 63--63
+[]\OT1/cmr/m/n/12 Time user reg-is-tered
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 65--65
+[]\OT1/cmr/m/n/12 512x512 sized
+ []
+
+
+Underfull \hbox (badness 1406) in paragraph at lines 65--66
+[]\OT1/cmr/m/n/12 User's pic-ture to iden-tify
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
+[]\OT1/cmr/m/n/12 Question's essence dis-
+ []
+
+
+Underfull \hbox (badness 3568) in paragraph at lines 75--75
+\OT1/cmr/m/n/12 played in search re-sults.
+ []
+
+
+Underfull \hbox (badness 1484) in paragraph at lines 77--77
+[]\OT1/cmr/m/n/12 Time when ques-tion
+ []
+
+
+Underfull \hbox (badness 1314) in paragraph at lines 79--79
+[]\OT1/cmr/m/n/12 Amount of flags for
+ []
+
+
+Underfull \hbox (badness 2409) in paragraph at lines 79--79
+[]\OT1/cmr/m/n/12 Integer start-ing
+ []
+
+
+Underfull \hbox (badness 1895) in paragraph at lines 79--80
+\OT1/cmr/m/n/12 was deemed by users as
+ []
+
+
+Underfull \hbox (badness 1406) in paragraph at lines 79--80
+\OT1/cmr/m/n/12 in-ap-pro-pri-ate. Ques-tions
+ []
+
+
+Underfull \hbox (badness 1168) in paragraph at lines 90--90
+[]\OT1/cmr/m/n/12 Time when tag was first
+ []
+
+[6]
+Underfull \hbox (badness 2409) in paragraph at lines 100--100
+[]\OT1/cmr/m/n/12 Integer start-ing
+ []
+
+
+Underfull \hbox (badness 1314) in paragraph at lines 101--101
+[]\OT1/cmr/m/n/12 Amount of flags for
+ []
+
+
+Underfull \hbox (badness 2409) in paragraph at lines 101--101
+[]\OT1/cmr/m/n/12 Integer start-ing
+ []
+
+
+Underfull \hbox (badness 2478) in paragraph at lines 101--102
+[]\OT1/cmr/m/n/12 How many times an-swer
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--105
+[]\OT1/cmr/m/n/12 Time when an-swer
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 107--107
+[]\OT1/cmr/m/n/12 Time when an-swer
+ []
+
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 115--122
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--122
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--122
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--122
+
+ []
+
+[8] (C:\Opiskelu\NetBeansProjects\tsoha\docs\sourcefiles\Documentation.aux) ) 
 Here is how much of TeX's memory you used:
- 1119 strings out of 493921
- 14969 string characters out of 3144864
- 66001 words of memory out of 3000000
- 4457 multiletter control sequences out of 15000+200000
- 5804 words of font info for 21 fonts, out of 3000000 for 9000
+ 1142 strings out of 493921
+ 15281 string characters out of 3147282
+ 70001 words of memory out of 3000000
+ 4472 multiletter control sequences out of 15000+200000
+ 8242 words of font info for 29 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,5n,19p,657b,110s stack positions out of 5000i,500n,10000p,200000b,50000s
-<c:/Program Files (x86
-)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on Documentation.pdf (4 pages, 106334 bytes).
+ 27i,8n,19p,677b,176s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Progra
+m Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on Documentation.pdf (8 pages, 121581 bytes).
 PDF statistics:
- 30 PDF objects out of 1000 (max. 8388607)
+ 46 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

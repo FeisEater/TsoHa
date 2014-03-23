@@ -43,5 +43,81 @@ The following is an actor chart, followed with a description for each user and a
 \textbf{Browse flagged questions:} Lists questions by their amount of flags. Helps finding inappropriate questions.\\
 \textbf{Browse flagged answers:} Lists answers by their amount of flags. Helps finding inappropriate answers.\\
 \textbf{Browse tags:} Lists tags. Whether they are inappropriate or not is apparent directly from the tag.\\
+\newpage
+
+\section{System's datacontents}
+The following is a chart representing the required data contents of the system on a conceptual level:\\
+\includegraphics{ConceptChart}
+\newpage
+\noindent Four datablocks shown in the chart have following properties:\\
+\\
+\textbf{Datablock: Registered user}
+\begin{center}
+    \begin{tabular}{ | p{4cm} | p{3cm} | p{5cm} |}
+    \hline
+    Property & Value interval & Description \\ \hline
+    Nickname/Username & 16 characters & User's calling name in the forum. Can't be empty. \\ \hline
+    E-mail & 64 characters & User's email to contact one. Can be omitted. \\ \hline
+    Password & 128 characters & User's password to access the account. Can't be empty. \\
+    \hline
+    Time user registered the account & Date and time &  \\
+    \hline
+    Avatar & 512x512 sized picture & User's picture to identify him by. Can be omitted. \\
+    \hline
+    \end{tabular}
+\end{center}
+\hspace*{\fill}\\
+\textbf{Datablock: Question}
+\begin{center}
+    \begin{tabular}{ | p{4cm} | p{3cm} | p{5cm} |}
+    \hline
+    Property & Value interval & Description \\ \hline
+    Question title & 96 characters & Question's essence displayed in search results. Can't be empty \\ \hline
+    Question body & Any amount of text & Main part of the question. \\ \hline
+    Time when question was asked & Date and time &  \\
+    \hline
+    Amount of flags for the question & Integer starting from 0 & How many times question was deemed by users as inappropriate. Questions with most flags are easier for a manager to find. \\
+    \hline
+    \end{tabular}
+\end{center}
+\hspace*{\fill}\\
+\textbf{Datablock: Tag}
+\begin{center}
+    \begin{tabular}{ | p{4cm} | p{3cm} | p{5cm} |}
+    \hline
+    Property & Value interval & Description \\ \hline
+    Tag title & 12 characters & Can't be empty \\ \hline
+    Time when tagged & Date and time & Time when tag was first used. \\ \hline
+    \end{tabular}
+\end{center}
+\newpage
+\textbf{Datablock: Answer}
+\begin{center}
+    \begin{tabular}{ | p{4cm} | p{3cm} | p{5cm} |}
+    \hline
+    Property & Value interval & Description \\ \hline
+    Answer body & Any amount of text &  \\ \hline
+    Rating & Integer starting from 0 & Amount of positive points other users have given to this answer. \\ \hline
+    Amount of flags for the answer & Integer starting from 0 & How many times answer was deemed by users as inappropriate. Answers with most flags are easier for a manager to find. \\
+    \hline
+    Approved by asker & Boolean & True if poster of the question which this answer addresses has rated this answer. \\
+    \hline
+    Time when answer was posted & Date and time & This value is reset if answer is edited. \\
+    \hline
+    Time when answer was last edited & Date and time & This value is reset if new information is appended to the answer. \\
+    \hline
+    \end{tabular}
+\end{center}
+User can post multiple questions and answers. Each question and answer belongs to one user, although question may be posted anonymously, that way it won't belong to any user. Question may contain several answers. Each answer belongs to one question. Question may contain several tags and several question may be tagged with the same tag.
+\newpage
+
+\section{User interface}
+The following is a map which represents all the sites that are accessible in the application, and what sites user can access next from the specified site:\\
+\\
+%\includegraphics[scale=0.7]{sitemap}\\
+\\
+This is a design concept of the front page. Notice that it lists asked questions, offers user to ask a question, sign in or register.\\
+\\
+%\includegraphics[scale=0.9]{FrontPage}
 
 \end{document}
