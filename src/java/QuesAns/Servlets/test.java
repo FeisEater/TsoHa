@@ -46,7 +46,7 @@ public class test extends HttpServlet {
                 {
                     out.println("<li>" + u + "</li>");
                 }
-            } catch (Throwable e) {out.println("<li>no connection</li>");}
+            } catch (Throwable e) {out.println("<li>"+e+"</li>");}
             out.println("</ul>");
             out.println("</body>");
             out.println("</html>");

@@ -5,6 +5,7 @@ import QuesAns.DataBase.QAConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,25 +18,31 @@ public class User {
     private String nick;
     private String email;
     private String password;
+    private Timestamp joined;
     
-    public User(int i, String n, String e, String p)
+    public User(int i, String n, String e, String p, Timestamp t)
     {
         id = i;
         nick = n;
         email = e;
         password = p;
+        joined = t;
     }
     public String toString()
     {
-        return ""+nick+" ("+email+")"+" - "+password;
+        return ""+nick+" ("+email+") - "+password+" - joined: " + joined;
     }
     public static List<User> getUsers() throws Throwable
     {
-        String sql = "SELECT r_id, nick, email, password from regusers";
+        System.out.println("started");
+        String sql = "SELECT r_id, nick, email, password, joined from regusers";
         Connection c = QAConnection.getConnection();
+        System.out.println("Connection");
         PreparedStatement ps = c.prepareStatement(sql);
+        System.out.println("PreparedStatement");
         ResultSet result = ps.executeQuery();
-        
+        System.out.println("Results");
+
         List<User> users = new ArrayList<User>();
         while (result.next())
         {
@@ -43,7 +50,8 @@ public class User {
             String n = result.getString("nick");
             String e = result.getString("email");
             String p = result.getString("password");
-            users.add(new User(i,n,e,p));
+            Timestamp t = result.getTimestamp("joined");
+            users.add(new User(i,n,e,p,t));
         }
         
         try {result.close();} catch (Exception e) {}
