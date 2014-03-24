@@ -34,14 +34,10 @@ public class User {
     }
     public static List<User> getUsers() throws Throwable
     {
-        System.out.println("started");
         String sql = "SELECT r_id, nick, email, password, joined from regusers";
         Connection c = QAConnection.getConnection();
-        System.out.println("Connection");
         PreparedStatement ps = c.prepareStatement(sql);
-        System.out.println("PreparedStatement");
         ResultSet result = ps.executeQuery();
-        System.out.println("Results");
 
         List<User> users = new ArrayList<User>();
         while (result.next())
