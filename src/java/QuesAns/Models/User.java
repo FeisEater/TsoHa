@@ -32,6 +32,18 @@ public class User {
     {
         return ""+nick+" ("+email+") - "+password+" - joined: " + joined;
     }
+    public String getName()
+    {
+        return nick;
+    }
+    public String getEmail()
+    {
+        return email;
+    }
+    public String getPassword()
+    {
+        return password;
+    }
     public static List<User> getUsers() throws Throwable
     {
         String sql = "SELECT r_id, nick, email, password, joined from regusers";

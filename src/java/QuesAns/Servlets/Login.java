@@ -1,6 +1,7 @@
 
 package QuesAns.Servlets;
 
+import QuesAns.Models.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -27,7 +28,26 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setAttribute("errorMessage", null);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        User loggedIn = null;
+        try
+        {
+            for (User u : User.getUsers())
+            {
+                if ((u.getName().equals(username) || u.getEmail().equals(username))
+                        && u.getPassword().equals(password))
+                {
+                    loggedIn = u;
+                    break;
+                }
+            }
+        }
+        catch (Throwable e) {}
+        if (loggedIn == null)
+        {
+            
+        }
         RequestDispatcher dispatcher = request.getRequestDispatcher("signin.jsp");
         dispatcher.forward(request, response);
     }
