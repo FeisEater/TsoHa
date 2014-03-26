@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label for="inputEmail" class="col-md-2 control-label">Username or e-mail</label>
                 <div class="col-md-8">
-                    <input type="email" class="form-control" id="inputEmail" name="username" placeholder="Nickname or email">
+                    <input type="text" class="form-control" id="inputEmail" name="username" placeholder="Nickname or email" value="${givenName}">
                 </div>
             </div>
             <div class="form-group">

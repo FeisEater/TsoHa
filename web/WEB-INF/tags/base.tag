@@ -10,6 +10,7 @@
 <%@attribute name="pageTitle"%>
 <%@attribute name="userName"%>
 <%@attribute name="errorMessage"%>
+<%@attribute name="givenName"%>
 
 <%-- any content can be specified here e.g.: --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

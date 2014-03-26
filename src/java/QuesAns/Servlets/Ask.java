@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author FeisEater
  */
-public class Login extends HttpServlet {
+public class Ask extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,27 +29,12 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        User loggedIn = null;
-        try
-        {
-            loggedIn = User.getByLoginInfo(username, password);
-        }
-        catch (Throwable e) {}
-        if (loggedIn == null)
-        {
-            request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
-            request.setAttribute("givenName", username);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("signin.jsp");
-            dispatcher.forward(request, response);            
-        }
-        else
-        {
-            session.setAttribute("loggedIn", loggedIn);
-            response.sendRedirect("index");
-        }
+        User loggedIn = (User)session.getAttribute("loggedIn");
+        request.setAttribute("userName", (loggedIn == null) ? null : loggedIn.getName());
+        RequestDispatcher dispatcher = request.getRequestDispatcher("ask.jsp");
+        dispatcher.forward(request, response);            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

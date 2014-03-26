@@ -8,6 +8,14 @@
         <servlet-name>Login</servlet-name>
         <servlet-class>QuesAns.Servlets.Login</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Listing</servlet-name>
+        <servlet-class>QuesAns.Servlets.Listing</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Ask</servlet-name>
+        <servlet-class>QuesAns.Servlets.Ask</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -15,6 +23,14 @@
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Listing</servlet-name>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Ask</servlet-name>
+        <url-pattern>/ask</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -68,4 +68,31 @@ public class User {
         
         return users;
     }
+    public static User getByLoginInfo(String nameoremail, String password) throws Throwable
+    {
+        String sql = "SELECT * from regusers "
+                + "where (nick = ? or email = ?) and password = ?";
+        Connection c = QAConnection.getConnection();
+        PreparedStatement ps = c.prepareStatement(sql);
+        ps.setString(1, nameoremail);
+        ps.setString(2, nameoremail);
+        ps.setString(3, password);
+        ResultSet result = ps.executeQuery();
+        User loggedIn = null;
+        if (result.next())
+        {
+            int i = result.getInt("r_id");
+            String n = result.getString("nick");
+            String e = result.getString("email");
+            String p = result.getString("password");
+            Timestamp t = result.getTimestamp("joined");
+            loggedIn = new User(i,n,e,p,t);
+        }
+        
+        try {result.close();} catch (Exception e) {}
+        try {ps.close();} catch (Exception e) {}
+        QAConnection.closeConnection(c);
+        
+        return loggedIn;
+    }
 }
