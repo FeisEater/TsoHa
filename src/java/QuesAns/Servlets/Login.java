@@ -46,10 +46,14 @@ public class Login extends HttpServlet {
         catch (Throwable e) {}
         if (loggedIn == null)
         {
-            
+            request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("signin.jsp");
+            dispatcher.forward(request, response);            
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("signin.jsp");
-        dispatcher.forward(request, response);
+        else
+        {
+            response.sendRedirect("index");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
