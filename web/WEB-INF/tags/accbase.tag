@@ -21,9 +21,9 @@
         </div>
         <div class="col-md-9">
             <ul class="nav nav-pills">
-                <li class="${page == 0 ? 'active' : ''}"><a href="accquestions.jsp">Asked questions</a></li>
-                <li class="${page == 1 ? 'active' : ''}"><a href="accanswers.jsp">Given answers</a></li>
-                <li class="${page == 2 ? 'active' : ''}"><a href="accsettings.jsp">Change account settings</a></li>
+                <li class="${page == 0 ? 'active' : ''}"><a href="accquestions">Asked questions</a></li>
+                <li class="${page == 1 ? 'active' : ''}"><a href="accanswers">Given answers</a></li>
+                <li class="${page == 2 ? 'active' : ''}"><a href="accsettings">Change account settings</a></li>
             </ul>
             <jsp:doBody/>
         </div>

@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <h1>Ask your question</h1>
                 <div class="col-md-offset-10 col-md-2">
-                    <a href="question.jsp" type="submit" class="btn btn-primary btn-lg">Ask away!</a>
+                    <a href="question" type="submit" class="btn btn-primary btn-lg">Ask away!</a>
                 </div>
                 <br>
                 <label for="title" class="control-label">Short title for your question. This text will show up in the search results. A good title fits within one line.</label>

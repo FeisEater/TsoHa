@@ -21,17 +21,17 @@
                 <tr>
                     <td width="80%">How to dispose of a body?</td>
                     <td width="15%">4</td>
-                    <td width="5%"><a href="question.jsp" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td width="5%"><a href="question" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                 </tr>
                 <tr>
                     <td>What's the meaning of life?</td>
                     <td>42</td>
-                    <td><a href="question.jsp" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td><a href="question" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                 </tr>
                 <tr>
                     <td>How do I read?</td>
                     <td>12</td>
-                    <td><a href="question.jsp" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td><a href="question" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                 </tr>
             </tbody>
         </table>

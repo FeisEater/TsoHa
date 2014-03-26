@@ -16,6 +16,10 @@
         <servlet-name>Ask</servlet-name>
         <servlet-class>QuesAns.Servlets.Ask</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>QuesAns.Servlets.Logout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>Ask</servlet-name>
         <url-pattern>/ask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

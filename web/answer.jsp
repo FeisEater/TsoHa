@@ -14,7 +14,7 @@
             <div class="col-md-1">
                 <img src="defavatar.png" alt="avatar" height="80">
                 <div class="caption">
-                    <a href="accquestions.jsp" type="button" class="btn btn-link text-left">User123</a>
+                    <a href="accquestions" type="button" class="btn btn-link text-left">User123</a>
                 </div>
             </div>
             <div class="col-md-offset-1 col-md-10">
@@ -26,7 +26,7 @@
             <div class="col-md-12" style="background-color:#FFFFFF">
                 <div class="col-md-12"><br></div>
                 <div class="col-md-offset-10 col-md-2">
-                    <a href="question.jsp" type="button" class="btn btn-primary btn-lg">Post answer</a>
+                    <a href="question" type="button" class="btn btn-primary btn-lg">Post answer</a>
                 </div>
                 <label class="control-label">Write your answer here.</label>
                 <textarea class="form-control" rows="20" spellcheck="false" placeholder="Your answer"></textarea>

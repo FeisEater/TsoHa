@@ -10,7 +10,7 @@
 <t:base pageTitle="Register to QuesAns">
     <div class="container">
         <h1>Register to the QuesAns</h1>
-        <form class="form-horizontal" role="form" action="accquestions.jsp" method="POST">
+        <form class="form-horizontal" role="form" action="accquestions" method="POST">
             <div class="form-group">
                 <label for="inputNick" class="col-md-2 control-label">User Name</label>
                 <div class="col-md-8">

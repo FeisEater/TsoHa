@@ -15,14 +15,14 @@
                 <div class="col-md-1">
                     <img src="defavatar.png" alt="avatar" height="80">
                     <div class="caption">
-                        <a href="accquestions.jsp" type="button" class="btn btn-link text-left">User123</a>
+                        <a href="accquestions" type="button" class="btn btn-link text-left">User123</a>
                     </div>
                 </div>
                 <div class="col-md-offset-1 col-md-8">
                     <h1>HELP! Code doesn't compile!</h1>
                 </div>
                 <div class="col-md-2">
-                    <a href="answer.jsp" type="button" class="btn btn-primary btn-lg">Give an answer</a>
+                    <a href="answer" type="button" class="btn btn-primary btn-lg">Give an answer</a>
                     <div class="col-md-12"><br></div>
                     <button type="button" class="btn btn-default pull-left btn-xs">Flag as inappropriate <span class="glyphicon glyphicon-flag"></span></button>
                 </div>
@@ -44,7 +44,7 @@
                             <td width="10%">
                                 <img src="defavatar.png" alt="avatar" height="64">
                                 <div class="caption">
-                                    <a href="accquestions.jsp" type="button" class="btn btn-link text-left">FeisEater</a>
+                                    <a href="accquestions" type="button" class="btn btn-link text-left">FeisEater</a>
                                 </div>
                             </td>
                             <td width="70%">Talk to your parents.</td>
@@ -56,7 +56,7 @@
                             <td>
                                 <img src="defavatar.png" alt="avatar" height="64">
                                 <div class="caption">
-                                    <a href="accquestions.jsp" type="button" class="btn btn-link text-left">NotSureIfTrolling</a>
+                                    <a href="accquestions" type="button" class="btn btn-link text-left">NotSureIfTrolling</a>
                                 </div>
                             </td>
                             <td>Push the compile button.</td>
@@ -68,7 +68,7 @@
                             <td>
                                 <img src="defavatar.png" alt="avatar" height="64">
                                 <div class="caption">
-                                    <a href="accquestions.jsp" type="button" class="btn btn-link text-left">Jerk69</a>
+                                    <a href="accquestions" type="button" class="btn btn-link text-left">Jerk69</a>
                                 </div>
                             </td>
                             <td>Give up!</td>
@@ -97,13 +97,13 @@
                 <div class="col-md-12"><br></div>
                 <label class="col-md-12 control-label">Tags:</label>
                 <div class="btn-group-vertical">
-                    <a href="index.jsp" type="button" class="btn btn-xs btn-info">compiler</a>
-                    <a href="index.jsp" type="button" class="btn btn-xs btn-info">code</a>
-                    <a href="index.jsp" type="button" class="btn btn-xs btn-info">urgent</a>
-                    <a href="index.jsp" type="button" class="btn btn-xs btn-info">programming</a>
-                    <a href="index.jsp" type="button" class="btn btn-xs btn-info">free</a>
-                    <a href="index.jsp" type="button" class="btn btn-xs btn-info">money</a>
-                    <a href="index.jsp" type="button" class="btn btn-xs btn-info">tag</a>
+                    <a href="index" type="button" class="btn btn-xs btn-info">compiler</a>
+                    <a href="index" type="button" class="btn btn-xs btn-info">code</a>
+                    <a href="index" type="button" class="btn btn-xs btn-info">urgent</a>
+                    <a href="index" type="button" class="btn btn-xs btn-info">programming</a>
+                    <a href="index" type="button" class="btn btn-xs btn-info">free</a>
+                    <a href="index" type="button" class="btn btn-xs btn-info">money</a>
+                    <a href="index" type="button" class="btn btn-xs btn-info">tag</a>
                 </div>
             </div>
         </div>

@@ -24,22 +24,22 @@
                     <td width="40%">Talk to your parents.</td>
                     <td width="40%">Can I go out tonight?</td>
                     <td width="10%">0</td>
-                    <td width="5%"><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                    <td width="5%"><a href="answer.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td width="5%"><a href="question" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td width="5%"><a href="answer" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 </tr>
                 <tr>
                     <td>Talk to your parents.</td>
                     <td>HELP! Code doesn't compile!</td>
                     <td>71</td>
-                    <td><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                    <td><a href="answer.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a href="question" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td><a href="answer" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 </tr>
                 <tr>
                     <td>Talk to your parents.</td>
                     <td>Parents won't talk to me.</td>
                     <td>1337</td>
-                    <td><a href="question.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                    <td><a href="answer.jsp" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    <td><a href="question" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td><a href="answer" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
                 </tr>
             </tbody>
         </table>

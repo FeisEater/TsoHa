@@ -27,15 +27,15 @@
         <div class="container-fluid" style="background-color:#DDDDFF">
             <div class="row">
                 <div class="col-md-offset-1 col-md-3">
-                    <a href="index.jsp" type="button" class="btn btn-link" style="color:#000; font-size:48px; font-weight:bold">QuesAns</a>
+                    <a href="index" type="button" class="btn btn-link" style="color:#000; font-size:48px; font-weight:bold">QuesAns</a>
                 </div>
                 <c:if test="${userName == null}">
                     <div class="col-md-offset-6 col-md-2">
                         <div class="col-md-12">
-                            <a href="signin.jsp" type="button" class="btn btn-primary">Sign in</a>
+                            <a href="login" type="button" class="btn btn-primary">Sign in</a>
                         </div>
                         <div class="col-md-12">
-                            <a href="register.jsp" type="button" class="btn btn-primary">Sign up</a>
+                            <a href="register" type="button" class="btn btn-primary">Sign up</a>
                         </div>
                     </div>
                 </c:if>
@@ -48,7 +48,7 @@
                             <button type="button" class="btn btn-primary">${userName}</button>
                         </div>
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-primary">Log out</button>
+                            <a href="logout" type="button" class="btn btn-primary">Log out</a>
                         </div>
                     </div>
                 </c:if>
