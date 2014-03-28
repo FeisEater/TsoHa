@@ -9,9 +9,9 @@ INSERT INTO regusers VALUES (
 
 INSERT INTO regusers VALUES (
     1,
-    'NotSureIfTrollin',
-    'otheremail@zmail.fi',
-    'göalgböa',
+    'matti',
+    'matti@matti.matti',
+    'teppo',
     TIMESTAMP '2013-12-01 00:00:01',
     DEFAULT
 );

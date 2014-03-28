@@ -40,13 +40,8 @@ public class test extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet test at " + request.getContextPath() + "</h1>");
             out.println("<ul>");
-            try
-            {
-                for (User u : User.getUsers())
-                {
-                    out.println("<li>" + u + "</li>");
-                }
-            } catch (Throwable e) {out.println("<li>"+e+"</li>");}
+            for (User u : User.getUsers())
+                out.println("<li>" + u + "</li>");
             out.println("</ul>");
             out.println("</body>");
             out.println("</html>");

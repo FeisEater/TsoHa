@@ -27,11 +27,11 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        QAServlet.preprocess(request, response);
         HttpSession session = request.getSession();
+        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
         User loggedIn = User.getByLoginInfo(username, password);
         if (loggedIn == null)
         {
@@ -40,8 +40,7 @@ public class Login extends HttpServlet {
                 request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
                 request.setAttribute("givenName", username);
             }
-            RequestDispatcher dispatcher = request.getRequestDispatcher("signin.jsp");
-            dispatcher.forward(request, response);            
+            QAServlet.showPage("signin.jsp", request, response);
         }
         else
         {

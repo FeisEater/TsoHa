@@ -27,12 +27,9 @@ public class Listing extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        User loggedIn = (User)session.getAttribute("loggedIn");
-        request.setAttribute("userName", (loggedIn == null) ? null : loggedIn.getName());
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-        dispatcher.forward(request, response);            
+        QAServlet.preprocess(request, response);
+        QAServlet.getUserFromSession(request, response);
+        QAServlet.showPage("index.jsp", request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

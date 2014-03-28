@@ -2,12 +2,15 @@
 package QuesAns.Models;
 
 import QuesAns.DataBase.QAConnection;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.ServletException;
 
 /**
  *
@@ -51,7 +54,7 @@ public class User {
     {
         return password;
     }
-    public static List<User> getUsers()
+    public static List<User> getUsers() throws ServletException, IOException
     {
         try {
             Connection c = QAConnection.getConnection();
@@ -60,20 +63,17 @@ public class User {
             
             List<User> users = new ArrayList<User>();
             while (result.next())
-            {
-                int i = result.getInt("r_id");
-                String n = result.getString("nick");
-                String e = result.getString("email");
-                String p = result.getString("password");
-                Timestamp t = result.getTimestamp("joined");
-                users.add(new User(i,n,e,p,t));
-            }
+                users.add(retrieveUserFromResults(result));
 
             QAConnection.closeComponents(result, ps, c);
             return users;
-        }   catch (Throwable e) {return null;}
+        } catch (SQLException ex) {
+            System.out.println(ex);
+            return null;
+        }
     }
     public static User getByLoginInfo(String nameoremail, String password)
+            throws ServletException, IOException
     {
         try {
             Connection c = QAConnection.getConnection();
@@ -85,17 +85,23 @@ public class User {
             
             User loggedIn = null;
             if (result.next())
-            {
-                int i = result.getInt("r_id");
-                String n = result.getString("nick");
-                String e = result.getString("email");
-                String p = result.getString("password");
-                Timestamp t = result.getTimestamp("joined");
-                loggedIn = new User(i,n,e,p,t);
-            }
+                loggedIn = retrieveUserFromResults(result);
 
             QAConnection.closeComponents(result, ps, c);
             return loggedIn;
-        }   catch (Throwable e) {return null;}
+        } catch (SQLException ex) {
+            System.out.println(ex);
+            return null;
+        }
+    }
+    
+    private static User retrieveUserFromResults(ResultSet result) throws SQLException
+    {
+        int i = result.getInt("r_id");
+        String n = result.getString("nick");
+        String e = result.getString("email");
+        String p = result.getString("password");
+        Timestamp t = result.getTimestamp("joined");
+        return new User(i,n,e,p,t);
     }
 }
