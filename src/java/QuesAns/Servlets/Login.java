@@ -3,7 +3,6 @@ package QuesAns.Servlets;
 
 import QuesAns.Models.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,12 +31,8 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        User loggedIn = null;
-        try
-        {
-            loggedIn = User.getByLoginInfo(username, password);
-        }
-        catch (Throwable e) {}
+        
+        User loggedIn = User.getByLoginInfo(username, password);
         if (loggedIn == null)
         {
             if (!(username == null && password == null))

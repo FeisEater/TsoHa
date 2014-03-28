@@ -5,8 +5,9 @@ package QuesAns.DataBase;
  * @author FeisEater
  */
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -14,20 +15,25 @@ import javax.sql.DataSource;
 public class QAConnection {
 
     public static Connection getConnection() {
-        try {
+        try
+        {
             InitialContext cxt = new InitialContext();
             DataSource ds = (DataSource) cxt.lookup("java:/comp/env/jdbc/tietokanta");
             return ds.getConnection();
-        } catch (NamingException e) {
-        } catch (SQLException e) {
         }
+        catch (NamingException e) {}
+        catch (SQLException e) {}
+        
         return null;
     }
-
-    public static void closeConnection(Connection c) {
-        try {
+    
+    public static void closeComponents(ResultSet r, PreparedStatement p, Connection c)
+    {
+        try
+        {
+            r.close();
+            p.close();
             c.close();
-        } catch (Exception e) {
-        }
+        }   catch (Throwable e) {}
     }
 }
