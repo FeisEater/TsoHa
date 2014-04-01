@@ -1,8 +1,10 @@
 
 package QuesAns.Servlets;
 
+import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +31,8 @@ public class Listing extends HttpServlet {
             throws ServletException, IOException {
         QAServlet.preprocess(request, response);
         QAServlet.getUserFromSession(request, response);
+        List<Question> questions = Question.getQuestions();
+        request.setAttribute("list", questions);
         QAServlet.showPage("index.jsp", request, response);
     }
 
