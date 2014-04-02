@@ -1,11 +1,7 @@
 
 package QuesAns.Servlets;
 
-import QuesAns.Models.Question;
-import QuesAns.Models.User;
 import java.io.IOException;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +12,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author FeisEater
  */
-public class Listing extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,11 +25,10 @@ public class Listing extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
-        QAServlet.getUserFromSession(request, response);
-        List<Question> questions = Question.getQuestions();
-        request.setAttribute("list", questions);
-        QAServlet.showPage("index.jsp", request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        session.removeAttribute("loggedIn");
+        response.sendRedirect("index");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -1,20 +1,21 @@
-
 package QuesAns.Servlets;
+
 
 import QuesAns.Models.User;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author FeisEater
  */
-public class Login extends HttpServlet {
+public class TestServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,25 +28,25 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
-        HttpSession session = request.getSession();
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        User loggedIn = User.getByLoginInfo(username, password);
-        if (loggedIn == null)
-        {
-            if (!(username == null && password == null))
-            {
-                request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
-                request.setAttribute("givenName", username);
-            }
-            QAServlet.showPage("signin.jsp", request, response);
-        }
-        else
-        {
-            session.setAttribute("loggedIn", loggedIn);
-            response.sendRedirect("index");
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet test</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet test at " + request.getContextPath() + "</h1>");
+            out.println("<ul>");
+            for (User u : User.getUsers())
+                out.println("<li>" + u + "</li>");
+            out.println("</ul>");
+            out.println("</body>");
+            out.println("</html>");
+        } finally {
+            out.close();
         }
     }
 
