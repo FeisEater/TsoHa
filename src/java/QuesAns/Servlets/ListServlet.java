@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author FeisEater
  */
-public class Listing extends HttpServlet {
+public class ListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

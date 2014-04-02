@@ -1,9 +1,7 @@
 
 package QuesAns.Servlets;
 
-import QuesAns.Models.User;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +12,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author FeisEater
  */
-public class Login extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,26 +25,10 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
+        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        User loggedIn = User.getByLoginInfo(username, password);
-        if (loggedIn == null)
-        {
-            if (!(username == null && password == null))
-            {
-                request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
-                request.setAttribute("givenName", username);
-            }
-            QAServlet.showPage("signin.jsp", request, response);
-        }
-        else
-        {
-            session.setAttribute("loggedIn", loggedIn);
-            response.sendRedirect("index");
-        }
+        session.removeAttribute("loggedIn");
+        response.sendRedirect("index");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
