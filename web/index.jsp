@@ -43,7 +43,7 @@
                 <tr>
                     <td class="unit" width="80%">${unit.title}</td>
                     <td width="15%">1337</td>
-                    <td width="5%"><a href="question" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td width="5%"><a href="question?id=${unit.id}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                 </tr>
             </c:forEach>
         </tbody>

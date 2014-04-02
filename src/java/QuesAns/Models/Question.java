@@ -26,6 +26,9 @@ public class Question {
     private static final String sql_getQuestions =
             "SELECT * from questions order by asked desc";
 
+    private static final String sql_getByID =
+            "SELECT * from questions where q_id = ?";
+
     public Question(int i, String t, String b, Timestamp a, int f)
     {
         id = i;
@@ -33,6 +36,10 @@ public class Question {
         body = b;
         asked = a;
         flags = f;
+    }
+    public int getID()
+    {
+        return id;
     }
     public String getTitle()
     {
@@ -53,12 +60,31 @@ public class Question {
             PreparedStatement ps = c.prepareStatement(sql_getQuestions);
             ResultSet result = ps.executeQuery();
             
-            List<Question> users = new ArrayList<Question>();
+            List<Question> questions = new ArrayList<Question>();
             while (result.next())
-                users.add(retrieveQuestionFromResults(result));
+                questions.add(retrieveQuestionFromResults(result));
 
             QAConnection.closeComponents(result, ps, c);
-            return users;
+            return questions;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+            return null;
+        }
+    }
+    public static Question getByID(int id)
+    {
+        try {
+            Connection c = QAConnection.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql_getByID);
+            ps.setInt(1, id);
+            ResultSet result = ps.executeQuery();
+            
+            Question q = null;
+            if (result.next())
+                q = retrieveQuestionFromResults(result);
+
+            QAConnection.closeComponents(result, ps, c);
+            return q;
         } catch (SQLException ex) {
             System.out.println(ex);
             return null;
