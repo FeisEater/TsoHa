@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<t:base pageTitle="Question title here">
+<t:base>
     <div class="container">
         <div class="row">
             <div class="col-md-12"><br></div>
@@ -19,15 +19,19 @@
                     </div>
                 </div>
                 <div class="col-md-offset-1 col-md-8">
-                    <h1>HELP! Code doesn't compile!</h1>
+                    <h1>${objectFromID.title}</h1>
                 </div>
                 <div class="col-md-2">
                     <a href="answer" type="button" class="btn btn-primary btn-lg">Give an answer</a>
                     <div class="col-md-12"><br></div>
-                    <button type="button" class="btn btn-default pull-left btn-xs">Flag as inappropriate <span class="glyphicon glyphicon-flag"></span></button>
+                    <c:if test="${userName != null}">
+                        <button type="button" class="btn btn-default pull-left btn-xs">
+                            Flag as inappropriate <span class="glyphicon glyphicon-flag"></span>
+                        </button>
+                    </c:if>
                 </div>
                 <div class="col-md-12">
-                    <p>Please answer as soon as you can! I have a deadline tomorrow!</p>
+                    <p>${objectFromID.body}</p>
                 </div>
                 <table class="table table-striped">
                     <thead>

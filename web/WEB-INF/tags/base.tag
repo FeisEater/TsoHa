@@ -11,6 +11,7 @@
 <%@attribute name="userName"%>
 <%@attribute name="errorMessage"%>
 <%@attribute name="givenName"%>
+<%@attribute name="objectFromID"%>
 
 <%-- any content can be specified here e.g.: --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

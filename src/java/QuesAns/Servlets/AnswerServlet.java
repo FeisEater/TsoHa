@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package QuesAns.Servlets;
 
-import QuesAns.Models.Question;
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Pavel
+ * @author FeisEater
  */
-public class QuestionServlet extends HttpServlet {
+public class AnswerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,21 +27,7 @@ public class QuestionServlet extends HttpServlet {
             throws ServletException, IOException {
         QAServlet.preprocess(request, response);
         QAServlet.getUserFromSession(request, response);
-        String idParam = request.getParameter("id");
-        int id = -1;
-        try {id = Integer.parseInt(idParam);} catch (Throwable e){}
-        Question q = Question.getByID(id);
-        request.setAttribute("objectFromID", q);
-        if (q == null)
-        {
-            request.setAttribute("errorMessage", "Invalid ID");
-            QAServlet.showPage("index.jsp", request, response);
-        }
-        else
-        {
-            request.setAttribute("pageTitle", q.getTitle());
-            QAServlet.showPage("question.jsp", request, response);
-        }
+        QAServlet.showPage("answer.jsp", request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

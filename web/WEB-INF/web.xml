@@ -24,6 +24,10 @@
         <servlet-name>QuestionServlet</servlet-name>
         <servlet-class>QuesAns.Servlets.QuestionServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AnswerServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.AnswerServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>QuestionServlet</servlet-name>
         <url-pattern>/question</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AnswerServlet</servlet-name>
+        <url-pattern>/answer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
