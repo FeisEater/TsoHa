@@ -30,20 +30,21 @@ public class Question {
             "SELECT * from questions where q_id = ?";
 
     private static final String sql_addToDB =
-            "INSERT INTO questions(title, body, r_id, asked, flags)"
-            + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING id";
+            "INSERT INTO questions(title, body, q_id, asked, flags) "
+            + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING q_id, asked";
 
-    public Question(String t, String b, Timestamp a, int f)
+    public Question(String t, String b)
     {
         title = t;
         body = b;
-        asked = a;
-        flags = f;
+        flags = 0;
     }
     public Question(int i, String t, String b, Timestamp a, int f)
     {
-        this(t,b,a,f);
+        this(t,b);
         id = i;
+        asked = a;
+        flags = f;
     }
     public int getID()
     {
@@ -67,11 +68,14 @@ public class Question {
             Connection c = QAConnection.getConnection();
             PreparedStatement ps = c.prepareStatement(sql_addToDB);
             ps.setString(1, title);
+            System.out.println(body);
             ps.setString(2, body);
-            ps.setInt(3, owner.getID());
+            int givenID = (owner == null) ? -1 : owner.getID();
+            ps.setInt(3, givenID);
             ResultSet result = ps.executeQuery();
             result.next();
             id = result.getInt(1);
+            asked = result.getTimestamp(2);
             QAConnection.closeComponents(result, ps, c);
         } catch (SQLException ex) {
             System.out.println(ex);

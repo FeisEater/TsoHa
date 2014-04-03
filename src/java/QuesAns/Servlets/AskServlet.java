@@ -1,6 +1,7 @@
 
 package QuesAns.Servlets;
 
+import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -28,10 +29,21 @@ public class AskServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         QAServlet.preprocess(request, response);
-        QAServlet.getUserFromSession(request, response);
-        String title = request.getParameter("username");
-        String body = request.getParameter("password");
-        QAServlet.showPage("ask.jsp", request, response);
+        User loggedIn = QAServlet.getUserFromSession(request, response);
+        String title = request.getParameter("title");
+        String body = request.getParameter("body");
+        if (!(title == null && body == null))
+        {
+            Question q = new Question(title, body);
+            q.addToDatabase(loggedIn);
+            request.setAttribute("objectFromID", q);
+            QAServlet.showPage("question.jsp", request, response);
+        }
+        else
+        {
+            request.setAttribute("errorMessage", "Invalid input.");
+            QAServlet.showPage("ask.jsp", request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
