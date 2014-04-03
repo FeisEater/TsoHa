@@ -42,6 +42,10 @@ public class User {
     {
         return ""+nick+" ("+email+") - "+password+" - joined: " + joined;
     }
+    public int getID()
+    {
+        return id;
+    }
     public String getName()
     {
         return nick;

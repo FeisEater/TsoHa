@@ -29,6 +29,8 @@ public class AskServlet extends HttpServlet {
             throws ServletException, IOException {
         QAServlet.preprocess(request, response);
         QAServlet.getUserFromSession(request, response);
+        String title = request.getParameter("username");
+        String body = request.getParameter("password");
         QAServlet.showPage("ask.jsp", request, response);
     }
 

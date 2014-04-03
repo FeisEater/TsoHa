@@ -29,13 +29,21 @@ public class Question {
     private static final String sql_getByID =
             "SELECT * from questions where q_id = ?";
 
-    public Question(int i, String t, String b, Timestamp a, int f)
+    private static final String sql_addToDB =
+            "INSERT INTO questions(title, body, r_id, asked, flags)"
+            + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING id";
+
+    public Question(String t, String b, Timestamp a, int f)
     {
-        id = i;
         title = t;
         body = b;
         asked = a;
         flags = f;
+    }
+    public Question(int i, String t, String b, Timestamp a, int f)
+    {
+        this(t,b,a,f);
+        id = i;
     }
     public int getID()
     {
@@ -52,6 +60,22 @@ public class Question {
     public int getFlags()
     {
         return flags;
+    }
+    public void addToDatabase(User owner)
+    {
+        try {
+            Connection c = QAConnection.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql_addToDB);
+            ps.setString(1, title);
+            ps.setString(2, body);
+            ps.setInt(3, owner.getID());
+            ResultSet result = ps.executeQuery();
+            result.next();
+            id = result.getInt(1);
+            QAConnection.closeComponents(result, ps, c);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
     }
     public static List<Question> getQuestions() throws ServletException, IOException
     {
