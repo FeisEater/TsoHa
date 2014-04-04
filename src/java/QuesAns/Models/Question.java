@@ -30,7 +30,7 @@ public class Question {
             "SELECT * from questions where q_id = ?";
 
     private static final String sql_addToDB =
-            "INSERT INTO questions(title, body, q_id, asked, flags) "
+            "INSERT INTO questions(title, body, r_id, asked, flags) "
             + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING q_id, asked";
 
     public Question(String t, String b)
@@ -65,13 +65,15 @@ public class Question {
     public void addToDatabase(User owner)
     {
         try {
+            System.out.println(body);
             Connection c = QAConnection.getConnection();
             PreparedStatement ps = c.prepareStatement(sql_addToDB);
             ps.setString(1, title);
-            System.out.println(body);
             ps.setString(2, body);
-            int givenID = (owner == null) ? -1 : owner.getID();
-            ps.setInt(3, givenID);
+            if (owner == null)
+                ps.setObject(3, null);
+            else
+                ps.setInt(3, owner.getID());
             ResultSet result = ps.executeQuery();
             result.next();
             id = result.getInt(1);
