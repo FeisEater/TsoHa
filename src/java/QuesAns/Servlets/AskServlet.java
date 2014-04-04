@@ -41,7 +41,7 @@ public class AskServlet extends HttpServlet {
         }
         else
         {
-            request.setAttribute("errorMessage", "Invalid input.");
+            //request.setAttribute("errorMessage", "Invalid input.");
             QAServlet.showPage("ask.jsp", request, response);
         }
     }

@@ -31,7 +31,7 @@
                     </c:if>
                 </div>
                 <div class="col-md-12">
-                    <p>${objectFromID.body}</p>
+                    <div class="well">${objectFromID.body}</div>
                 </div>
                 <table class="table table-striped">
                     <thead>

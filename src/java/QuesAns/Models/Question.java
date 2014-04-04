@@ -62,10 +62,20 @@ public class Question {
     {
         return flags;
     }
+    public String reformatString(String s)
+    {
+        s = s.replace("&", "&amp");
+        s = s.replace("<", "&lt");
+        s = s.replace(">", "&gt");
+        s = s.replace("\n", "<br>");
+        s = s.replace(" ", "&nbsp");
+        return s;
+    }
     public void addToDatabase(User owner)
     {
+        title = reformatString(title);
+        body = reformatString(body);
         try {
-            System.out.println(body);
             Connection c = QAConnection.getConnection();
             PreparedStatement ps = c.prepareStatement(sql_addToDB);
             ps.setString(1, title);
