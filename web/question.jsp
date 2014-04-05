@@ -25,9 +25,9 @@
                     <a href="answer" type="button" class="btn btn-primary btn-lg">Give an answer</a>
                     <div class="col-md-12"><br></div>
                     <c:if test="${userName != null}">
-                        <button type="button" class="btn btn-default pull-left btn-xs">
+                        <a href="flag?id=${objectFromID.ID}" type="button" class="btn btn-default pull-left btn-xs">
                             Flag as inappropriate <span class="glyphicon glyphicon-flag"></span>
-                        </button>
+                        </a>
                     </c:if>
                 </div>
                 <div class="col-md-12">

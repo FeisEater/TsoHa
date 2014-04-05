@@ -28,6 +28,18 @@
         <servlet-name>AnswerServlet</servlet-name>
         <servlet-class>QuesAns.Servlets.AnswerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FlagServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.FlagServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListQuestionsServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.moderator.ListQuestionsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemoveQuestionServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.moderator.RemoveQuestionServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -56,12 +68,24 @@
         <servlet-name>AnswerServlet</servlet-name>
         <url-pattern>/answer</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FlagServlet</servlet-name>
+        <url-pattern>/flag</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListQuestionsServlet</servlet-name>
+        <url-pattern>/modquestions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveQuestionServlet</servlet-name>
+        <url-pattern>/modremovequestion</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index</welcome-file>
     </welcome-file-list>
 </web-app>

@@ -1,22 +1,19 @@
 
-package QuesAns.Servlets;
+package QuesAns.Servlets.moderator;
 
 import QuesAns.Models.Question;
-import QuesAns.Models.User;
 import java.io.IOException;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author FeisEater
+ * @author Pavel
  */
-public class ListServlet extends HttpServlet {
+public class RemoveQuestionServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,11 +26,13 @@ public class ListServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
-        QAServlet.getUserFromSession(request, response);
-        List<Question> questions = Question.getQuestions("order by asked desc");
-        request.setAttribute("list", questions);
-        QAServlet.showPage("index.jsp", request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        String idParam = request.getParameter("id");
+        int id = -1;
+        try {id = Integer.parseInt(idParam);} catch (Throwable e){}
+        Question q = Question.getByID(id);
+        if (q != null)  q.removeFromDatabase();
+        response.sendRedirect("modquestions");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

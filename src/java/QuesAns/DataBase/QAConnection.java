@@ -31,9 +31,9 @@ public class QAConnection {
     {
         try
         {
-            r.close();
-            p.close();
-            c.close();
+            if (r != null)  r.close();
+            if (p != null)  p.close();
+            if (c != null)  c.close();
         }   catch (Throwable e) {}
     }
 }

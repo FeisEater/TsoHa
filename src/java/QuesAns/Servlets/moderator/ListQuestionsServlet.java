@@ -1,22 +1,21 @@
 
-package QuesAns.Servlets;
+package QuesAns.Servlets.moderator;
 
 import QuesAns.Models.Question;
-import QuesAns.Models.User;
+import QuesAns.Servlets.QAServlet;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author FeisEater
+ * @author Pavel
  */
-public class ListServlet extends HttpServlet {
+public class ListQuestionsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,9 +30,9 @@ public class ListServlet extends HttpServlet {
             throws ServletException, IOException {
         QAServlet.preprocess(request, response);
         QAServlet.getUserFromSession(request, response);
-        List<Question> questions = Question.getQuestions("order by asked desc");
+        List<Question> questions = Question.getQuestions("order by flags desc");
         request.setAttribute("list", questions);
-        QAServlet.showPage("index.jsp", request, response);
+        QAServlet.showPage("modquestions.jsp", request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

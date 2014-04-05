@@ -24,7 +24,7 @@ public class Question {
     private int flags;
     
     private static final String sql_getQuestions =
-            "SELECT * from questions order by asked desc";
+            "SELECT * from questions ";
 
     private static final String sql_getByID =
             "SELECT * from questions where q_id = ?";
@@ -32,6 +32,12 @@ public class Question {
     private static final String sql_addToDB =
             "INSERT INTO questions(title, body, r_id, asked, flags) "
             + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING q_id, asked";
+
+    private static final String sql_addFlag =
+            "UPDATE questions SET flags = ? where q_id = ?";
+    
+    private static final String sql_removeFromDB =
+            "DELETE FROM questions WHERE q_id = ?";
 
     public Question(String t, String b)
     {
@@ -93,11 +99,36 @@ public class Question {
             System.out.println(ex);
         }
     }
-    public static List<Question> getQuestions() throws ServletException, IOException
+    public void addFlag()
     {
         try {
             Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_getQuestions);
+            PreparedStatement ps = c.prepareStatement(sql_addFlag);
+            ps.setInt(1, flags + 1);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            QAConnection.closeComponents(null, ps, c);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+    public void removeFromDatabase()
+    {
+        try {
+            Connection c = QAConnection.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql_removeFromDB);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            QAConnection.closeComponents(null, ps, c);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
+    public static List<Question> getQuestions(String order) throws ServletException, IOException
+    {
+        try {
+            Connection c = QAConnection.getConnection();
+            PreparedStatement ps = c.prepareStatement(sql_getQuestions + order);
             ResultSet result = ps.executeQuery();
             
             List<Question> questions = new ArrayList<Question>();
