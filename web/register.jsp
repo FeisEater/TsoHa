@@ -10,11 +10,11 @@
 <t:base pageTitle="Register to QuesAns">
     <div class="container">
         <h1>Register to the QuesAns</h1>
-        <form class="form-horizontal" role="form" action="accquestions" method="POST">
+        <form class="form-horizontal" role="form" action="register" method="POST">
             <div class="form-group">
                 <label for="inputNick" class="col-md-2 control-label">User Name</label>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" id="inputNick" name="userName" placeholder="User Name">
+                    <input type="text" class="form-control" id="inputNick" name="username" placeholder="User Name">
                 </div>
             </div>
             <div class="form-group">

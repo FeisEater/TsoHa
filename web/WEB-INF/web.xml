@@ -40,6 +40,14 @@
         <servlet-name>RemoveQuestionServlet</servlet-name>
         <servlet-class>QuesAns.Servlets.moderator.RemoveQuestionServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SettingsServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.RegisteredUser.SettingsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -79,6 +87,14 @@
     <servlet-mapping>
         <servlet-name>RemoveQuestionServlet</servlet-name>
         <url-pattern>/modremovequestion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SettingsServlet</servlet-name>
+        <url-pattern>/accsettings</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

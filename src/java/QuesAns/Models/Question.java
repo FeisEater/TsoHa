@@ -81,55 +81,68 @@ public class Question {
     {
         title = reformatString(title);
         body = reformatString(body);
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
         try {
-            Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_addToDB);
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_addToDB);
             ps.setString(1, title);
             ps.setString(2, body);
             if (owner == null)
                 ps.setObject(3, null);
             else
                 ps.setInt(3, owner.getID());
-            ResultSet result = ps.executeQuery();
+            result = ps.executeQuery();
             result.next();
             id = result.getInt(1);
             asked = result.getTimestamp(2);
-            QAConnection.closeComponents(result, ps, c);
         } catch (SQLException ex) {
             System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
         }
     }
     public void addFlag()
     {
+        Connection c = null;
+        PreparedStatement ps = null;
         try {
-            Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_addFlag);
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_addFlag);
             ps.setInt(1, flags + 1);
             ps.setInt(2, id);
             ps.executeUpdate();
-            QAConnection.closeComponents(null, ps, c);
         } catch (SQLException ex) {
             System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(null, ps, c);
         }
     }
     public void removeFromDatabase()
     {
+        Connection c = null;
+        PreparedStatement ps = null;
         try {
-            Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_removeFromDB);
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_removeFromDB);
             ps.setInt(1, id);
             ps.executeUpdate();
-            QAConnection.closeComponents(null, ps, c);
         } catch (SQLException ex) {
             System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(null, ps, c);
         }
     }
     public static List<Question> getQuestions(String order) throws ServletException, IOException
     {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
         try {
-            Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_getQuestions + order);
-            ResultSet result = ps.executeQuery();
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getQuestions + order);
+            result = ps.executeQuery();
             
             List<Question> questions = new ArrayList<Question>();
             while (result.next())
@@ -139,16 +152,21 @@ public class Question {
             return questions;
         } catch (SQLException ex) {
             System.out.println(ex);
-            return null;
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
         }
+        return null;
     }
     public static Question getByID(int id)
     {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
         try {
-            Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_getByID);
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getByID);
             ps.setInt(1, id);
-            ResultSet result = ps.executeQuery();
+            result = ps.executeQuery();
             
             Question q = null;
             if (result.next())
@@ -158,8 +176,10 @@ public class Question {
             return q;
         } catch (SQLException ex) {
             System.out.println(ex);
-            return null;
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
         }
+        return null;
     }
     private static Question retrieveQuestionFromResults(ResultSet result) throws SQLException
     {

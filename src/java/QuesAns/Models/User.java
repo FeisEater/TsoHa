@@ -28,13 +28,25 @@ public class User {
     
     private static final String sql_getUserByLogin = "SELECT * from regusers "
                 + "where (nick = ? or email = ?) and password = ?";
+
+    private static final String sql_registerUser =
+            "INSERT INTO regusers(nick, email, password, joined) "
+            + "VALUES(?,?,?,LOCALTIMESTAMP) RETURNING r_id, joined";
     
-    public User(int i, String n, String e, String p, Timestamp t)
+    private static final String sql_changeSettings =
+            "UPDATE questions SET nick = ?, email = ?, password = ? where r_id = ?";
+
+
+    public User(String n, String e, String p)
     {
-        id = i;
         nick = n;
         email = e;
         password = p;
+    }
+    public User(int i, String n, String e, String p, Timestamp t)
+    {
+        this(n, e, p);
+        id = i;
         joined = t;
     }
     @Override
@@ -58,12 +70,67 @@ public class User {
     {
         return password;
     }
+    public void setName(String n)
+    {
+        nick = n;
+    }
+    public void setEmail(String e)
+    {
+        email = e;
+    }
+    public void setPassword(String p)
+    {
+        password = p;
+    }
+    public void register()
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_registerUser);
+            ps.setString(1, nick);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            result = ps.executeQuery();
+            result.next();
+            id = result.getInt(1);
+            joined = result.getTimestamp(2);
+            QAConnection.closeComponents(result, ps, c);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+    }
+    public void changeSettings()
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_changeSettings);
+            ps.setString(1, nick);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            ps.setInt(4, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(null, ps, c);
+        }
+    }
     public static List<User> getUsers() throws ServletException, IOException
     {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
         try {
-            Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_getAllUsers);
-            ResultSet result = ps.executeQuery();
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getAllUsers);
+            result = ps.executeQuery();
             
             List<User> users = new ArrayList<User>();
             while (result.next())
@@ -73,19 +140,24 @@ public class User {
             return users;
         } catch (SQLException ex) {
             System.out.println(ex);
-            return null;
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
         }
+        return null;
     }
     public static User getByLoginInfo(String nameoremail, String password)
             throws ServletException, IOException
     {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
         try {
-            Connection c = QAConnection.getConnection();
-            PreparedStatement ps = c.prepareStatement(sql_getUserByLogin);
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getUserByLogin);
             ps.setString(1, nameoremail);
             ps.setString(2, nameoremail);
             ps.setString(3, password);
-            ResultSet result = ps.executeQuery();
+            result = ps.executeQuery();
             
             User loggedIn = null;
             if (result.next())
@@ -95,8 +167,10 @@ public class User {
             return loggedIn;
         } catch (SQLException ex) {
             System.out.println(ex);
-            return null;
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
         }
+        return null;
     }
     
     private static User retrieveUserFromResults(ResultSet result) throws SQLException
