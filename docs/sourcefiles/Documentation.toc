@@ -3,3 +3,5 @@
 \contentsline {section}{\numberline {3}System's datacontents}{5}
 \contentsline {section}{\numberline {4}Relation data base chart}{8}
 \contentsline {section}{\numberline {5}User interface}{9}
+\contentsline {section}{\numberline {6}Installation}{10}
+\contentsline {section}{\numberline {7}How to run and use the app}{10}

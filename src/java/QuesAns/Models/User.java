@@ -22,9 +22,9 @@ public class User {
     private String email;
     private String password;
     private Timestamp joined;
+    private boolean moderator;
     
-    private static final String sql_getAllUsers =
-            "SELECT r_id, nick, email, password, joined from regusers";
+    private static final String sql_getAllUsers = "SELECT * from regusers";
     
     private static final String sql_getUserByLogin = "SELECT * from regusers "
                 + "where (nick = ? or email = ?) and password = ?";
@@ -34,7 +34,7 @@ public class User {
             + "VALUES(?,?,?,LOCALTIMESTAMP) RETURNING r_id, joined";
     
     private static final String sql_changeSettings =
-            "UPDATE questions SET nick = ?, email = ?, password = ? where r_id = ?";
+            "UPDATE regusers SET nick = ?, email = ?, password = ? where r_id = ?";
 
 
     public User(String n, String e, String p)
@@ -43,11 +43,12 @@ public class User {
         email = e;
         password = p;
     }
-    public User(int i, String n, String e, String p, Timestamp t)
+    public User(int i, String n, String e, String p, Timestamp t, boolean m)
     {
         this(n, e, p);
         id = i;
         joined = t;
+        moderator = m;
     }
     @Override
     public String toString()
@@ -70,17 +71,24 @@ public class User {
     {
         return password;
     }
+    public boolean getModerator()
+    {
+        return moderator;
+    }
     public void setName(String n)
     {
-        nick = n;
+        if (!n.isEmpty())
+            nick = n;
     }
     public void setEmail(String e)
     {
-        email = e;
+        if (!e.isEmpty())
+            email = e;
     }
     public void setPassword(String p)
     {
-        password = p;
+        if (!p.isEmpty())
+            password = p;
     }
     public void register()
     {
@@ -180,6 +188,7 @@ public class User {
         String e = result.getString("email");
         String p = result.getString("password");
         Timestamp t = result.getTimestamp("joined");
-        return new User(i,n,e,p,t);
+        boolean m = result.getBoolean("moderator");
+        return new User(i,n,e,p,t,m);
     }
 }

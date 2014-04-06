@@ -22,13 +22,13 @@
             <div class="form-group">
                 <label for="inputNick" class="col-md-3 control-label">Change user Name</label>
                 <div class="col-md-6">
-                    <input type="text" class="form-control" id="inputNick" name="userName" placeholder="FeisEater">
+                    <input type="text" class="form-control" id="inputNick" name="username" placeholder=${loggedIn.name}>
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputEmail" class="col-md-3 control-label">Change e-mail</label>
                 <div class="col-md-6">
-                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="myemail@zmail.com">
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder=${loggedIn.email}>
                 </div>
             </div>
             <div class="form-group">

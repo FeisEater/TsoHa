@@ -31,24 +31,22 @@ public class SettingsServlet extends HttpServlet {
         QAServlet.preprocess(request, response);
         User loggedIn = QAServlet.getUserFromSession(request, response);
         
-        loggedIn.setName(request.getParameter("username"));
-        loggedIn.setEmail(request.getParameter("email"));
-        loggedIn.setPassword(request.getParameter("password"));
-//TODO: Finish later
-/*        if (username != null && email != null && password != null)
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        if (username == null && email == null && password == null)
         {
-            registering = new User(username, email, password);
-            registering.register();
-        }
-        if (registering == null)
-        {
-            QAServlet.showPage("register.jsp", request, response);
+            QAServlet.showPage("accsettings.jsp", request, response);
         }
         else
         {
-            session.setAttribute("loggedIn", registering);
+            loggedIn.setName(username);
+            loggedIn.setEmail(email);
+            loggedIn.setPassword(password);
+            loggedIn.changeSettings();
             response.sendRedirect("index");
-        }*/
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

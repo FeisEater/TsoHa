@@ -124,5 +124,13 @@ The following is a map which represents all the sites that are accessible in the
 This is a design concept of the front page. Notice that it lists asked questions, offers user to ask a question, sign in or register.\\
 \\
 \includegraphics[scale=0.9]{FrontPage}
+\newpage
+
+\section{Installation}
+To install the application, copy \emph{QuesAns.war} file to \emph{tomcat/webapps/} folder. Copying the file should be enough to make the tomcat unpack the file within the \emph{.war} file. \newline Next, configure \emph{context.xml} file at \emph{tomcat/webapps/QuesAns/META-INF/} to connect to the Postgres database. Use \emph{context.xml.dist} for reference. \newline
+Now, as long as tomcat is running, web application should now be working.
+
+\section{How to run and use the app}
+Web application is accessed at the url: \emph{servername.com/QuesAns/}. At the moment of writing it is accessed at \emph{http://t-pasmpasm.users.cs.helsinki.fi/QuesAns/}. Press sign up at top-right corner to get started by registering a user. Notice that reading other questions and even asking a question doesn't require the user to be registered.
 
 \end{document}

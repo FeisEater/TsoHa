@@ -30,22 +30,30 @@
         </div>
         <br>
     </div>
-    <t:list>
-        <thead>
-            <tr>
-                <th>Question</th>
-                <th>Amount of answers</th>
-                <th>Show question</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="unit" items="${list}">
-                <tr>
-                    <td class="unit" width="80%">${unit.title}</td>
-                    <td width="15%">1337</td>
-                    <td class="unit" width="5%"><a href="question?id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </t:list>
+    <div class="container">
+        <div class="row">
+            <t:list>
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Amount of answers</th>
+                        <th>Show question</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="unit" items="${list}">
+                        <tr>
+                            <td class="unit" width="80%">${unit.title}</td>
+                            <td width="15%">1337</td>
+                            <td class="unit" width="5%">
+                                <a href="question?id=${unit.ID}" type="button" class="btn btn-xs btn-default">
+                                    <span class="glyphicon glyphicon-arrow-left"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </t:list>
+        </div>
+    </div>
 </t:base>

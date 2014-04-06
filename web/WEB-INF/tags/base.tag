@@ -25,7 +25,7 @@
         <link href="css/main.css" rel="stylesheet">
     </head>
     <body>
-        <div class="container-fluid" style="background-color:#DDDDFF">
+        <div class="container-fluid" style="${loggedIn.moderator == true ? 'background-color:#CC0000' : 'background-color:#DDDDFF'}">
             <div class="row">
                 <div class="col-md-offset-1 col-md-3">
                     <a href="index" type="button" class="btn btn-link" style="color:#000; font-size:48px; font-weight:bold">QuesAns</a>
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-primary">${userName}</button>
+                            <a href="accsettings" type="button" class="btn btn-primary">${userName}</a>
                         </div>
                         <div class="col-md-12">
                             <a href="logout" type="button" class="btn btn-primary">Log out</a>
