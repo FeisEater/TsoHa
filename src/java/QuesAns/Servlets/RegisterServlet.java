@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author FeisEater
  */
-public class RegisterServlet extends HttpServlet {
+public class RegisterServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -27,7 +27,7 @@ public class RegisterServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
+        preprocess(request, response);
         HttpSession session = request.getSession();
         
         String username = request.getParameter("username");
@@ -41,42 +41,13 @@ public class RegisterServlet extends HttpServlet {
         }
         if (registering == null)
         {
-            QAServlet.showPage("register.jsp", request, response);
+            showPage("register.jsp", request, response);
         }
         else
         {
             session.setAttribute("loggedIn", registering);
             response.sendRedirect("index");
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -87,6 +58,6 @@ public class RegisterServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

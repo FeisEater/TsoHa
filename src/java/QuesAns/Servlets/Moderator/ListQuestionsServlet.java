@@ -1,21 +1,21 @@
 
-package QuesAns.Servlets;
+package QuesAns.Servlets.Moderator;
 
 import QuesAns.Models.Question;
-import QuesAns.Models.User;
+import QuesAns.Servlets.QAServlet;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author FeisEater
+ * @author Pavel
  */
-public class AskServlet extends QAServlet {
+public class ListQuestionsServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,21 +29,10 @@ public class AskServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        User loggedIn = getUserFromSession(request, response);
-        String title = request.getParameter("title");
-        String body = request.getParameter("body");
-        if (!(title == null && body == null))
-        {
-            Question q = new Question(title, body);
-            q.addToDatabase(loggedIn);
-            request.setAttribute("objectFromID", q);
-            response.sendRedirect("question");
-        }
-        else
-        {
-            //request.setAttribute("errorMessage", "Invalid input.");
-            showPage("ask.jsp", request, response);
-        }
+        getUserFromSession(request, response);
+        List<Question> questions = Question.getQuestions("order by flags desc");
+        request.setAttribute("list", questions);
+        showPage("modquestions.jsp", request, response);
     }
 
     /**
@@ -55,5 +44,5 @@ public class AskServlet extends QAServlet {
     public String getServletInfo() {
         return "Short description";
     }
-    
+
 }

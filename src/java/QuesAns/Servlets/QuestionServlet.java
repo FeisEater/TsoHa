@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package QuesAns.Servlets;
 
@@ -18,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Pavel
  */
-public class QuestionServlet extends HttpServlet {
+public class QuestionServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,8 +26,8 @@ public class QuestionServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
-        QAServlet.getUserFromSession(request, response);
+        preprocess(request, response);
+        getUserFromSession(request, response);
         String idParam = request.getParameter("id");
         int id = -1;
         try {id = Integer.parseInt(idParam);} catch (Throwable e){}
@@ -41,42 +36,13 @@ public class QuestionServlet extends HttpServlet {
         if (q == null)
         {
             request.setAttribute("errorMessage", "Invalid ID");
-            QAServlet.showPage("index.jsp", request, response);
+            response.sendRedirect("index");
         }
         else
         {
             request.setAttribute("pageTitle", q.getTitle());
-            QAServlet.showPage("question.jsp", request, response);
+            showPage("question.jsp", request, response);
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -87,6 +53,6 @@ public class QuestionServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

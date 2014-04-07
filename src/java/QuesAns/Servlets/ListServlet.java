@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author FeisEater
  */
-public class ListServlet extends HttpServlet {
+public class ListServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,40 +29,11 @@ public class ListServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
-        QAServlet.getUserFromSession(request, response);
+        preprocess(request, response);
+        getUserFromSession(request, response);
         List<Question> questions = Question.getQuestions("order by asked desc");
         request.setAttribute("list", questions);
-        QAServlet.showPage("index.jsp", request, response);
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        showPage("index.jsp", request, response);
     }
 
     /**
@@ -73,6 +44,6 @@ public class ListServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author FeisEater
  */
-public class SettingsServlet extends HttpServlet {
+public class SettingsServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,8 +28,8 @@ public class SettingsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        QAServlet.preprocess(request, response);
-        User loggedIn = QAServlet.getUserFromSession(request, response);
+        preprocess(request, response);
+        User loggedIn = getUserFromSession(request, response);
         
         String username = request.getParameter("username");
         String email = request.getParameter("email");
@@ -37,7 +37,7 @@ public class SettingsServlet extends HttpServlet {
 
         if (username == null && email == null && password == null)
         {
-            QAServlet.showPage("accsettings.jsp", request, response);
+            showPage("accsettings.jsp", request, response);
         }
         else
         {
@@ -49,35 +49,6 @@ public class SettingsServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
     /**
      * Returns a short description of the servlet.
      *
@@ -86,6 +57,6 @@ public class SettingsServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }
