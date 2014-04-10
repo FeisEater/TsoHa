@@ -40,6 +40,8 @@ public class QuestionServlet extends QAServlet {
         }
         else
         {
+            request.setAttribute("list", q.getAnswers());
+            request.setAttribute("taglist", q.getTags());
             request.setAttribute("pageTitle", q.getTitle());
             showPage("question.jsp", request, response);
         }

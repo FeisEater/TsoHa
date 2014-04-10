@@ -22,6 +22,7 @@ public class Question {
     private String body;
     private Timestamp asked;
     private int flags;
+    private User asker;
     
     private static final String sql_getQuestions =
             "SELECT * from questions ";
@@ -34,10 +35,19 @@ public class Question {
             + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING q_id, asked";
 
     private static final String sql_addFlag =
-            "UPDATE questions SET flags = ? where q_id = ?";
+            "UPDATE questions SET flags = ? where q_id = ? order by rating";
     
     private static final String sql_removeFromDB =
             "DELETE FROM questions WHERE q_id = ?";
+
+    private static final String sql_getQuestionsAnswers =
+        "SELECT * from answers where q_id = ?";
+
+    private static final String sql_getQuestionsTags =
+            "SELECT * from tagstoquestions where q_id = ?";
+
+    private static final String sql_countAnswers =
+            "SELECT count(*) from answers where q_id = ?";
 
     public Question(String t, String b)
     {
@@ -45,12 +55,13 @@ public class Question {
         body = b;
         flags = 0;
     }
-    public Question(int i, String t, String b, Timestamp a, int f)
+    public Question(int i, String t, String b, Timestamp a, int f, User u)
     {
         this(t,b);
         id = i;
         asked = a;
         flags = f;
+        asker = u;
     }
     public int getID()
     {
@@ -67,6 +78,10 @@ public class Question {
     public int getFlags()
     {
         return flags;
+    }
+    public User getAsker()
+    {
+        return asker;
     }
     public String reformatString(String s)
     {
@@ -134,6 +149,54 @@ public class Question {
             QAConnection.closeComponents(null, ps, c);
         }
     }
+    public List<Answer> getAnswers() throws ServletException, IOException
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getQuestionsAnswers);
+            ps.setInt(1, id);
+            result = ps.executeQuery();
+            
+            List<Answer> answers = new ArrayList<Answer>();
+            while (result.next())
+                answers.add(Answer.retrieveAnswerFromResults(result));
+
+            QAConnection.closeComponents(result, ps, c);
+            return answers;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return null;
+    }
+    public List<Tag> getTags() throws ServletException, IOException
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getQuestionsTags);
+            ps.setInt(1, id);
+            result = ps.executeQuery();
+            
+            List<Tag> tags = new ArrayList<Tag>();
+            while (result.next())
+                tags.add(Tag.getByID(result.getInt("t_id")));
+
+            QAConnection.closeComponents(result, ps, c);
+            return tags;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return null;
+    }
     public static List<Question> getQuestions(String order) throws ServletException, IOException
     {
         Connection c = null;
@@ -181,6 +244,30 @@ public class Question {
         }
         return null;
     }
+    public int getAnswerCount()
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_countAnswers);
+            ps.setInt(1, id);
+            result = ps.executeQuery();
+            
+            int count = -1;
+            if (result.next())
+                count = result.getInt(1);
+
+            QAConnection.closeComponents(result, ps, c);
+            return count;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return -1;
+    }
     private static Question retrieveQuestionFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("q_id");
@@ -188,7 +275,9 @@ public class Question {
         String b = result.getString("body");
         Timestamp a = result.getTimestamp("asked");
         int f = result.getInt("flags");
-        return new Question(i,t,b,a,f);
+        int askerID = result.getInt("r_id");
+        User u = User.getByID(askerID);
+        return new Question(i,t,b,a,f,u);
     }
 
 }

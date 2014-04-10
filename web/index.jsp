@@ -44,7 +44,7 @@
                     <c:forEach var="unit" items="${list}">
                         <tr>
                             <td class="unit" width="80%">${unit.title}</td>
-                            <td width="15%">1337</td>
+                            <td width="15%">${unit.answerCount}</td>
                             <td class="unit" width="5%">
                                 <a href="question?id=${unit.ID}" type="button" class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-arrow-left"></span>

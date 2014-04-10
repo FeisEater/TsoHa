@@ -36,6 +36,9 @@ public class User {
     private static final String sql_changeSettings =
             "UPDATE regusers SET nick = ?, email = ?, password = ? where r_id = ?";
 
+    private static final String sql_getByID =
+            "SELECT * from regusers where r_id = ?";
+
 
     public User(String n, String e, String p)
     {
@@ -180,7 +183,31 @@ public class User {
         }
         return null;
     }
-    
+    public static User getByID(int id)
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getByID);
+            ps.setInt(1, id);
+            result = ps.executeQuery();
+            
+            User u = null;
+            if (result.next())
+                u = retrieveUserFromResults(result);
+
+            QAConnection.closeComponents(result, ps, c);
+            return u;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return null;
+    }
+
     private static User retrieveUserFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("r_id");
