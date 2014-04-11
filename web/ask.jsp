@@ -20,7 +20,7 @@
                         <label for="title" class="control-label">Short title for your question. This text will show up in the search results. A good title fits within one line.</label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="Question title">
                     <br>
-                        <label for="tags" class="control-label">Ädd tägs to help your question show up in relevant searches. Separate tags with space.</label>
+                        <label for="tags" class="control-label">Add tags to help your question show up in relevant searches. Separate tags with space.</label>
                         <textarea class="form-control" id="tags" name="tags" spellcheck="false" placeholder="Tags"></textarea>
                     <br>
                         <label for="body" class="control-label">Write your overall question here.</label>

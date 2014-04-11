@@ -2,6 +2,7 @@
 package QuesAns.Servlets;
 
 import QuesAns.Models.Question;
+import QuesAns.Models.Tag;
 import QuesAns.Models.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -32,10 +33,17 @@ public class AskServlet extends QAServlet {
         User loggedIn = getUserFromSession(request, response);
         String title = request.getParameter("title");
         String body = request.getParameter("body");
+        String tagline = request.getParameter("tags");
+        String[] tags = null;
+        if (tagline != null)
+            tags = tagline.split(" ");
+        
         if (!(title == null && body == null))
         {
             Question q = new Question(title, body);
             q.addToDatabase(loggedIn);
+            for (String t : tags)
+                new Tag(t).addToDatabase(q);
             request.setAttribute("objectFromID", q);
             response.sendRedirect("question");
         }

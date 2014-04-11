@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<t:base>
+<t:base pageTitle="${objectFromID.title}">
     <div class="container">
         <div class="row">
             <div class="col-md-12"><br></div>
@@ -49,7 +49,7 @@
                                 <td width="10%">
                                     <img src="defavatar.png" alt="avatar" height="64">
                                     <div class="caption">
-                                        <a href="accquestions" type="button" class="btn btn-link text-left"><c:out value="${unit.answerer.name}"></c:out></a>
+                                        <a href="accquestions" type="button" class="btn btn-link text-left"><a href="accquestions">${unit.answerer.name}></a>
                                     </div>
                                 </td>
                                 <td width="70%">${unit.body}</td>

@@ -20,10 +20,21 @@ public class Tag {
     private static final String sql_getByID =
             "SELECT * from tags where t_id = ?";
 
+    private static final String sql_addToDB =
+            "INSERT INTO tags(tag, firsttagged) "
+            + "VALUES(?,LOCALTIMESTAMP) RETURNING t_id, firsttagged";
+
+    private static final String sql_connectTagWithQuestion =
+            "INSERT INTO tagstoquestions(t_id, q_id) VALUES(?,?)";
+
+    public Tag(String tag)
+    {
+        this.tag = tag;
+    }
     public Tag(int i, String tag, Timestamp t)
     {
+        this(tag);
         id = i;
-        this.tag = tag;
         tagged = t;
     }
     public String getText()
@@ -53,6 +64,29 @@ public class Tag {
             QAConnection.closeComponents(result, ps, c);
         }
         return null;
+    }
+    public void addToDatabase(Question q)
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_addToDB);
+            ps.setString(1, tag);
+            result = ps.executeQuery();
+            result.next();
+            id = result.getInt(1);
+            tagged = result.getTimestamp(2);
+            ps = c.prepareStatement(sql_connectTagWithQuestion);
+            ps.setInt(1, id);
+            ps.setInt(2, q.getID());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
     }
     private static Tag retrieveTagFromResults(ResultSet result) throws SQLException
     {
