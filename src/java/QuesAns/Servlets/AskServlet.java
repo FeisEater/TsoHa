@@ -34,8 +34,8 @@ public class AskServlet extends QAServlet {
         String title = request.getParameter("title");
         String body = request.getParameter("body");
         String tagline = request.getParameter("tags");
-        String[] tags = null;
-        if (tagline != null)
+        String[] tags = {};
+        if (tagline != null && !tagline.isEmpty())
             tags = tagline.split(" ");
         
         if (!(title == null && body == null))

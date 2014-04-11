@@ -20,6 +20,9 @@ public class Tag {
     private static final String sql_getByID =
             "SELECT * from tags where t_id = ?";
 
+    private static final String sql_findTag =
+            "SELECT t_id, firsttagged from tags where tag = ?";
+
     private static final String sql_addToDB =
             "INSERT INTO tags(tag, firsttagged) "
             + "VALUES(?,LOCALTIMESTAMP) RETURNING t_id, firsttagged";
@@ -72,12 +75,23 @@ public class Tag {
         ResultSet result = null;
         try {
             c = QAConnection.getConnection();
-            ps = c.prepareStatement(sql_addToDB);
+            ps = c.prepareStatement(sql_findTag);
             ps.setString(1, tag);
             result = ps.executeQuery();
-            result.next();
-            id = result.getInt(1);
-            tagged = result.getTimestamp(2);
+            if (result.next())
+            {
+                id = result.getInt(1);
+                tagged = result.getTimestamp(2);
+            }
+            else
+            {
+                ps = c.prepareStatement(sql_addToDB);
+                ps.setString(1, tag);
+                result = ps.executeQuery();
+                result.next();
+                id = result.getInt(1);
+                tagged = result.getTimestamp(2);
+            }
             ps = c.prepareStatement(sql_connectTagWithQuestion);
             ps.setInt(1, id);
             ps.setInt(2, q.getID());
