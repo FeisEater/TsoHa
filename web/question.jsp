@@ -22,9 +22,9 @@
                     <h1>${objectFromID.title}</h1>
                 </div>
                 <div class="col-md-2">
-                    <a href="answer" type="button" class="btn btn-primary btn-lg">Give an answer</a>
-                    <div class="col-md-12"><br></div>
                     <c:if test="${userName != null}">
+                        <a href="answer?id=${objectFromID.ID}" type="button" class="btn btn-primary btn-lg">Give an answer</a>
+                        <div class="col-md-12"><br></div>
                         <a href="flag?id=${objectFromID.ID}" type="button" class="btn btn-default pull-left btn-xs">
                             Flag as inappropriate <span class="glyphicon glyphicon-flag"></span>
                         </a>
@@ -49,7 +49,7 @@
                                 <td width="10%">
                                     <img src="defavatar.png" alt="avatar" height="64">
                                     <div class="caption">
-                                        <a href="accquestions" type="button" class="btn btn-link text-left"><a href="accquestions">${unit.answerer.name}></a>
+                                        <a href="accquestions" type="button" class="btn btn-link text-left"><a href="accquestions">${unit.answerer.name}</a>
                                     </div>
                                 </td>
                                 <td width="70%">${unit.body}</td>

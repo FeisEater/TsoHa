@@ -1,6 +1,9 @@
 
 package QuesAns.Servlets.RegisteredUser;
 
+import QuesAns.Models.Answer;
+import QuesAns.Models.Question;
+import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,8 +30,22 @@ public class AnswerServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        getUserFromSession(request, response);
-        showPage("answer.jsp", request, response);
+        User loggedIn = getUserFromSession(request, response);
+        String stringId = request.getParameter("id");
+        int quesId = -1;
+        try {
+            quesId = Integer.parseInt(stringId);
+        } catch (NumberFormatException e) {}
+        Question ques = Question.getByID(quesId);
+        request.setAttribute("objectFromID", ques);
+        String answer = request.getParameter("answer");
+        if (answer != null)
+        {
+            new Answer(answer).addToDatabase(loggedIn, ques);
+            response.sendRedirect("question?id=" + quesId);
+        }
+        else
+            showPage("answer.jsp", request, response);
     }
 
     /**

@@ -1,5 +1,5 @@
 <%-- 
-    Document   : answer
+    Document   : append
     Created on : Mar 22, 2014, 1:36:00 AM
     Author     : FeisEater
 --%>
@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<t:base pageTitle="Answer to ${objectFromID.title}">
+<t:base pageTitle="Append answer">
     <div class="container">
         <div class="row" style="background-color:#FFDDFF">
             <div class="col-md-12"><br></div>
