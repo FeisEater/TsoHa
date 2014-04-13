@@ -1,7 +1,8 @@
 package QuesAns.DataBase;
 
 /**
- *
+ * Static class for forming and closing components requiring
+ * connection with the database.
  * @author FeisEater
  */
 import java.sql.Connection;
@@ -13,7 +14,10 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 public class QAConnection {
-
+/**
+ * Gets connection with database.
+ * @return connection object.
+ */
     public static Connection getConnection() {
         try
         {
@@ -26,7 +30,12 @@ public class QAConnection {
         
         return null;
     }
-    
+/**
+ * Closes components requiring connection with database.
+ * @param r ResultSet object.
+ * @param p PreparedStatement object.
+ * @param c Connection object.
+ */
     public static void closeComponents(ResultSet r, PreparedStatement p, Connection c)
     {
         try

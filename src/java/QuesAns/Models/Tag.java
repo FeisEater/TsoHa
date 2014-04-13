@@ -44,6 +44,11 @@ public class Tag {
     {
         return tag;
     }
+/**
+ * Retrieves specific tag by its ID.
+ * @param id Specified ID.
+ * @return tag object.
+ */
     public static Tag getByID(int id)
     {
         Connection c = null;
@@ -68,6 +73,10 @@ public class Tag {
         }
         return null;
     }
+/**
+ * Adds a tag to the database.
+ * @param q Question to which tag is added.
+ */
     public void addToDatabase(Question q)
     {
         Connection c = null;
@@ -102,6 +111,12 @@ public class Tag {
             QAConnection.closeComponents(result, ps, c);
         }
     }
+/**
+ * Forms a tag object based by query results.
+ * @param result ResultSet object.
+ * @return Tag object.
+ * @throws SQLException 
+ */
     private static Tag retrieveTagFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("t_id");

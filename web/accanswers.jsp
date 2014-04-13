@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:base pageTitle="User's answers">
     <t:accbase page="1">
-        <table class="table table-striped">
+        <t:list>
             <thead>
                 <tr>
                     <th>Answer</th>
@@ -20,37 +20,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td width="40%">Talk to your parents.</td>
-                    <td width="40%">Can I go out tonight?</td>
-                    <td width="10%">0</td>
-                    <td width="5%"><a href="question" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                    <td width="5%"><a href="answer" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                </tr>
-                <tr>
-                    <td>Talk to your parents.</td>
-                    <td>HELP! Code doesn't compile!</td>
-                    <td>71</td>
-                    <td><a href="question" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                    <td><a href="answer" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                </tr>
-                <tr>
-                    <td>Talk to your parents.</td>
-                    <td>Parents won't talk to me.</td>
-                    <td>1337</td>
-                    <td><a href="question" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                    <td><a href="answer" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
-                </tr>
+                <c:forEach var="unit" items="${list}">
+                    <tr>
+                        <td width="40%">${unit.body}</td>
+                        <td width="40%">${unit.question.title}</td>
+                        <td width="10%">${unit.rating}</td>
+                        <td width="5%"><a href="question?id=${unit.question.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                        <td width="5%"><a href="append?id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                    </tr>
+                </c:forEach>
             </tbody>
-        </table>
-        <ul class="pagination">
-            <li><a href="#">&laquo;</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">&raquo;</a></li>
-        </ul>
+        </t:list>
     </t:accbase>
 </t:base>

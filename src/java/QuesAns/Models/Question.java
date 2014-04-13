@@ -13,7 +13,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 /**
- *
+ * Model class for questions database table.
  * @author FeisEater
  */
 public class Question {
@@ -35,13 +35,13 @@ public class Question {
             + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING q_id, asked";
 
     private static final String sql_addFlag =
-            "UPDATE questions SET flags = ? where q_id = ? order by rating";
+            "UPDATE questions SET flags = ? where q_id = ?";
     
     private static final String sql_removeFromDB =
             "DELETE FROM questions WHERE q_id = ?";
 
     private static final String sql_getQuestionsAnswers =
-        "SELECT * from answers where q_id = ?";
+        "SELECT * from answers where q_id = ? order by rating desc";
 
     private static final String sql_getQuestionsTags =
             "SELECT * from tagstoquestions where q_id = ?";
@@ -49,6 +49,11 @@ public class Question {
     private static final String sql_countAnswers =
             "SELECT count(*) from answers where q_id = ?";
     
+/**
+ * Forms an sql statement for finding questions that have the required set of tags
+ * @param tagcount amount of tags
+ * @return sql statement
+ */
     private static String sql_getQuestionByTags(int tagcount)
     {
         String sql = "SELECT questions.q_id, title, body, r_id, asked, flags from questions";
@@ -97,6 +102,11 @@ public class Question {
     {
         return asker;
     }
+/**
+ * Formats string in a way that html-code won't confuse it as a set of html-elements.
+ * @param s String to be formatted.
+ * @return Formatted version of the string.
+ */
     public String reformatString(String s)
     {
         s = s.replace("&", "&amp");
@@ -106,6 +116,10 @@ public class Question {
         s = s.replace(" ", "&nbsp");
         return s;
     }
+/**
+ * Adds a question to the database.
+ * @param owner User that made the question.
+ */
     public void addToDatabase(User owner)
     {
         title = reformatString(title);
@@ -132,6 +146,9 @@ public class Question {
             QAConnection.closeComponents(result, ps, c);
         }
     }
+/**
+ * Adds question's flag count by one.
+ */
     public void addFlag()
     {
         Connection c = null;
@@ -148,6 +165,9 @@ public class Question {
             QAConnection.closeComponents(null, ps, c);
         }
     }
+/**
+ * Removes question from the database.
+ */
     public void removeFromDatabase()
     {
         Connection c = null;
@@ -163,6 +183,12 @@ public class Question {
             QAConnection.closeComponents(null, ps, c);
         }
     }
+/**
+ * Finds all answers for the question.
+ * @return List of answers.
+ * @throws ServletException
+ * @throws IOException 
+ */
     public List<Answer> getAnswers() throws ServletException, IOException
     {
         Connection c = null;
@@ -187,6 +213,12 @@ public class Question {
         }
         return null;
     }
+/**
+ * Finds all tags for the question.
+ * @return List of tags.
+ * @throws ServletException
+ * @throws IOException 
+ */
     public List<Tag> getTags() throws ServletException, IOException
     {
         Connection c = null;
@@ -211,6 +243,13 @@ public class Question {
         }
         return null;
     }
+/**
+ * Finds all questions.
+ * @param order final part of the sql statement, can be used for specifying the order to be listed.
+ * @return List of questions
+ * @throws ServletException
+ * @throws IOException 
+ */
     public static List<Question> getQuestions(String order) throws ServletException, IOException
     {
         Connection c = null;
@@ -234,6 +273,11 @@ public class Question {
         }
         return null;
     }
+/**
+ * Retrieves specific question by its ID.
+ * @param id Specified ID.
+ * @return question object.
+ */
     public static Question getByID(int id)
     {
         Connection c = null;
@@ -258,6 +302,10 @@ public class Question {
         }
         return null;
     }
+/**
+ * Counts the amount of answer for this question.
+ * @return answer count.
+ */
     public int getAnswerCount()
     {
         Connection c = null;
@@ -282,7 +330,12 @@ public class Question {
         }
         return -1;
     }
-    public static List<Question> getQuestionsByTags(String[] tags) throws ServletException, IOException
+/**
+ * Finds question that have the specified set of tags.
+ * @param tags set of tags.
+ * @return Questions that pass the filter.
+ */
+    public static List<Question> getQuestionsByTags(String[] tags)
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -307,7 +360,13 @@ public class Question {
         }
         return null;
     }
-    private static Question retrieveQuestionFromResults(ResultSet result) throws SQLException
+/**
+ * Forms a question object based by query results.
+ * @param result ResultSet object.
+ * @return Question object.
+ * @throws SQLException 
+ */
+    public static Question retrieveQuestionFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("q_id");
         String t = result.getString("title");

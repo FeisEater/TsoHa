@@ -1,6 +1,7 @@
 
 package QuesAns.Servlets.RegisteredUser;
 
+import QuesAns.Models.Answer;
 import QuesAns.Models.Question;
 import QuesAns.Servlets.QAServlet;
 import java.io.IOException;
@@ -29,12 +30,21 @@ public class FlagServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
+        String typeParam = request.getParameter("type");
         String idParam = request.getParameter("id");
         int id = -1;
         try {id = Integer.parseInt(idParam);} catch (Throwable e){}
-        Question q = Question.getByID(id);
-        if (q != null)  q.addFlag();
-        response.sendRedirect("index");
+        if (typeParam.equals("ques"))
+        {
+            Question q = Question.getByID(id);
+            if (q != null)  q.addFlag();
+        }
+        else if (typeParam.equals("ans"))
+        {
+            Answer a = Answer.getByID(id);
+            if (a != null)  a.addFlag();
+        }
+        response.sendRedirect(getPrevURL(request, response));
     }
 
     /**

@@ -1,20 +1,23 @@
 
-package QuesAns.Servlets;
+package QuesAns.Servlets.RegisteredUser;
 
+import QuesAns.Models.Answer;
+import QuesAns.Models.Question;
 import QuesAns.Models.User;
+import QuesAns.Servlets.QAServlet;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author FeisEater
  */
-public class LoginServlet extends QAServlet {
+public class UsersAnswersServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,25 +31,10 @@ public class LoginServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        HttpSession session = request.getSession();
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        User loggedIn = User.getByLoginInfo(username, password);
-        if (loggedIn == null)
-        {
-            if (!(username == null && password == null))
-            {
-                request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
-                request.setAttribute("givenName", username);
-            }
-            showPage("signin.jsp", request, response);
-        }
-        else
-        {
-            session.setAttribute("loggedIn", loggedIn);
-            response.sendRedirect(getPrevURL(request, response));
-        }
+        User loggedIn = getUserFromSession(request, response);
+        List<Answer> answers = loggedIn.getAnswers();
+        request.setAttribute("list", answers);
+        showPage("accanswers.jsp", request, response);
     }
 
     /**

@@ -25,7 +25,7 @@
                     <c:if test="${userName != null}">
                         <a href="answer?id=${objectFromID.ID}" type="button" class="btn btn-primary btn-lg">Give an answer</a>
                         <div class="col-md-12"><br></div>
-                        <a href="flag?id=${objectFromID.ID}" type="button" class="btn btn-default pull-left btn-xs">
+                        <a href="flag?type=ques&id=${objectFromID.ID}" type="button" class="btn btn-default pull-left btn-xs">
                             Flag as inappropriate <span class="glyphicon glyphicon-flag"></span>
                         </a>
                     </c:if>
@@ -39,8 +39,10 @@
                             <th></th>
                             <th>Answer</th>
                             <th>Rating</th>
-                            <th>Mark as useful</th>
-                            <th>Flag answer as inappropriate</th>
+                            <th>Rate</th>
+                            <c:if test="${loggedIn != null}">
+                                <th>Flag</th>
+                            </c:if>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,12 +52,20 @@
                                     <img src="defavatar.png" alt="avatar" height="64">
                                     <div class="caption">
                                         <a href="accquestions" type="button" class="btn btn-link text-left"><a href="accquestions">${unit.answerer.name}</a>
+                                        <c:if test="${loggedIn.ID == unit.answerer.ID}">
+                                            <a href="append?id=${unit.ID}" type="button" class="btn btn-xs btn-primary">Edit answer</a>
+                                        </c:if>
                                     </div>
                                 </td>
-                                <td width="70%">${unit.body}</td>
+                                <td width="60%">${unit.body}</td>
                                 <td width="10%">${unit.rating}</td>
-                                <td width="5%"><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-up"></span></button></td>
-                                <td width="5%"><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-flag"></span></button></td>
+                                <td width="10%">
+                                    <a href="rate?type=t&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+                                    <a href="rate?type=f&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+                                </td>
+                                <c:if test="${loggedIn != null}">
+                                    <td width="5%"><a href="flag?type=ans&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-flag"></span></a></td>
+                                </c:if>
                             </tr>
                         </c:forEach>
                     </tbody>

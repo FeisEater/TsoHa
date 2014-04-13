@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
- *
+ * Model class for answers database table.
  * @author Pavel
  */
 public class Answer {
@@ -23,12 +23,23 @@ public class Answer {
     private User answerer;
     private Question question;
     
+    private static final String sql_getByID =
+            "SELECT * from answers where a_id = ?";
+
     private static final String sql_addToDB =
             "INSERT INTO answers(body, answered, lastedited, r_id, q_id) "
             + "VALUES(?,LOCALTIMESTAMP,LOCALTIMESTAMP,?,?) RETURNING a_id, answered";
 
     private static final String sql_append =
-            "UPDATE answers SET body = ?, lastedited = ? where a_id = ?";
+            "UPDATE answers SET body = ?, lastedited = LOCALTIMESTAMP where a_id = ?";
+    
+    private static final String sql_rate =
+            "UPDATE answers SET rating = ? where a_id = ?";
+
+    private static final String sql_addFlag =
+            "UPDATE answers SET flags = ? where a_id = ?";
+
+    private static final String sql_currentTime = "SELECT LOCALTIMESTAMP";
     
     public Answer(String answer)
     {
@@ -50,6 +61,10 @@ public class Answer {
     {
         return answerer;
     }
+    public Question getQuestion()
+    {
+        return question;
+    }
     public String getBody()
     {
         return body;
@@ -58,6 +73,15 @@ public class Answer {
     {
         return rating;
     }
+    public int getID()
+    {
+        return id;
+    }
+/**
+ * Formats string in a way that html-code won't confuse it as a set of html-elements.
+ * @param s String to be formatted.
+ * @return Formatted version of the string.
+ */
     public String reformatString(String s)
     {
         s = s.replace("&", "&amp");
@@ -67,6 +91,11 @@ public class Answer {
         s = s.replace(" ", "&nbsp");
         return s;
     }
+/**
+ * Adds an answer to the database.
+ * @param owner User that made the answer.
+ * @param q Question, which this answers.
+ */
     public void addToDatabase(User owner, Question q)
     {
         body = reformatString(body);
@@ -90,6 +119,106 @@ public class Answer {
             QAConnection.closeComponents(result, ps, c);
         }
     }
+/**
+ * Appends stuff to the answer.
+ * @param s new information.
+ */
+    public void appendAnswer(String s)
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_currentTime);
+            result = ps.executeQuery();
+            result.next();
+            Timestamp ts = result.getTimestamp(1);
+            s = "<br><br> Update " + ts + ":<br>" + reformatString(s);
+            ps = c.prepareStatement(sql_append);
+            ps.setString(1, body + s);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+    }
+/**
+ * Changes answers rating.
+ * @param up if true, rates answer up. Otherwise rate down.
+ */
+    public void rate(boolean up)
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_rate);
+            ps.setInt(1, rating + (up ? 1 : -1));
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(null, ps, c);
+        }
+    }
+/**
+ * Adds answer's flag count by one.
+ */
+    public void addFlag()
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_addFlag);
+            ps.setInt(1, flags + 1);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(null, ps, c);
+        }
+    }
+/**
+ * Retrieves specific answer by its ID.
+ * @param id Specified ID.
+ * @return answer object.
+ */
+    public static Answer getByID(int id)
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getByID);
+            ps.setInt(1, id);
+            result = ps.executeQuery();
+            
+            Answer a = null;
+            if (result.next())
+                a = retrieveAnswerFromResults(result);
+
+            QAConnection.closeComponents(result, ps, c);
+            return a;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return null;
+    }
+/**
+ * Forms an answer object based by query results.
+ * @param result ResultSet object.
+ * @return Answer object.
+ * @throws SQLException 
+ */
     public static Answer retrieveAnswerFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("a_id");

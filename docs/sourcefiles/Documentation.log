@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.14)  6 APR 2014 21:31
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.14)  13 APR 2014 22:25
 entering extended mode
 **C:/Codez/tsoha/docs/sourcefiles/Documentation.tex
 (C:/Codez/tsoha/docs/sourcefiles/Documentation.tex
@@ -248,53 +248,61 @@ Overfull \hbox (5.97841pt too wide) in paragraph at lines 115--117
  []
 
 [8 <C:/Codez/tsoha/docs/sourcefiles/RelationalDBChart.png>]
-<sitemap.png, id=37, 581.2917pt x 263.0628pt>
-File: sitemap.png Graphic file (type png)
- <use sitemap.png>
-Package pdftex.def Info: sitemap.png used on input line 122.
-(pdftex.def)             Requested size: 406.90141pt x 184.1427pt.
+Underfull \hbox (badness 10000) in paragraph at lines 120--131
 
-<FrontPage.png, id=38, 449.7603pt x 303.7749pt>
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--131
+
+ []
+
+[9] <sitemap2.png, id=40, 804.00375pt x 798.985pt>
+File: sitemap2.png Graphic file (type png)
+ <use sitemap2.png>
+Package pdftex.def Info: sitemap2.png used on input line 137.
+(pdftex.def)             Requested size: 442.20343pt x 439.4431pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--138
+
+ []
+
+
+Overfull \hbox (52.20343pt too wide) in paragraph at lines 135--138
+[] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--138
+
+ []
+
+[10 <C:/Codez/tsoha/docs/sourcefiles/sitemap2.png>]
+<FrontPage.png, id=45, 449.7603pt x 303.7749pt>
 File: FrontPage.png Graphic file (type png)
  <use FrontPage.png>
-Package pdftex.def Info: FrontPage.png used on input line 126.
+Package pdftex.def Info: FrontPage.png used on input line 141.
 (pdftex.def)             Requested size: 404.78052pt x 273.39488pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 120--127
+Underfull \hbox (badness 10000) in paragraph at lines 139--142
 
  []
 
 
-Overfull \hbox (16.90141pt too wide) in paragraph at lines 120--127
+Overfull \hbox (14.78052pt too wide) in paragraph at lines 139--142
 [] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--127
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 120--127
-
- []
-
-
-Overfull \hbox (14.78052pt too wide) in paragraph at lines 120--127
-[] 
- []
-
-[9 <C:/Codez/tsoha/docs/sourcefiles/sitemap.png> <C:/Codez/tsoha/docs/sourcefil
-es/FrontPage.png>]
-Overfull \hbox (36.02422pt too wide) in paragraph at lines 134--135
+[11 <C:/Codez/tsoha/docs/sourcefiles/FrontPage.png>]
+Overfull \hbox (36.02422pt too wide) in paragraph at lines 149--150
 \OT1/cmr/m/n/12 mo-ment of writ-ing it is ac-cessed at \OT1/cmr/m/it/12 http://
 t-pasmpasm.users.cs.helsinki.fi/QuesAns/\OT1/cmr/m/n/12 .
  []
 
-[10] (C:\Codez\tsoha\docs\sourcefiles\Documentation.aux) ) 
+[12] (C:\Codez\tsoha\docs\sourcefiles\Documentation.aux) ) 
 Here is how much of TeX's memory you used:
  1157 strings out of 493921
- 15539 string characters out of 3144864
+ 15544 string characters out of 3144864
  70001 words of memory out of 3000000
  4484 multiletter control sequences out of 15000+200000
  8242 words of font info for 29 fonts, out of 3000000 for 9000
@@ -304,9 +312,9 @@ Here is how much of TeX's memory you used:
 6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/Program Files (x86)
 /MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/Program Files (x86)/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on Documentation.pdf (10 pages, 2765356 bytes).
+Output written on Documentation.pdf (12 pages, 1419779 bytes).
 PDF statistics:
- 58 PDF objects out of 1000 (max. 8388607)
+ 64 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

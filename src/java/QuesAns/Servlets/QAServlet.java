@@ -11,18 +11,31 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Servlet super class, which is inherited by every servlet class in this app.
  * @author FeisEater
  */
 public abstract class QAServlet extends HttpServlet {
-    
+/**
+ * Should be called in the first line of servlet code. Sets correct character encoding.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     public void preprocess(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
     }
-    
+/**
+ * Retrieves the user currently logged in according to the session.
+ * @param request
+ * @param response
+ * @return User currently logged in.
+ * @throws ServletException
+ * @throws IOException 
+ */
     public User getUserFromSession(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
@@ -31,12 +44,49 @@ public abstract class QAServlet extends HttpServlet {
         request.setAttribute("userName", (loggedIn == null) ? null : loggedIn.getName());
         return loggedIn;
     }
-    
+/**
+ * Reads the html code of the specified jsp.
+ * @param jsp name of the jsp file
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     public void showPage(String jsp, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         RequestDispatcher dispatcher = request.getRequestDispatcher(jsp);
         dispatcher.forward(request, response);
+    }
+/**
+ * Saves url for this servlet (with query string), so that other servlets can
+ * redirect back here.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
+    public void saveURL(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        HttpSession session = request.getSession();
+        session.setAttribute("prevURL", request.getRequestURI() + "?" + request.getQueryString());
+    }
+/**
+ * Gets the previously stored url.
+ * @param request
+ * @param response
+ * @return String of the previously stored URL. If none was stored, return index.
+ * @throws ServletException
+ * @throws IOException 
+ */
+    public String getPrevURL(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        HttpSession session = request.getSession();
+        String prevURL = (String)session.getAttribute("prevURL");
+        if (prevURL == null)    return "index";
+        return prevURL;
     }
     
     protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response)

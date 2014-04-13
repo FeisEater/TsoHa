@@ -1,20 +1,21 @@
 
-package QuesAns.Servlets;
+package QuesAns.Servlets.RegisteredUser;
 
-import QuesAns.Models.User;
+import QuesAns.Models.Answer;
+import QuesAns.Models.Question;
+import QuesAns.Servlets.QAServlet;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author FeisEater
  */
-public class LoginServlet extends QAServlet {
+public class AppendServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -28,25 +29,22 @@ public class LoginServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        HttpSession session = request.getSession();
-        
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        User loggedIn = User.getByLoginInfo(username, password);
-        if (loggedIn == null)
+        getUserFromSession(request, response);
+        String stringId = request.getParameter("id");
+        int ansId = -1;
+        try {
+            ansId = Integer.parseInt(stringId);
+        } catch (NumberFormatException e) {}
+        Answer ans = Answer.getByID(ansId);
+        request.setAttribute("objectFromID", ans);
+        String update = request.getParameter("answer");
+        if (update != null)
         {
-            if (!(username == null && password == null))
-            {
-                request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
-                request.setAttribute("givenName", username);
-            }
-            showPage("signin.jsp", request, response);
+            ans.appendAnswer(update);
+            response.sendRedirect("question?id=" + ans.getQuestion().getID());
         }
         else
-        {
-            session.setAttribute("loggedIn", loggedIn);
-            response.sendRedirect(getPrevURL(request, response));
-        }
+            showPage("append.jsp", request, response);
     }
 
     /**

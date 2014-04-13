@@ -28,6 +28,7 @@ public class QuestionServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         getUserFromSession(request, response);
+        saveURL(request, response);
         String idParam = request.getParameter("id");
         int id = -1;
         try {id = Integer.parseInt(idParam);} catch (Throwable e){}

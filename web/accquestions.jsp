@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:base pageTitle="User's questions">
     <t:accbase page="0">
-        <table class="table table-striped">
+        <t:list>
             <thead>
                 <tr>
                     <th>Question</th>
@@ -18,31 +18,14 @@
                 </tr>
             </thead>
             <tbody>
+                <c:forEach var="unit" items="${list}">
                 <tr>
-                    <td width="80%">How to dispose of a body?</td>
-                    <td width="15%">4</td>
-                    <td width="5%"><a href="question" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+                    <td width="80%">${unit.title}</td>
+                    <td width="15%">${unit.answerCount}</td>
+                    <td width="5%"><a href="question?id=${unit.ID}" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                 </tr>
-                <tr>
-                    <td>What's the meaning of life?</td>
-                    <td>42</td>
-                    <td><a href="question" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                </tr>
-                <tr>
-                    <td>How do I read?</td>
-                    <td>12</td>
-                    <td><a href="question" type="button" class="btn btn-xs btn-default center-block"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
-                </tr>
+                </c:forEach>
             </tbody>
-        </table>
-        <ul class="pagination">
-            <li><a href="#">&laquo;</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">&raquo;</a></li>
-        </ul>
+        </t:list>
     </t:accbase>
 </t:base>

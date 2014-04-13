@@ -31,6 +31,7 @@ public class AskServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         User loggedIn = getUserFromSession(request, response);
+        saveURL(request, response);
         String title = request.getParameter("title");
         String body = request.getParameter("body");
         String tagline = request.getParameter("tags");

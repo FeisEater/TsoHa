@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="col-md-12">
-                            <a href="accsettings" type="button" class="btn btn-primary">${userName}</a>
+                            <a href="accquestions" type="button" class="btn btn-primary">${userName}</a>
                         </div>
                         <div class="col-md-12">
                             <a href="logout" type="button" class="btn btn-primary">Log out</a>

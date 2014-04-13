@@ -39,6 +39,11 @@ public class User {
     private static final String sql_getByID =
             "SELECT * from regusers where r_id = ?";
 
+    private static final String sql_getQuestions =
+            "SELECT * from questions where r_id = ?";
+
+    private static final String sql_getAnswers =
+            "SELECT * from answers where r_id = ?";
 
     public User(String n, String e, String p)
     {
@@ -93,6 +98,9 @@ public class User {
         if (!p.isEmpty())
             password = p;
     }
+/**
+ * Adds a User to the database.
+ */
     public void register()
     {
         Connection c = null;
@@ -115,6 +123,9 @@ public class User {
             QAConnection.closeComponents(result, ps, c);
         }
     }
+/**
+ * Edits user's information in the database.
+ */
     public void changeSettings()
     {
         Connection c = null;
@@ -133,7 +144,67 @@ public class User {
             QAConnection.closeComponents(null, ps, c);
         }
     }
-    public static List<User> getUsers() throws ServletException, IOException
+/**
+ * Finds all questions asked by this user.
+ * @return List of Questions.
+ */
+    public List<Question> getQuestions()
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getQuestions);
+            ps.setInt(1, id);
+            result = ps.executeQuery();
+            
+            List<Question> questions = new ArrayList<Question>();
+            while (result.next())
+                questions.add(Question.retrieveQuestionFromResults(result));
+
+            QAConnection.closeComponents(result, ps, c);
+            return questions;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return null;
+    }
+/**
+ * Finds all answers made by this user.
+ * @return List of Answers.
+ */
+    public List<Answer> getAnswers()
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getAnswers);
+            ps.setInt(1, id);
+            result = ps.executeQuery();
+            
+            List<Answer> answers = new ArrayList<Answer>();
+            while (result.next())
+                answers.add(Answer.retrieveAnswerFromResults(result));
+
+            QAConnection.closeComponents(result, ps, c);
+            return answers;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return null;
+    }
+/**
+ * Finds all users.
+ * @return List of Users.
+ */
+    public static List<User> getUsers()
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -156,8 +227,13 @@ public class User {
         }
         return null;
     }
+/**
+ * Retrieves User object by login info.
+ * @param nameoremail String for nickname or email.
+ * @param password String for password.
+ * @return User object.
+ */
     public static User getByLoginInfo(String nameoremail, String password)
-            throws ServletException, IOException
     {
         Connection c = null;
         PreparedStatement ps = null;
@@ -183,6 +259,11 @@ public class User {
         }
         return null;
     }
+/**
+ * Retrieves specific user by its ID.
+ * @param id Specified ID.
+ * @return user object.
+ */
     public static User getByID(int id)
     {
         Connection c = null;
@@ -207,7 +288,12 @@ public class User {
         }
         return null;
     }
-
+/**
+ * Forms a user object based by query results.
+ * @param result ResultSet object.
+ * @return User object.
+ * @throws SQLException 
+ */
     private static User retrieveUserFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("r_id");

@@ -38,7 +38,14 @@ public class TestServlet extends HttpServlet {
             out.println("<title>Servlet test</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet test at " + request.getContextPath() + "</h1>");
+            out.println("<p>context path " + request.getContextPath() + "</p>");
+            out.println("<p>path info " + request.getPathInfo() + "</p>");
+            out.println("<p>path translated " + request.getPathTranslated() + "</p>");
+            out.println("<p>query string " + request.getQueryString() + "</p>");
+            out.println("<p>request uri " + request.getRequestURI() + "</p>");
+            out.println("<p>Servlet path " + request.getServletPath() + "</p>");
+            out.println("<p>Servlet path " + request.getRequestURL() + "</p>");
+
             out.println("<ul>");
             for (User u : User.getUsers())
                 out.println("<li>" + u + "</li>");

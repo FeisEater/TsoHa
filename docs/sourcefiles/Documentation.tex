@@ -116,11 +116,26 @@ User can post multiple questions and answers. Each question and answer belongs t
 \includegraphics[scale=0.5]{RelationalDBChart}
 \newpage
 
+\section{System's architecture}
+This app uses the traditional \emph{MVC-model}, meaning that the code is divided to three parts:\\
+\emph{Models}, which access database data and stores it into objects.\\
+\emph{Views}, which is client-side code mainly consisting of html-code.\\
+\emph{Controllers}, which let correct users access correct app controls under correct premises.\\
+\\
+Models are stored in the Models package, which has four classes accessing four main database tables (registered user, question, answer, tag). Code for forming and closing connections with the database is placed at \\ \emph{QAConnection} class.\\
+Views are stored in the \emph{web} directory, outside \emph{src} directory where most of the code is placed. Each webpage of the app is written in a .jsp file. Some parts of the html-code are stored in tag files, which are then referenced in .jsp files. These are placed at \emph{web/WEB-INF/tags}.\\
+Controllers are synonymous with Servlets in this app. These are placed in \emph{Servlets} package, controls exclusive to registered users are stored at \\
+\emph{Servlets.RegisteredUser} and controls exclusive to moderators are stored at \emph{Servlets.Moderator}. Each concrete Servlet inherits QAServlet, which provides useful methods that are often used.\\
+\\
+\emph{Sessions} are used to store the user currently signed in and previous URL. For example, if a user browses questions and only then decides to log in, after entering the information app redirects user to the question that was last browsed using the saved URL.
+\newpage
+
 \section{User interface}
+
 The following is a map which represents all the sites that are accessible in the application, and what sites user can access next from the specified site:\\
 \\
-\includegraphics[scale=0.7]{sitemap}\\
-\\
+\includegraphics[scale=0.55]{sitemap2}\\
+\newpage
 This is a design concept of the front page. Notice that it lists asked questions, offers user to ask a question, sign in or register.\\
 \\
 \includegraphics[scale=0.9]{FrontPage}

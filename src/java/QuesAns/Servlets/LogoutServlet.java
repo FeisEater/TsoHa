@@ -28,7 +28,7 @@ public class LogoutServlet extends QAServlet {
         preprocess(request, response);
         HttpSession session = request.getSession();
         session.removeAttribute("loggedIn");
-        response.sendRedirect("index");
+        response.sendRedirect(getPrevURL(request, response));
     }
 
     /**

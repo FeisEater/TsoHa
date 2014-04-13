@@ -31,6 +31,7 @@ public class ListServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         getUserFromSession(request, response);
+        saveURL(request, response);
         String tagString = request.getParameter("tags");
         String[] tagParam = null;
         if (tagString != null)

@@ -48,6 +48,22 @@
         <servlet-name>SettingsServlet</servlet-name>
         <servlet-class>QuesAns.Servlets.RegisteredUser.SettingsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AppendServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.RegisteredUser.AppendServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RateServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.RateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UsersQuestionsServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.RegisteredUser.UsersQuestionsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UsersAnswersServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.RegisteredUser.UsersAnswersServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -95,6 +111,22 @@
     <servlet-mapping>
         <servlet-name>SettingsServlet</servlet-name>
         <url-pattern>/accsettings</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AppendServlet</servlet-name>
+        <url-pattern>/append</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RateServlet</servlet-name>
+        <url-pattern>/rate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UsersQuestionsServlet</servlet-name>
+        <url-pattern>/accquestions</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UsersAnswersServlet</servlet-name>
+        <url-pattern>/accanswers</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
