@@ -71,7 +71,7 @@
                 <label class="col-md-12 control-label">Tags:</label>
                 <t:taglist>
                     <c:forEach var="tag" items="${taglist}">
-                        <a href="index" type="button" class="btn btn-xs btn-info">${tag.text}</a>
+                        <a href="index?tags=${tag.text}" type="button" class="btn btn-xs btn-info">${tag.text}</a>
                     </c:forEach>
                 </t:taglist>
             </div>

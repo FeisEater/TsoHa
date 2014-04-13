@@ -48,7 +48,21 @@ public class Question {
 
     private static final String sql_countAnswers =
             "SELECT count(*) from answers where q_id = ?";
-
+    
+    private static String sql_getQuestionByTags(int tagcount)
+    {
+        String sql = "SELECT questions.q_id, title, body, r_id, asked, flags from questions";
+        for (int i = 0; i < tagcount; i++)
+            sql += ", tags as t" + i + ", tagstoquestions as tq" + i;
+        sql += " where ";
+        for (int i = 0; i < tagcount; i++)
+        {
+            sql += "t" + i + ".t_id = tq" + i + ".t_id and tq" + i + ".q_id = questions.q_id and t" + i + ".tag = ?";
+            if (i != tagcount - 1)  sql += " and ";
+        }
+        return sql;
+    }
+    
     public Question(String t, String b)
     {
         title = t;
@@ -267,6 +281,31 @@ public class Question {
             QAConnection.closeComponents(result, ps, c);
         }
         return -1;
+    }
+    public static List<Question> getQuestionsByTags(String[] tags) throws ServletException, IOException
+    {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet result = null;
+        try {
+            c = QAConnection.getConnection();
+            ps = c.prepareStatement(sql_getQuestionByTags(tags.length));
+            for (int i = 1; i <= tags.length; i++)
+                ps.setString(i, tags[i-1]);
+            result = ps.executeQuery();
+            
+            List<Question> questions = new ArrayList<Question>();
+            while (result.next())
+                questions.add(retrieveQuestionFromResults(result));
+
+            QAConnection.closeComponents(result, ps, c);
+            return questions;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            QAConnection.closeComponents(result, ps, c);
+        }
+        return null;
     }
     private static Question retrieveQuestionFromResults(ResultSet result) throws SQLException
     {

@@ -4,7 +4,7 @@
     Author     : FeisEater
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:base pageTitle="QuesAns">
@@ -20,12 +20,14 @@
             <div class="col-md-12"><br></div>
             <div class="col-md-12"><br></div>
             <div class="col-md-offset-6 col-md-5">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="inputNick" name="search" placeholder="Search...">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default pull-left"><span class="glyphicon glyphicon-search"></span></button>
-                    </span>
-                </div>
+                <form class="form-horizontal" role="form" action="index" method="POST">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="search" name="tags" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default pull-left"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </form>
             </div>
         </div>
         <br>

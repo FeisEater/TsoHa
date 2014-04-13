@@ -31,7 +31,15 @@ public class ListServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         getUserFromSession(request, response);
-        List<Question> questions = Question.getQuestions("order by asked desc");
+        String tagString = request.getParameter("tags");
+        String[] tagParam = null;
+        if (tagString != null)
+            tagParam = tagString.replace("+", " ").split(" ");
+        List<Question> questions;
+        if (tagParam != null && tagParam.length > 0)
+            questions = Question.getQuestionsByTags(tagParam);
+        else
+            questions = Question.getQuestions("order by asked desc");
         request.setAttribute("list", questions);
         showPage("index.jsp", request, response);
     }
