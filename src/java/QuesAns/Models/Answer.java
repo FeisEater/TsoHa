@@ -38,8 +38,6 @@ public class Answer {
 
     private static final String sql_addFlag =
             "UPDATE answers SET flags = ? where a_id = ?";
-
-    private static final String sql_currentTime = "SELECT LOCALTIMESTAMP";
     
     public Answer(String answer)
     {
@@ -130,10 +128,7 @@ public class Answer {
         ResultSet result = null;
         try {
             c = QAConnection.getConnection();
-            ps = c.prepareStatement(sql_currentTime);
-            result = ps.executeQuery();
-            result.next();
-            Timestamp ts = result.getTimestamp(1);
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
             s = "<br><br> Update " + ts + ":<br>" + reformatString(s);
             ps = c.prepareStatement(sql_append);
             ps.setString(1, body + s);
