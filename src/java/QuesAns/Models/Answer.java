@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  * Model class for answers database table.
  * @author Pavel
  */
-public class Answer {
+public class Answer implements Model {
     private int id;
     private String body;
     private int rating;
@@ -228,5 +228,9 @@ public class Answer {
         int questionID = result.getInt("q_id");
         Question q = Question.getByID(questionID);
         return new Answer(i,b,r,f,appr,a,l,u,q);
+    }
+
+    public Model getObjectFromResults(ResultSet result) throws SQLException {
+        return retrieveAnswerFromResults(result);
     }
 }

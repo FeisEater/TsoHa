@@ -17,16 +17,11 @@ import javax.sql.DataSource;
  * @author Pavel
  */
 public class QAModel {
-    Connection c;
-    PreparedStatement ps;
-    ResultSet result;
-    int count;
-    
-    public QAModel()
-    {
-        count = 1;
-    }
-    
+    private static Connection c;
+    private static PreparedStatement ps;
+    private static ResultSet result;
+    private static int count;
+        
 /**
  * Gets connection with database.
  * @return connection object.
@@ -45,27 +40,26 @@ public class QAModel {
     }
 /**
  * Closes components requiring connection with database.
- * @param r ResultSet object.
- * @param p PreparedStatement object.
- * @param c Connection object.
  */
-    public void closeComponents(ResultSet r, PreparedStatement p, Connection c)
+    public static void closeComponents()
     {
         try
         {
-            if (r != null)  r.close();
-            if (p != null)  p.close();
-            if (c != null)  c.close();
+            if (result != null)     result.close();
+            if (ps != null)         ps.close();
+            if (c != null)          c.close();
+            c = null;
         }   catch (Throwable e) {}
     }
 
     public void prepareSQL(String sql)
     {
         try {
-            c = getConnection();
+            if (c == null)   c = getConnection();
             ps = c.prepareStatement(sql);
+            count = 1;
         } catch (SQLException ex) {
-            closeComponents(null, ps, c);
+            closeComponents();
             System.out.println(ex);
         }
     }
@@ -76,7 +70,7 @@ public class QAModel {
             ps.setInt(count, i);
             count++;
         } catch (SQLException ex) {
-            closeComponents(null, ps, c);
+            closeComponents();
             System.out.println(ex);
         }
     }
@@ -87,7 +81,7 @@ public class QAModel {
             ps.setString(count, s);
             count++;
         } catch (SQLException ex) {
-            closeComponents(null, ps, c);
+            closeComponents();
             System.out.println(ex);
         }
     }
@@ -98,7 +92,7 @@ public class QAModel {
             ps.setTimestamp(count, t);
             count++;
         } catch (SQLException ex) {
-            closeComponents(null, ps, c);
+            closeComponents();
             System.out.println(ex);
         }
     }
@@ -109,19 +103,21 @@ public class QAModel {
             result = ps.executeQuery();
             count = 1;
         } catch (SQLException ex) {
-            closeComponents(null, ps, c);
+            closeComponents();
             System.out.println(ex);
         }
     }
-   /* 
-    public Object getResult(int index)
+
+    public static List<Model> getObjectList(Model m)
     {
+        List<Model> list = new ArrayList<Model>();
         try {
-            ps.setTimestamp(count, t);
-            count++;
+            while(result.next())
+                list.add(m.getObjectFromResults(result));
         } catch (SQLException ex) {
-            closeComponents(null, ps, c);
+            closeComponents();
             System.out.println(ex);
         }
-    }*/
+        return list;
+    }
 }
