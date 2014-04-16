@@ -189,9 +189,15 @@ public class Question {
  * @throws ServletException
  * @throws IOException 
  */
-    public List<Answer> getAnswers() throws ServletException, IOException
+    public List<Answer> getAnswers()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_getQuestionsAnswers);
+        QAModel.setInt(id);
+        QAModel.executeQuery();
+        List<Answer> result = QAModel.getObjectList(Answer.class);
+        QAModel.closeComponents();
+        return result;
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -211,7 +217,7 @@ public class Question {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Finds all tags for the question.

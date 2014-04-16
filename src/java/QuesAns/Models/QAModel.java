@@ -1,6 +1,8 @@
 
 package QuesAns.Models;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -26,7 +30,7 @@ public class QAModel {
  * Gets connection with database.
  * @return connection object.
  */
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try
         {
             InitialContext cxt = new InitialContext();
@@ -52,7 +56,7 @@ public class QAModel {
         }   catch (Throwable e) {}
     }
 
-    public void prepareSQL(String sql)
+    public static void prepareSQL(String sql)
     {
         try {
             if (c == null)   c = getConnection();
@@ -64,7 +68,7 @@ public class QAModel {
         }
     }
     
-    public void setInt(int i)
+    public static void setInt(int i)
     {
         try {
             ps.setInt(count, i);
@@ -75,7 +79,7 @@ public class QAModel {
         }
     }
 
-    public void setString(String s)
+    public static void setString(String s)
     {
         try {
             ps.setString(count, s);
@@ -86,7 +90,7 @@ public class QAModel {
         }
     }
 
-    public void setTimestamp(Timestamp t)
+    public static void setTimestamp(Timestamp t)
     {
         try {
             ps.setTimestamp(count, t);
@@ -97,7 +101,7 @@ public class QAModel {
         }
     }
 
-    public void executeQuery()
+    public static void executeQuery()
     {
         try {
             result = ps.executeQuery();
@@ -108,13 +112,25 @@ public class QAModel {
         }
     }
 
-    public static List<Model> getObjectList(Model m)
+    public static void executeUpdate()
     {
-        List<Model> list = new ArrayList<Model>();
+        try {
+            ps.executeUpdate();
+            count = 1;
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            closeComponents();
+        }
+    }
+
+    public static List getObjectList(Class c)
+    {
+        List list = new ArrayList();
         try {
             while(result.next())
-                list.add(m.getObjectFromResults(result));
-        } catch (SQLException ex) {
+                list.add(c.getMethod("retrieveObjectFromResults", ResultSet.class).invoke(null, result));
+        } catch (Throwable ex) {
             closeComponents();
             System.out.println(ex);
         }
