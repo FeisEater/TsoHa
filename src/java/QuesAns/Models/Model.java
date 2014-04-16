@@ -9,5 +9,6 @@ import java.sql.SQLException;
  * @author Pavel
  */
 public interface Model {
-    public Model getObjectFromResults(ResultSet result) throws SQLException;
+    public void getObjectFromResults(ResultSet result) throws SQLException;
+    public Model newModel();
 }

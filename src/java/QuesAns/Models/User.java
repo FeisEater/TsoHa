@@ -16,7 +16,7 @@ import javax.servlet.ServletException;
  *
  * @author FeisEater
  */
-public class User {
+public class User implements Model {
     private int id;
     private String nick;
     private String email;
@@ -45,19 +45,20 @@ public class User {
     private static final String sql_getAnswers =
             "SELECT * from answers where r_id = ?";
 
+    public User() {}
     public User(String n, String e, String p)
     {
         nick = n;
         email = e;
         password = p;
     }
-    public User(int i, String n, String e, String p, Timestamp t, boolean m)
+/*    public User(int i, String n, String e, String p, Timestamp t, boolean m)
     {
         this(n, e, p);
         id = i;
         joined = t;
         moderator = m;
-    }
+    }*/
     @Override
     public String toString()
     {
@@ -103,7 +104,12 @@ public class User {
  */
     public void register()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_registerUser, nick, email, password);
+        id = QAModel.retrieveInt(1);
+        joined = QAModel.retrieveTimestamp(2);
+        moderator = false;
+        QAModel.closeComponents();
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -121,14 +127,17 @@ public class User {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(result, ps, c);
-        }
+        }*/
     }
 /**
  * Edits user's information in the database.
  */
     public void changeSettings()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_changeSettings, nick, email, password, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+        /*Connection c = null;
         PreparedStatement ps = null;
         try {
             c = QAConnection.getConnection();
@@ -142,7 +151,7 @@ public class User {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(null, ps, c);
-        }
+        }*/
     }
 /**
  * Finds all questions asked by this user.
@@ -150,7 +159,11 @@ public class User {
  */
     public List<Question> getQuestions()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_getQuestions, id);
+        List result = QAModel.retrieveObjectList(new Question());
+        QAModel.closeComponents();
+        return result;
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -170,7 +183,7 @@ public class User {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Finds all answers made by this user.
@@ -178,7 +191,11 @@ public class User {
  */
     public List<Answer> getAnswers()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_getAnswers, id);
+        List result = QAModel.retrieveObjectList(new Answer());
+        QAModel.closeComponents();
+        return result;
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -198,7 +215,7 @@ public class User {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Finds all users.
@@ -206,7 +223,11 @@ public class User {
  */
     public static List<User> getUsers()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_getAllUsers);
+        List result = QAModel.retrieveObjectList(new User());
+        QAModel.closeComponents();
+        return result;
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -225,7 +246,7 @@ public class User {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Retrieves User object by login info.
@@ -235,7 +256,12 @@ public class User {
  */
     public static User getByLoginInfo(String nameoremail, String password)
     {
-        Connection c = null;
+        User u = new User();
+        QAModel.prepareSQL(sql_getUserByLogin, nameoremail, nameoremail, password);
+        QAModel.retrieveSingleObject(u);
+        QAModel.closeComponents();
+        return u;
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -257,7 +283,7 @@ public class User {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Retrieves specific user by its ID.
@@ -266,7 +292,12 @@ public class User {
  */
     public static User getByID(int id)
     {
-        Connection c = null;
+        User u = new User();
+        QAModel.prepareSQL(sql_getByID, id);
+        QAModel.retrieveSingleObject(u);
+        QAModel.closeComponents();
+        return u;
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -286,7 +317,7 @@ public class User {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Forms a user object based by query results.
@@ -294,7 +325,7 @@ public class User {
  * @return User object.
  * @throws SQLException 
  */
-    private static User retrieveUserFromResults(ResultSet result) throws SQLException
+/*    private static User retrieveObjectFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("r_id");
         String n = result.getString("nick");
@@ -303,5 +334,20 @@ public class User {
         Timestamp t = result.getTimestamp("joined");
         boolean m = result.getBoolean("moderator");
         return new User(i,n,e,p,t,m);
+    }*/
+
+    public void getObjectFromResults(ResultSet result) throws SQLException
+    {
+        id = result.getInt("r_id");
+        nick = result.getString("nick");
+        email = result.getString("email");
+        password = result.getString("password");
+        joined = result.getTimestamp("joined");
+        moderator = result.getBoolean("moderator");
+    }
+
+    public Model newModel()
+    {
+        return new User();
     }
 }

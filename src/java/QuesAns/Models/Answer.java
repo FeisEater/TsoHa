@@ -39,10 +39,12 @@ public class Answer implements Model {
     private static final String sql_addFlag =
             "UPDATE answers SET flags = ? where a_id = ?";
     
+    public Answer() {}
     public Answer(String answer)
     {
         body = answer;
     }
+    /*
     public Answer(int i, String b, int r, int f, boolean appr, Timestamp a, Timestamp l, User u, Question q)
     {
         this(b);
@@ -54,7 +56,7 @@ public class Answer implements Model {
         lastEdited = l;
         answerer = u;
         question = q;
-    }
+    }*/
     public User getAnswerer()
     {
         return answerer;
@@ -97,7 +99,12 @@ public class Answer implements Model {
     public void addToDatabase(User owner, Question q)
     {
         body = reformatString(body);
-        Connection c = null;
+        QAModel.prepareSQL(sql_addToDB, body, owner.getID(), q.getID());
+        id = QAModel.retrieveInt(1);
+        answered = QAModel.retrieveTimestamp(2);
+        lastEdited = QAModel.retrieveTimestamp(2);
+        QAModel.closeComponents();
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -115,7 +122,7 @@ public class Answer implements Model {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(result, ps, c);
-        }
+        }*/
     }
 /**
  * Appends stuff to the answer.
@@ -123,7 +130,12 @@ public class Answer implements Model {
  */
     public void appendAnswer(String s)
     {
-        Connection c = null;
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        s = "<br><br> Update " + ts + ":<br>" + reformatString(s);
+        QAModel.prepareSQL(sql_append, body + s, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -138,7 +150,7 @@ public class Answer implements Model {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(result, ps, c);
-        }
+        }*/
     }
 /**
  * Changes answers rating.
@@ -146,7 +158,10 @@ public class Answer implements Model {
  */
     public void rate(boolean up)
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_rate, up ? rating++ : rating--, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+        /*Connection c = null;
         PreparedStatement ps = null;
         try {
             c = QAConnection.getConnection();
@@ -158,14 +173,17 @@ public class Answer implements Model {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(null, ps, c);
-        }
+        }*/
     }
 /**
  * Adds answer's flag count by one.
  */
     public void addFlag()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_addFlag, flags + 1, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+/*        Connection c = null;
         PreparedStatement ps = null;
         try {
             c = QAConnection.getConnection();
@@ -177,7 +195,7 @@ public class Answer implements Model {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(null, ps, c);
-        }
+        }*/
     }
 /**
  * Retrieves specific answer by its ID.
@@ -186,7 +204,12 @@ public class Answer implements Model {
  */
     public static Answer getByID(int id)
     {
-        Connection c = null;
+        Answer a = new Answer();
+        QAModel.prepareSQL(sql_getByID, id);
+        QAModel.retrieveSingleObject(a);
+        QAModel.closeComponents();
+        return a;
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -206,7 +229,7 @@ public class Answer implements Model {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Forms an answer object based by query results.
@@ -214,7 +237,7 @@ public class Answer implements Model {
  * @return Answer object.
  * @throws SQLException 
  */
-    public static Answer retrieveAnswerFromResults(ResultSet result) throws SQLException
+/*    public static Answer retrieveObjectFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("a_id");
         String b = result.getString("body");
@@ -229,8 +252,24 @@ public class Answer implements Model {
         Question q = Question.getByID(questionID);
         return new Answer(i,b,r,f,appr,a,l,u,q);
     }
-
-    public Model getObjectFromResults(ResultSet result) throws SQLException {
-        return retrieveAnswerFromResults(result);
+*/
+    public void getObjectFromResults(ResultSet result) throws SQLException
+    {
+        id = result.getInt("a_id");
+        body = result.getString("body");
+        rating = result.getInt("rating");
+        flags = result.getInt("flags");
+        askerApproved = result.getBoolean("approvedbyasker");
+        answered = result.getTimestamp("answered");
+        lastEdited = result.getTimestamp("lastedited");
+        int answererID = result.getInt("r_id");
+        answerer = User.getByID(answererID);
+        int questionID = result.getInt("q_id");
+        question = Question.getByID(questionID);
+    }
+    
+    public Model newModel()
+    {
+        return new Answer();
     }
 }

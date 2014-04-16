@@ -12,7 +12,7 @@ import java.sql.Timestamp;
  *
  * @author Pavel
  */
-public class Tag {
+public class Tag implements Model {
     private int id;
     private String tag;
     private Timestamp tagged;
@@ -30,16 +30,17 @@ public class Tag {
     private static final String sql_connectTagWithQuestion =
             "INSERT INTO tagstoquestions(t_id, q_id) VALUES(?,?)";
 
+    public Tag() {}
     public Tag(String tag)
     {
         this.tag = tag;
     }
-    public Tag(int i, String tag, Timestamp t)
+/*    public Tag(int i, String tag, Timestamp t)
     {
         this(tag);
         id = i;
         tagged = t;
-    }
+    }*/
     public String getText()
     {
         return tag;
@@ -51,7 +52,12 @@ public class Tag {
  */
     public static Tag getByID(int id)
     {
-        Connection c = null;
+        Tag t = new Tag();
+        QAModel.prepareSQL(sql_getByID, id);
+        QAModel.retrieveSingleObject(t);
+        QAModel.closeComponents();
+        return t;
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -71,7 +77,7 @@ public class Tag {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Adds a tag to the database.
@@ -79,7 +85,15 @@ public class Tag {
  */
     public void addToDatabase(Question q)
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_findTag, tag);
+        if (!QAModel.resultFound())
+            QAModel.prepareSQL(sql_addToDB, tag);
+        id = QAModel.retrieveInt(1);
+        tagged = QAModel.retrieveTimestamp(2);
+        QAModel.prepareSQL(sql_connectTagWithQuestion, id, q.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -109,7 +123,7 @@ public class Tag {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(result, ps, c);
-        }
+        }*/
     }
 /**
  * Forms a tag object based by query results.
@@ -117,11 +131,23 @@ public class Tag {
  * @return Tag object.
  * @throws SQLException 
  */
-    private static Tag retrieveTagFromResults(ResultSet result) throws SQLException
+/*    private static Tag retrieveObjectFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("t_id");
         String tagtext = result.getString("tag");
         Timestamp t = result.getTimestamp("firsttagged");
         return new Tag(i,tagtext,t);
+    }
+*/
+    public void getObjectFromResults(ResultSet result) throws SQLException
+    {
+        id = result.getInt("t_id");
+        tag = result.getString("tag");
+        tagged = result.getTimestamp("firsttagged");
+    }
+
+    public Model newModel()
+    {
+        return new Tag();
     }
 }

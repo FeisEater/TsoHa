@@ -16,7 +16,7 @@ import javax.servlet.ServletException;
  * Model class for questions database table.
  * @author FeisEater
  */
-public class Question {
+public class Question implements Model {
     private int id;
     private String title;
     private String body;
@@ -68,20 +68,21 @@ public class Question {
         return sql;
     }
     
+    public Question() {}
     public Question(String t, String b)
     {
         title = t;
         body = b;
         flags = 0;
     }
-    public Question(int i, String t, String b, Timestamp a, int f, User u)
+/*    public Question(int i, String t, String b, Timestamp a, int f, User u)
     {
         this(t,b);
         id = i;
         asked = a;
         flags = f;
         asker = u;
-    }
+    }*/
     public int getID()
     {
         return id;
@@ -122,9 +123,15 @@ public class Question {
  */
     public void addToDatabase(User owner)
     {
+        asker = owner;
         title = reformatString(title);
         body = reformatString(body);
-        Connection c = null;
+        int ownerID = (owner == null) ? null : owner.getID();
+        QAModel.prepareSQL(sql_addToDB, title, body, ownerID);
+        id = QAModel.retrieveInt(1);
+        asked = QAModel.retrieveTimestamp(2);
+        QAModel.closeComponents();
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -144,14 +151,17 @@ public class Question {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(result, ps, c);
-        }
+        }*/
     }
 /**
  * Adds question's flag count by one.
  */
     public void addFlag()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_addFlag, flags++, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+/*        Connection c = null;
         PreparedStatement ps = null;
         try {
             c = QAConnection.getConnection();
@@ -163,14 +173,17 @@ public class Question {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(null, ps, c);
-        }
+        }*/
     }
 /**
  * Removes question from the database.
  */
     public void removeFromDatabase()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_removeFromDB, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+        /*Connection c = null;
         PreparedStatement ps = null;
         try {
             c = QAConnection.getConnection();
@@ -181,7 +194,7 @@ public class Question {
             System.out.println(ex);
         } finally {
             QAConnection.closeComponents(null, ps, c);
-        }
+        }*/
     }
 /**
  * Finds all answers for the question.
@@ -191,10 +204,8 @@ public class Question {
  */
     public List<Answer> getAnswers()
     {
-        QAModel.prepareSQL(sql_getQuestionsAnswers);
-        QAModel.setInt(id);
-        QAModel.executeQuery();
-        List<Answer> result = QAModel.getObjectList(Answer.class);
+        QAModel.prepareSQL(sql_getQuestionsAnswers, id);
+        List result = QAModel.retrieveObjectList(new Answer());
         QAModel.closeComponents();
         return result;
 /*        Connection c = null;
@@ -227,7 +238,11 @@ public class Question {
  */
     public List<Tag> getTags() throws ServletException, IOException
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_getQuestionsTags, id);
+        List result = QAModel.retrieveObjectList(new Tag());
+        QAModel.closeComponents();
+        return result;
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -247,7 +262,7 @@ public class Question {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Finds all questions.
@@ -258,7 +273,11 @@ public class Question {
  */
     public static List<Question> getQuestions(String order) throws ServletException, IOException
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_getQuestions + order);
+        List result = QAModel.retrieveObjectList(new Question());
+        QAModel.closeComponents();
+        return result;
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -277,7 +296,7 @@ public class Question {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Retrieves specific question by its ID.
@@ -286,7 +305,12 @@ public class Question {
  */
     public static Question getByID(int id)
     {
-        Connection c = null;
+        Question q = new Question();
+        QAModel.prepareSQL(sql_getByID, id);
+        QAModel.retrieveSingleObject(q);
+        QAModel.closeComponents();
+        return q;
+        /*Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -306,7 +330,7 @@ public class Question {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Counts the amount of answer for this question.
@@ -314,7 +338,11 @@ public class Question {
  */
     public int getAnswerCount()
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_countAnswers, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -334,7 +362,7 @@ public class Question {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return -1;
+        return -1;*/
     }
 /**
  * Finds question that have the specified set of tags.
@@ -343,7 +371,11 @@ public class Question {
  */
     public static List<Question> getQuestionsByTags(String[] tags)
     {
-        Connection c = null;
+        QAModel.prepareSQL(sql_getQuestionByTags(tags.length), (Object[]) tags);
+        List result = QAModel.retrieveObjectList(new Question());
+        QAModel.closeComponents();
+        return result;
+/*        Connection c = null;
         PreparedStatement ps = null;
         ResultSet result = null;
         try {
@@ -364,7 +396,7 @@ public class Question {
         } finally {
             QAConnection.closeComponents(result, ps, c);
         }
-        return null;
+        return null;*/
     }
 /**
  * Forms a question object based by query results.
@@ -372,7 +404,7 @@ public class Question {
  * @return Question object.
  * @throws SQLException 
  */
-    public static Question retrieveQuestionFromResults(ResultSet result) throws SQLException
+/*    public static Question retrieveObjectFromResults(ResultSet result) throws SQLException
     {
         int i = result.getInt("q_id");
         String t = result.getString("title");
@@ -382,6 +414,22 @@ public class Question {
         int askerID = result.getInt("r_id");
         User u = User.getByID(askerID);
         return new Question(i,t,b,a,f,u);
+    }
+*/
+    public void getObjectFromResults(ResultSet result) throws SQLException
+    {
+        id = result.getInt("q_id");
+        title = result.getString("title");
+        body = result.getString("body");
+        asked = result.getTimestamp("asked");
+        flags = result.getInt("flags");
+        int askerID = result.getInt("r_id");
+        asker = User.getByID(askerID);
+    }
+
+    public Model newModel()
+    {
+        return new Question();
     }
 
 }
