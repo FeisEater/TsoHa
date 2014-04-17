@@ -44,7 +44,7 @@ public class Question implements Model {
         "SELECT * from answers where q_id = ? order by rating desc";
 
     private static final String sql_getQuestionsTags =
-            "SELECT * from tagstoquestions where q_id = ?";
+            "SELECT t.t_id, t.tag, t.firsttagged from tagstoquestions as tq, tags as t where q_id = ? and tq.t_id = t.t_id";
 
     private static final String sql_countAnswers =
             "SELECT count(*) from answers where q_id = ?";
@@ -307,7 +307,8 @@ public class Question implements Model {
     {
         Question q = new Question();
         QAModel.prepareSQL(sql_getByID, id);
-        QAModel.retrieveSingleObject(q);
+        if (!QAModel.retrieveSingleObject(q))
+            q = null;
         QAModel.closeComponents();
         return q;
         /*Connection c = null;

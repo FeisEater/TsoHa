@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
@@ -23,7 +24,7 @@ import javax.sql.DataSource;
 public class QAModel {
     private static Connection c;
     private static PreparedStatement ps;
-    private static ResultSet result;
+    private static Stack<ResultSet> result = new Stack<ResultSet>();
     private static boolean resultRetrieved;
         
 /**
@@ -47,12 +48,14 @@ public class QAModel {
     public static void closeComponents()
     {
         try {
-            if (result != null)     result.close();
-            if (ps != null)         ps.close();
-            if (c != null)          c.close();
-            c = null;
-            ps = null;
-            result = null;
+            if (!result.empty())     result.pop().close();
+            if (result.empty())
+            {
+                if (ps != null)         ps.close();
+                if (c != null)          c.close();
+                c = null;
+                ps = null;
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -84,8 +87,8 @@ public class QAModel {
         if (resultRetrieved)
             return true;
         
-        result = ps.executeQuery();
-        if (!result.next())
+        result.push(ps.executeQuery());
+        if (!result.peek().next())
             return false;
         resultRetrieved = true;
         return true;
@@ -94,7 +97,7 @@ public class QAModel {
     {
         try {
             getResult();
-            return result.getInt(index);
+            return result.peek().getInt(index);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -104,7 +107,7 @@ public class QAModel {
     {
         try {
             getResult();
-            return result.getString(index);
+            return result.peek().getString(index);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -114,34 +117,33 @@ public class QAModel {
     {
         try {
             getResult();
-            return result.getTimestamp(index);
+            return result.peek().getTimestamp(index);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
         return null;
     }
-    public static void retrieveSingleObject(Model m)
+    public static boolean retrieveSingleObject(Model m)
     {
         try {
             if (!getResult())
-            {
-                m = null;
-                return;
-            }
-            m.getObjectFromResults(result);
+                return false;
+            m.getObjectFromResults(result.peek());
+            return true;
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+        return false;
     }
     public static List<Model> retrieveObjectList(Model m)
     {
         List<Model> list = new ArrayList<Model>();
         try {
-            result = ps.executeQuery();
-            while(result.next())
+            result.push(ps.executeQuery());
+            while (result.peek().next())
             {
                 Model newm = m.newModel();
-                newm.getObjectFromResults(result);
+                newm.getObjectFromResults(result.peek());
                 list.add(newm);
             }
         } catch (SQLException ex) {

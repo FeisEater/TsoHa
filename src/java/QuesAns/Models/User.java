@@ -258,7 +258,8 @@ public class User implements Model {
     {
         User u = new User();
         QAModel.prepareSQL(sql_getUserByLogin, nameoremail, nameoremail, password);
-        QAModel.retrieveSingleObject(u);
+        if (!QAModel.retrieveSingleObject(u))
+            u = null;
         QAModel.closeComponents();
         return u;
         /*Connection c = null;
@@ -294,7 +295,8 @@ public class User implements Model {
     {
         User u = new User();
         QAModel.prepareSQL(sql_getByID, id);
-        QAModel.retrieveSingleObject(u);
+        if (!QAModel.retrieveSingleObject(u))
+            u = null;
         QAModel.closeComponents();
         return u;
         /*Connection c = null;

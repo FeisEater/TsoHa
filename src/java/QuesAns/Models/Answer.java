@@ -206,7 +206,8 @@ public class Answer implements Model {
     {
         Answer a = new Answer();
         QAModel.prepareSQL(sql_getByID, id);
-        QAModel.retrieveSingleObject(a);
+        if (!QAModel.retrieveSingleObject(a))
+            a = null;
         QAModel.closeComponents();
         return a;
         /*Connection c = null;

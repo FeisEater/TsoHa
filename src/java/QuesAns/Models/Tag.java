@@ -54,7 +54,8 @@ public class Tag implements Model {
     {
         Tag t = new Tag();
         QAModel.prepareSQL(sql_getByID, id);
-        QAModel.retrieveSingleObject(t);
+        if (!QAModel.retrieveSingleObject(t))
+            t = null;
         QAModel.closeComponents();
         return t;
 /*        Connection c = null;
