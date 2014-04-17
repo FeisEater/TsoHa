@@ -44,19 +44,6 @@ public class Answer implements Model {
     {
         body = answer;
     }
-    /*
-    public Answer(int i, String b, int r, int f, boolean appr, Timestamp a, Timestamp l, User u, Question q)
-    {
-        this(b);
-        id = i;
-        rating = r;
-        flags = f;
-        askerApproved = appr;
-        answered = a;
-        lastEdited = l;
-        answerer = u;
-        question = q;
-    }*/
     public User getAnswerer()
     {
         return answerer;
@@ -104,25 +91,11 @@ public class Answer implements Model {
         answered = QAModel.retrieveTimestamp(2);
         lastEdited = QAModel.retrieveTimestamp(2);
         QAModel.closeComponents();
-        /*Connection c = null;
-        PreparedStatement ps = null;
-        ResultSet result = null;
-        try {
-            c = QAConnection.getConnection();
-            ps = c.prepareStatement(sql_addToDB);
-            ps.setString(1, body);
-            ps.setInt(2, owner.getID());
-            ps.setInt(3, q.getID());
-            result = ps.executeQuery();
-            result.next();
-            id = result.getInt(1);
-            answered = result.getTimestamp(2);
-            lastEdited = result.getTimestamp(2);
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            QAConnection.closeComponents(result, ps, c);
-        }*/
+        askerApproved = false;
+        rating = 0;
+        flags = 0;
+        answerer = owner;
+        question = q;
     }
 /**
  * Appends stuff to the answer.
@@ -132,25 +105,10 @@ public class Answer implements Model {
     {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         s = "<br><br> Update " + ts + ":<br>" + reformatString(s);
-        QAModel.prepareSQL(sql_append, body + s, id);
+        body += s;
+        QAModel.prepareSQL(sql_append, body, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
-        /*Connection c = null;
-        PreparedStatement ps = null;
-        ResultSet result = null;
-        try {
-            c = QAConnection.getConnection();
-            Timestamp ts = new Timestamp(System.currentTimeMillis());
-            s = "<br><br> Update " + ts + ":<br>" + reformatString(s);
-            ps = c.prepareStatement(sql_append);
-            ps.setString(1, body + s);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            QAConnection.closeComponents(result, ps, c);
-        }*/
     }
 /**
  * Changes answers rating.
@@ -158,44 +116,18 @@ public class Answer implements Model {
  */
     public void rate(boolean up)
     {
-        QAModel.prepareSQL(sql_rate, up ? rating++ : rating--, id);
+        QAModel.prepareSQL(sql_rate, up ? ++rating : --rating, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
-        /*Connection c = null;
-        PreparedStatement ps = null;
-        try {
-            c = QAConnection.getConnection();
-            ps = c.prepareStatement(sql_rate);
-            ps.setInt(1, rating + (up ? 1 : -1));
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            QAConnection.closeComponents(null, ps, c);
-        }*/
     }
 /**
  * Adds answer's flag count by one.
  */
     public void addFlag()
     {
-        QAModel.prepareSQL(sql_addFlag, flags + 1, id);
+        QAModel.prepareSQL(sql_addFlag, ++flags, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
-/*        Connection c = null;
-        PreparedStatement ps = null;
-        try {
-            c = QAConnection.getConnection();
-            ps = c.prepareStatement(sql_addFlag);
-            ps.setInt(1, flags + 1);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            QAConnection.closeComponents(null, ps, c);
-        }*/
     }
 /**
  * Retrieves specific answer by its ID.
@@ -210,50 +142,7 @@ public class Answer implements Model {
             a = null;
         QAModel.closeComponents();
         return a;
-        /*Connection c = null;
-        PreparedStatement ps = null;
-        ResultSet result = null;
-        try {
-            c = QAConnection.getConnection();
-            ps = c.prepareStatement(sql_getByID);
-            ps.setInt(1, id);
-            result = ps.executeQuery();
-            
-            Answer a = null;
-            if (result.next())
-                a = retrieveAnswerFromResults(result);
-
-            QAConnection.closeComponents(result, ps, c);
-            return a;
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            QAConnection.closeComponents(result, ps, c);
-        }
-        return null;*/
     }
-/**
- * Forms an answer object based by query results.
- * @param result ResultSet object.
- * @return Answer object.
- * @throws SQLException 
- */
-/*    public static Answer retrieveObjectFromResults(ResultSet result) throws SQLException
-    {
-        int i = result.getInt("a_id");
-        String b = result.getString("body");
-        int r = result.getInt("rating");
-        int f = result.getInt("flags");
-        boolean appr = result.getBoolean("approvedbyasker");
-        Timestamp a = result.getTimestamp("answered");
-        Timestamp l = result.getTimestamp("lastedited");
-        int answererID = result.getInt("r_id");
-        User u = User.getByID(answererID);
-        int questionID = result.getInt("q_id");
-        Question q = Question.getByID(questionID);
-        return new Answer(i,b,r,f,appr,a,l,u,q);
-    }
-*/
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("a_id");

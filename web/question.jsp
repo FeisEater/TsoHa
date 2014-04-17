@@ -18,17 +18,8 @@
                         <a href="accquestions" type="button" class="btn btn-link text-left">${objectFromID.asker.name}</a>
                     </div>
                 </div>
-                <div class="col-md-offset-1 col-md-8">
+                <div class="col-md-offset-1 col-md-10">
                     <h1>${objectFromID.title}</h1>
-                </div>
-                <div class="col-md-2">
-                    <c:if test="${userName != null}">
-                        <a href="answer?id=${objectFromID.ID}" type="button" class="btn btn-primary btn-lg">Give an answer</a>
-                        <div class="col-md-12"><br></div>
-                        <a href="flag?type=ques&id=${objectFromID.ID}" type="button" class="btn btn-default pull-left btn-xs">
-                            Flag as inappropriate <span class="glyphicon glyphicon-flag"></span>
-                        </a>
-                    </c:if>
                 </div>
                 <div class="col-md-12">
                     <div class="well">${objectFromID.body}</div>
@@ -51,7 +42,7 @@
                                 <td width="10%">
                                     <img src="defavatar.png" alt="avatar" height="64">
                                     <div class="caption">
-                                        <a href="accquestions" type="button" class="btn btn-link text-left"><a href="accquestions">${unit.answerer.name}</a>
+                                        <a href="accquestions" type="button" class="btn btn-link text-left">${unit.answerer.name}</a>
                                         <c:if test="${loggedIn.ID == unit.answerer.ID}">
                                             <a href="append?id=${unit.ID}" type="button" class="btn btn-xs btn-primary">Edit answer</a>
                                         </c:if>
@@ -72,7 +63,15 @@
                 </t:list>
             </div>
             <div class="col-md-2">
-                <div class="col-md-12"><br></div>
+                <div class="col-md-12">
+                    <c:if test="${userName != null}">
+                        <a href="answer?id=${objectFromID.ID}" type="button" class="btn btn-primary btn-lg">Give an answer</a>
+                        <div class="col-md-12"><br></div>
+                        <a href="flag?type=ques&id=${objectFromID.ID}" type="button" class="btn btn-default pull-left btn-xs">
+                            Flag as inappropriate <span class="glyphicon glyphicon-flag"></span>
+                        </a>
+                    </c:if>
+                </div>
                 <div class="col-md-12"><br></div>
                 <div class="col-md-12"><br></div>
                 <div class="col-md-12"><br></div>

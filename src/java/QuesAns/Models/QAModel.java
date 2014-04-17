@@ -24,9 +24,31 @@ import javax.sql.DataSource;
 public class QAModel {
     private static Connection c;
     private static PreparedStatement ps;
-    private static Stack<ResultSet> result = new Stack<ResultSet>();
+    private static Result result = new Result();
     private static boolean resultRetrieved;
-        
+    private static class Result {
+        private Stack<ResultSet> results;
+        private Result()
+        {
+            results = new Stack<ResultSet>();
+        }
+        private void add(ResultSet res)
+        {
+            results.push(res);
+        }
+        private ResultSet get()
+        {
+            return results.peek();
+        }
+        private void close() throws SQLException
+        {
+            results.pop().close();
+        }
+        private boolean allclosed()
+        {
+            return results.empty();
+        }
+    }
 /**
  * Gets connection with database.
  * @return connection object.
@@ -48,8 +70,8 @@ public class QAModel {
     public static void closeComponents()
     {
         try {
-            if (!result.empty())     result.pop().close();
-            if (result.empty())
+            if (!result.allclosed())     result.close();
+            if (result.allclosed())
             {
                 if (ps != null)         ps.close();
                 if (c != null)          c.close();
@@ -87,8 +109,8 @@ public class QAModel {
         if (resultRetrieved)
             return true;
         
-        result.push(ps.executeQuery());
-        if (!result.peek().next())
+        result.add(ps.executeQuery());
+        if (!result.get().next())
             return false;
         resultRetrieved = true;
         return true;
@@ -97,7 +119,7 @@ public class QAModel {
     {
         try {
             getResult();
-            return result.peek().getInt(index);
+            return result.get().getInt(index);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -107,7 +129,7 @@ public class QAModel {
     {
         try {
             getResult();
-            return result.peek().getString(index);
+            return result.get().getString(index);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -117,7 +139,7 @@ public class QAModel {
     {
         try {
             getResult();
-            return result.peek().getTimestamp(index);
+            return result.get().getTimestamp(index);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -128,7 +150,7 @@ public class QAModel {
         try {
             if (!getResult())
                 return false;
-            m.getObjectFromResults(result.peek());
+            m.getObjectFromResults(result.get());
             return true;
         } catch (SQLException ex) {
             System.out.println(ex);
@@ -139,11 +161,11 @@ public class QAModel {
     {
         List<Model> list = new ArrayList<Model>();
         try {
-            result.push(ps.executeQuery());
-            while (result.peek().next())
+            result.add(ps.executeQuery());
+            while (result.get().next())
             {
                 Model newm = m.newModel();
-                newm.getObjectFromResults(result.peek());
+                newm.getObjectFromResults(result.get());
                 list.add(newm);
             }
         } catch (SQLException ex) {
