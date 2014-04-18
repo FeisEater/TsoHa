@@ -18,7 +18,7 @@
             </p>
         </div>
         <div class="col-md-12"><br></div>
-        <form class="form-horizontal" role="form" action="accsettings" method="POST">
+        <form class="form-horizontal" role="form" action="accsettings" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="inputNick" class="col-md-3 control-label">Change user Name</label>
                 <div class="col-md-6">
@@ -42,6 +42,11 @@
                 <div class="col-md-6">
                     <input type="password" class="form-control" id="inputPassword2" name="password2" placeholder="Same password">
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="avatar">Change avatar</label>
+                <input type="file" name="avatar" id="avatar">
+                <p class="help-block">Choose a picture file you have stored locally.</p>
             </div>
             <!--div class="form-group">
                 <div class="col-md-offset-2 col-md-10">

@@ -42,7 +42,13 @@
                 </c:if>
                 <c:if test="${userName != null}">
                     <div class="col-md-offset-4 col-md-2">
-                        <img src="defavatar.png" alt="avatar" height="80" align="right">
+                        <c:set var="avatar" value="${loggedIn.avatar}"/>
+                        <c:if test="${avatar == null}">
+                            <img src="defavatar.png" alt="avatar" height="80" align="right">
+                        </c:if>
+                        <c:if test="${avatar != null}">
+                            <img src="data:image/jpg;base64,${avatar}" alt="avatar" height="80" align="right">
+                        </c:if>
                     </div>
                     <div class="col-md-2">
                         <div class="col-md-12">

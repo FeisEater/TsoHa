@@ -40,7 +40,13 @@
                         <c:forEach var="unit" items="${list}">
                             <tr>
                                 <td width="10%">
-                                    <img src="defavatar.png" alt="avatar" height="64">
+                                    <c:set var="avatar" value="${unit.answerer.avatar}"/>
+                                    <c:if test="${avatar == null}">
+                                        <img src="defavatar.png" alt="avatar" height="64">
+                                    </c:if>
+                                    <c:if test="${avatar != null}">
+                                        <img src="data:image/jpg;base64,${avatar}" alt="avatar" height="64">
+                                    </c:if>
                                     <div class="caption">
                                         <a href="accquestions" type="button" class="btn btn-link text-left">${unit.answerer.name}</a>
                                         <c:if test="${loggedIn.ID == unit.answerer.ID}">

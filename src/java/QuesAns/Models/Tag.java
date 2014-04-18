@@ -1,9 +1,6 @@
 
 package QuesAns.Models;
 
-import QuesAns.DataBase.QAConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;

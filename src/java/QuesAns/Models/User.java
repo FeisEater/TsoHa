@@ -1,16 +1,12 @@
 
 package QuesAns.Models;
 
-import QuesAns.DataBase.QAConnection;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.ServletException;
+import org.apache.catalina.util.Base64;
 
 /**
  *
@@ -34,7 +30,7 @@ public class User implements Model {
             + "VALUES(?,?,?,LOCALTIMESTAMP) RETURNING r_id, joined";
     
     private static final String sql_changeSettings =
-            "UPDATE regusers SET nick = ?, email = ?, password = ? where r_id = ?";
+            "UPDATE regusers SET nick = ?, email = ?, password = ?, avatar = ? where r_id = ?";
 
     private static final String sql_getByID =
             "SELECT * from regusers where r_id = ?";
@@ -44,6 +40,9 @@ public class User implements Model {
 
     private static final String sql_getAnswers =
             "SELECT * from answers where r_id = ?";
+    
+    private static final String sql_getAvatar =
+            "SELECT avatar from regusers where r_id = ?";
 
     public User() {}
     public User(String n, String e, String p)
@@ -106,9 +105,9 @@ public class User implements Model {
 /**
  * Edits user's information in the database.
  */
-    public void changeSettings()
+    public void changeSettings(byte[] avatar)
     {
-        QAModel.prepareSQL(sql_changeSettings, nick, email, password, id);
+        QAModel.prepareSQL(sql_changeSettings, nick, email, password, avatar, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
@@ -174,7 +173,14 @@ public class User implements Model {
         QAModel.closeComponents();
         return u;
     }
-
+    public String getAvatar()
+    {
+        QAModel.prepareSQL(sql_getAvatar, id);
+        byte[] bytearray = QAModel.retrieveByteArray(1);
+        QAModel.closeComponents();
+        if (bytearray == null)  return null;
+        return new String(Base64.encode(bytearray));
+    }
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("r_id");

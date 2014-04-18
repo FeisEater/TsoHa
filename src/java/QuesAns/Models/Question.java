@@ -1,16 +1,10 @@
 
 package QuesAns.Models;
 
-import QuesAns.DataBase.QAConnection;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.ServletException;
 
 /**
  * Model class for questions database table.

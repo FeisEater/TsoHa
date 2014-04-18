@@ -1,8 +1,6 @@
 
 package QuesAns.Models;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,8 +9,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -140,6 +136,16 @@ public class QAModel {
         try {
             getResult();
             return result.get().getTimestamp(index);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return null;
+    }
+    public static byte[] retrieveByteArray(int index)
+    {
+        try {
+            getResult();
+            return result.get().getBytes(index);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
