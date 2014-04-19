@@ -49,6 +49,12 @@ public class User implements Model {
 
     private static final String sql_removeFromDB =
             "DELETE FROM regusers WHERE r_id = ?";
+    
+    private static final String sql_countAnswers =
+            "SELECT count(*) from answers where r_id = ?";
+
+    private static final String sql_countQuestions =
+            "SELECT count(*) from questions where r_id = ?";
 
     public User() {}
     public User(String n, String e, String p)
@@ -77,6 +83,10 @@ public class User implements Model {
     public String getPassword()
     {
         return password;
+    }
+    public String getJoined()
+    {
+        return joined.toString();
     }
     public boolean getModerator()
     {
@@ -199,6 +209,21 @@ public class User implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+    public int getAnscount()
+    {
+        QAModel.prepareSQL(sql_countAnswers, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
+    }
+    public int getQuescount()
+    {
+        QAModel.prepareSQL(sql_countQuestions, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
+    }
+
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("r_id");

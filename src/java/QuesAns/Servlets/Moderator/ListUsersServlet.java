@@ -1,8 +1,8 @@
 
 package QuesAns.Servlets.Moderator;
 
-import QuesAns.Models.Answer;
 import QuesAns.Models.Tag;
+import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author FeisEater
  */
-public class ListTagsServlet extends QAServlet {
+public class ListUsersServlet extends QAServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,9 +31,9 @@ public class ListTagsServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         getUserFromSession(request, response);
-        List<Tag> tags = Tag.getAllTags();
-        request.setAttribute("taglist", tags);
-        showPage("modtags.jsp", request, response);
+        List<User> users = User.getUsers();
+        request.setAttribute("list", users);
+        showPage("modusers.jsp", request, response);
     }
 
     /**

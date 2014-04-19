@@ -72,6 +72,10 @@
         <servlet-name>ListTagsServlet</servlet-name>
         <servlet-class>QuesAns.Servlets.Moderator.ListTagsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListUsersServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.Moderator.ListUsersServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
         <url-pattern>/test</url-pattern>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>ListTagsServlet</servlet-name>
         <url-pattern>/modtags</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListUsersServlet</servlet-name>
+        <url-pattern>/modusers</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -43,6 +43,10 @@ public class Tag implements Model {
     {
         return tag;
     }
+    public int getID()
+    {
+        return id;
+    }
 /**
  * Retrieves specific tag by its ID.
  * @param id Specified ID.

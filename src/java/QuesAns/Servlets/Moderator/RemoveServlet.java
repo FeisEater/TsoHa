@@ -35,7 +35,6 @@ public class RemoveServlet extends QAServlet {
         String idParam = request.getParameter("id");
         int id = -1;
         try {id = Integer.parseInt(idParam);} catch (Throwable e){}
-        System.out.println(typeParam + " " + id);
         if (typeParam.equals("ques"))
         {
             Question q = Question.getByID(id);
