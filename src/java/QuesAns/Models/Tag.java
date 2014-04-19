@@ -4,6 +4,7 @@ package QuesAns.Models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  *
@@ -26,6 +27,12 @@ public class Tag implements Model {
 
     private static final String sql_connectTagWithQuestion =
             "INSERT INTO tagstoquestions(t_id, q_id) VALUES(?,?)";
+    
+    private static final String sql_getAllTags =
+            "SELECT * from tags order by tag";
+
+    private static final String sql_removeFromDB =
+            "DELETE FROM tags WHERE t_id = ?";
 
     public Tag() {}
     public Tag(String tag)
@@ -65,6 +72,20 @@ public class Tag implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+    public static List<Tag> getAllTags()
+    {
+        QAModel.prepareSQL(sql_getAllTags);
+        List result = QAModel.retrieveObjectList(new Tag());
+        QAModel.closeComponents();
+        return result;
+    }
+    public void removeFromDatabase()
+    {
+        QAModel.prepareSQL(sql_removeFromDB, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("t_id");

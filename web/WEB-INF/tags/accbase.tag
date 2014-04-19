@@ -15,15 +15,13 @@
     <div class="row">
         <div class="col-md-3">
             <h2>${loggedIn.name}</h2>
-            <div class="panel panel-default">
-                <c:set var="avatar" value="${loggedIn.avatar}"/>
-                <c:if test="${avatar == null}">
-                    <img src="defavatar.png" class="img-responsive" alt="avatar">
-                </c:if>
-                <c:if test="${avatar != null}">
-                    <img src="data:image/jpg;base64,${avatar}" class="img-responsive" alt="avatar">
-                </c:if>
-            </div>
+            <c:set var="avatar" value="${loggedIn.avatar}"/>
+            <c:if test="${avatar == null}">
+                <img src="defavatar.png" class="avatar" width="256" height="256" alt="avatar">
+            </c:if>
+            <c:if test="${avatar != null}">
+                <img src="data:image/jpg;base64,${avatar}" class="avatar" width="256" height="256" alt="avatar">
+            </c:if>
             <a href="">${loggedIn.email}</a>
         </div>
         <div class="col-md-9">

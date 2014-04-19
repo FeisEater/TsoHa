@@ -70,7 +70,8 @@ public abstract class QAServlet extends HttpServlet {
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
-        session.setAttribute("prevURL", request.getRequestURI() + "?" + request.getQueryString());
+        String queryPart = (request.getQueryString() == null) ? "" : "?" + request.getQueryString();
+        session.setAttribute("prevURL", request.getRequestURI() + queryPart);
     }
 /**
  * Gets the previously stored url.

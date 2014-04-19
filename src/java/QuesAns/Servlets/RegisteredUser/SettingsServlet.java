@@ -45,6 +45,7 @@ public class SettingsServlet extends QAServlet {
         {
             FileItemFactory factory = new DiskFileItemFactory();
             ServletFileUpload upload = new ServletFileUpload(factory);
+            upload.setSizeMax(1024 * 256);
             try {
                 List<FileItem> items = upload.parseRequest(request);
                 Iterator<FileItem> iter = items.iterator();
@@ -63,12 +64,14 @@ public class SettingsServlet extends QAServlet {
                     else
                     {
                         avatar = item.get();
+                        //item.getContentType();
                     }
                 }
             } catch (FileUploadException e) {
                 System.out.println(e);
             }
-            loggedIn.changeSettings(avatar);
+            loggedIn.changeSettings();
+            if (avatar != null && avatar.length > 0)    loggedIn.setAvatar(avatar);
             response.sendRedirect("index");
         }
         else

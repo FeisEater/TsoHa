@@ -20,7 +20,7 @@ public class User implements Model {
     private Timestamp joined;
     private boolean moderator;
     
-    private static final String sql_getAllUsers = "SELECT * from regusers";
+    private static final String sql_getAllUsers = "SELECT * from regusers order by joined desc";
     
     private static final String sql_getUserByLogin = "SELECT * from regusers "
                 + "where (nick = ? or email = ?) and password = ?";
@@ -30,7 +30,7 @@ public class User implements Model {
             + "VALUES(?,?,?,LOCALTIMESTAMP) RETURNING r_id, joined";
     
     private static final String sql_changeSettings =
-            "UPDATE regusers SET nick = ?, email = ?, password = ?, avatar = ? where r_id = ?";
+            "UPDATE regusers SET nick = ?, email = ?, password = ? where r_id = ?";
 
     private static final String sql_getByID =
             "SELECT * from regusers where r_id = ?";
@@ -43,6 +43,12 @@ public class User implements Model {
     
     private static final String sql_getAvatar =
             "SELECT avatar from regusers where r_id = ?";
+
+    private static final String sql_setAvatar =
+            "UPDATE regusers SET avatar = ? where r_id = ?";
+
+    private static final String sql_removeFromDB =
+            "DELETE FROM regusers WHERE r_id = ?";
 
     public User() {}
     public User(String n, String e, String p)
@@ -105,9 +111,15 @@ public class User implements Model {
 /**
  * Edits user's information in the database.
  */
-    public void changeSettings(byte[] avatar)
+    public void changeSettings()
     {
-        QAModel.prepareSQL(sql_changeSettings, nick, email, password, avatar, id);
+        QAModel.prepareSQL(sql_changeSettings, nick, email, password, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+    public void setAvatar(byte[] avatar)
+    {
+        QAModel.prepareSQL(sql_setAvatar, avatar, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
@@ -180,6 +192,12 @@ public class User implements Model {
         QAModel.closeComponents();
         if (bytearray == null)  return null;
         return new String(Base64.encode(bytearray));
+    }
+    public void removeFromDatabase()
+    {
+        QAModel.prepareSQL(sql_removeFromDB, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public void getObjectFromResults(ResultSet result) throws SQLException
     {

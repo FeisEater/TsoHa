@@ -37,8 +37,8 @@
         <servlet-class>QuesAns.Servlets.Moderator.ListQuestionsServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>RemoveQuestionServlet</servlet-name>
-        <servlet-class>QuesAns.Servlets.Moderator.RemoveQuestionServlet</servlet-class>
+        <servlet-name>RemoveServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.Moderator.RemoveServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
@@ -63,6 +63,14 @@
     <servlet>
         <servlet-name>UsersAnswersServlet</servlet-name>
         <servlet-class>QuesAns.Servlets.RegisteredUser.UsersAnswersServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListAnswersServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.Moderator.ListAnswersServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListTagsServlet</servlet-name>
+        <servlet-class>QuesAns.Servlets.Moderator.ListTagsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>test</servlet-name>
@@ -101,8 +109,8 @@
         <url-pattern>/modquestions</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RemoveQuestionServlet</servlet-name>
-        <url-pattern>/modremovequestion</url-pattern>
+        <servlet-name>RemoveServlet</servlet-name>
+        <url-pattern>/modremove</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
@@ -127,6 +135,14 @@
     <servlet-mapping>
         <servlet-name>UsersAnswersServlet</servlet-name>
         <url-pattern>/accanswers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListAnswersServlet</servlet-name>
+        <url-pattern>/modanswers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListTagsServlet</servlet-name>
+        <url-pattern>/modtags</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -4,6 +4,7 @@ package QuesAns.Models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Model class for answers database table.
@@ -36,6 +37,12 @@ public class Answer implements Model {
     private static final String sql_addFlag =
             "UPDATE answers SET flags = ? where a_id = ?";
     
+    private static final String sql_allAnswersByFlags =
+            "SELECT * from answers order by flags desc";
+
+    private static final String sql_removeFromDB =
+            "DELETE FROM answers WHERE a_id = ?";
+
     public Answer() {}
     public Answer(String answer)
     {
@@ -56,6 +63,10 @@ public class Answer implements Model {
     public int getRating()
     {
         return rating;
+    }
+    public int getFlags()
+    {
+        return flags;
     }
     public int getID()
     {
@@ -139,6 +150,19 @@ public class Answer implements Model {
             a = null;
         QAModel.closeComponents();
         return a;
+    }
+    public static List<Answer> getAnswersSortedByFlags()
+    {
+        QAModel.prepareSQL(sql_allAnswersByFlags);
+        List result = QAModel.retrieveObjectList(new Answer());
+        QAModel.closeComponents();
+        return result;
+    }
+    public void removeFromDatabase()
+    {
+        QAModel.prepareSQL(sql_removeFromDB, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public void getObjectFromResults(ResultSet result) throws SQLException
     {

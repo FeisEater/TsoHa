@@ -13,7 +13,13 @@
             <div class="col-md-12"><br></div>
             <div class="col-md-10">
                 <div class="col-md-1">
-                    <img src="defavatar.png" alt="avatar" height="80">
+                    <c:set var="avatar" value="${objectFromID.asker.avatar}"/>
+                    <c:if test="${avatar == null}">
+                        <img src="defavatar.png" alt="avatar" class="avatar" height="128" width="128">
+                    </c:if>
+                    <c:if test="${avatar != null}">
+                        <img src="data:image/jpg;base64,${avatar}" alt="avatar" class="avatar" height="128" width="128">
+                    </c:if>
                     <div class="caption">
                         <a href="accquestions" type="button" class="btn btn-link text-left">${objectFromID.asker.name}</a>
                     </div>
@@ -42,10 +48,10 @@
                                 <td width="10%">
                                     <c:set var="avatar" value="${unit.answerer.avatar}"/>
                                     <c:if test="${avatar == null}">
-                                        <img src="defavatar.png" alt="avatar" height="64">
+                                        <img src="defavatar.png" alt="avatar" class="avatar" height="80" width="80">
                                     </c:if>
                                     <c:if test="${avatar != null}">
-                                        <img src="data:image/jpg;base64,${avatar}" alt="avatar" height="64">
+                                        <img src="data:image/jpg;base64,${avatar}" alt="avatar" class="avatar" height="80" width="80">
                                     </c:if>
                                     <div class="caption">
                                         <a href="accquestions" type="button" class="btn btn-link text-left">${unit.answerer.name}</a>
@@ -83,12 +89,14 @@
                 <div class="col-md-12"><br></div>
                 <div class="col-md-12"><br></div>
                 <div class="col-md-12"><br></div>
-                <label class="col-md-12 control-label">Tags:</label>
-                <t:taglist>
-                    <c:forEach var="tag" items="${taglist}">
-                        <a href="index?tags=${tag.text}" type="button" class="btn btn-xs btn-info">${tag.text}</a>
-                    </c:forEach>
-                </t:taglist>
+                <div align="center">
+                    <label class="col-md-12 control-label">Tags:</label>
+                    <t:taglist>
+                        <c:forEach var="tag" items="${taglist}">
+                            <a href="index?tags=${tag.text}" type="button" class="btn btn-xs btn-info">${tag.text}</a>
+                        </c:forEach>
+                    </t:taglist>
+                </div>
             </div>
         </div>
     </div>

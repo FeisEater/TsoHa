@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="avatar">Change avatar</label>
+                <label for="avatar" class="col-md-3 control-label">Change avatar</label>
                 <input type="file" name="avatar" id="avatar">
                 <p class="help-block">Choose a picture file you have stored locally.</p>
             </div>
