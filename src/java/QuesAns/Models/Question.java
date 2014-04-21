@@ -112,7 +112,7 @@ public class Question implements Model {
         asker = owner;
         title = reformatString(title);
         body = reformatString(body);
-        int ownerID = (owner == null) ? null : owner.getID();
+        Integer ownerID = (owner == null) ? null : owner.getID();
         QAModel.prepareSQL(sql_addToDB, title, body, ownerID);
         id = QAModel.retrieveInt(1);
         asked = QAModel.retrieveTimestamp(2);

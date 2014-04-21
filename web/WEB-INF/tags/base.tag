@@ -8,13 +8,12 @@
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="pageTitle"%>
-<%@attribute name="userName"%>
-<%@attribute name="errorMessage"%>
 <%@attribute name="givenName"%>
 <%@attribute name="objectFromID"%>
 
 <%-- any content can be specified here e.g.: --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -41,7 +40,7 @@
                         </ul>
                     </c:if>
                 </div>
-                <c:if test="${userName == null}">
+                <c:if test="${loggedIn == null}">
                     <div class="col-md-offset-3 col-md-2">
                         <div class="col-md-12">
                             <a href="login" type="button" class="btn btn-primary">Sign in</a>
@@ -51,7 +50,7 @@
                         </div>
                     </div>
                 </c:if>
-                <c:if test="${userName != null}">
+                <c:if test="${loggedIn != null}">
                     <div class="col-md-offset-1 col-md-2">
                         <c:set var="avatar" value="${loggedIn.avatar}"/>
                         <c:if test="${avatar == null}">
@@ -63,7 +62,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="col-md-12">
-                            <a href="accquestions" type="button" class="btn btn-primary">${userName}</a>
+                            <a href="accquestions" type="button" class="btn btn-primary">${loggedIn.name}</a>
                         </div>
                         <div class="col-md-12">
                             <a href="logout" type="button" class="btn btn-primary">Log out</a>
@@ -72,12 +71,44 @@
                 </c:if>
             </div>
         </div>
-        <c:if test="${errorMessage != null}">
+        <c:if test="${fn:length(errors) > 0}">
             <div class="container-fluid" style="background-color:#FFDDDD">
                 <div class="row">
                     <div class="col-ms-12"><br></div>
                     <label class="col-md-offset-4">
-                        Shit! ${errorMessage}
+                        <c:if test="${fn:length(errors) == 1}">
+                            Oh no! <c:forEach var="error" items="${errors}">${error}</c:forEach>
+                        </c:if>
+                        <c:if test="${fn:length(errors) > 1}">
+                            Oh no! There were following errors:
+                            <ul>
+                                <c:forEach var="error" items="${errors}">
+                                    <li>${error}</li>
+                                </c:forEach>
+                            </ul>
+                        </c:if>
+                    </label>
+                    <div class="col-ms-12"><br></div>
+                </div>
+            </div>
+        </c:if>
+        <c:if test="${fn:length(infos) > 0}">
+            <div class="container-fluid" style="background-color:#DDFFDD">
+                <div class="row">
+                    <div class="col-ms-12"><br></div>
+                    <label class="col-md-offset-4">
+                        <c:if test="${fn:length(infos) == 1}">
+                            <c:forEach var="info" items="${infos}">
+                                ${info}
+                            </c:forEach>
+                        </c:if>
+                        <c:if test="${fn:length(infos) > 1}">
+                            <ul>
+                                <c:forEach var="info" items="${infos}">
+                                    <li>${info}</li>
+                                </c:forEach>
+                            </ul>
+                        </c:if>
                     </label>
                     <div class="col-ms-12"><br></div>
                 </div>

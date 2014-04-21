@@ -3,6 +3,8 @@ package QuesAns.Servlets;
 
 import QuesAns.Models.User;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,7 +43,6 @@ public abstract class QAServlet extends HttpServlet {
     {
         HttpSession session = request.getSession();
         User loggedIn = (User)session.getAttribute("loggedIn");
-        request.setAttribute("userName", (loggedIn == null) ? null : loggedIn.getName());
         return loggedIn;
     }
 /**
@@ -57,6 +58,9 @@ public abstract class QAServlet extends HttpServlet {
     {
         RequestDispatcher dispatcher = request.getRequestDispatcher(jsp);
         dispatcher.forward(request, response);
+        HttpSession session = request.getSession();
+        session.removeAttribute("errors");
+        session.removeAttribute("infos");
     }
 /**
  * Saves url for this servlet (with query string), so that other servlets can
@@ -90,6 +94,29 @@ public abstract class QAServlet extends HttpServlet {
         return prevURL;
     }
     
+    public void setNotification(String notify, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        HttpSession session = request.getSession();
+        List<String> infos = new ArrayList<String>();
+        infos.add(notify);
+        session.setAttribute("infos", infos);
+    }
+    
+    public void setNotifications(List<String> infos, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        HttpSession session = request.getSession();
+        session.setAttribute("infos", infos);
+    }
+
+    public void setErrors(List<String> errors, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        HttpSession session = request.getSession();
+        session.setAttribute("errors", errors);
+    }
+
     protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException;
     

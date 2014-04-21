@@ -4,7 +4,11 @@ package QuesAns.Servlets;
 import QuesAns.Models.Question;
 import QuesAns.Models.Tag;
 import QuesAns.Models.User;
+import QuesAns.utils.Error;
+import QuesAns.utils.Info;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,29 +36,82 @@ public class AskServlet extends QAServlet {
         preprocess(request, response);
         User loggedIn = getUserFromSession(request, response);
         saveURL(request, response);
-        String title = request.getParameter("title");
-        String body = request.getParameter("body");
-        String tagline = request.getParameter("tags");
-        String[] tags = {};
-        if (tagline != null && !tagline.isEmpty())
-            tags = tagline.split(" ");
         
-        if (!(title == null && body == null))
-        {
-            Question q = new Question(title, body);
-            q.addToDatabase(loggedIn);
-            for (String t : tags)
-                new Tag(t).addToDatabase(q);
-            request.setAttribute("objectFromID", q);
-            response.sendRedirect("question");
-        }
+        if (firstTimeVisiting(request, response))
+            showPage("ask.jsp", request, response);
         else
         {
-            //request.setAttribute("errorMessage", "Invalid input.");
-            showPage("ask.jsp", request, response);
+            String title = request.getParameter("title");
+            String body = request.getParameter("body");
+            String[] tags = extractTags(request, response);
+            List<String> errors = searchForErrors(title, body, tags);
+            if (errors.isEmpty())
+            {
+                Question q = new Question(title, body);
+                q.addToDatabase(loggedIn);
+                for (String t : tags)
+                    new Tag(t).addToDatabase(q);
+                setNotification(Info.quesSuccess, request, response);
+                response.sendRedirect("question?id=" + q.getID());
+            }
+            else
+            {
+                setErrors(errors, request, response);
+                showPage("ask.jsp", request, response);
+            }
         }
     }
+    
+    public boolean firstTimeVisiting(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        return request.getParameter("title") == null || request.getParameter("body") == null ||
+                request.getParameter("tags") == null;
+    }
 
+    public String[] extractTags(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String tagline = request.getParameter("tags").toLowerCase();
+        String[] tags = {};
+        if (!tagline.isEmpty())
+            tags = tagline.split(" ");
+        return tags;
+    }
+    
+    public List<String> searchForErrors(String title, String body, String[] tags)
+    {
+        List<String> result = new ArrayList<String>();
+        if (title.isEmpty())    result.add(Error.quesTitleEmpty);
+        else
+        {
+            String t = title;
+            t = t.replace(" ", "");
+            if (t.isEmpty())    result.add(Error.quesTitleOnlyWhitespaces);
+        }
+        if (title.length() > 96)
+            result.add(Error.quesTitleTooLong);
+        if (body.length() > 65536)
+            result.add(Error.quesBodyTooLong);
+        if (tags.length > 1024)
+            result.add(Error.quesTooManyTags);
+        else
+        {
+            for (String tag : tags)
+            {
+                if (tag.length() > 12)
+                    result.add(Error.quesTagTooLong(tag.substring(0, 32)));
+                else
+                {
+                    String accepted = "abcdefghijklmnopqrstuvwxyzåäö_0123456789";
+                    String t = tag;
+                    for (int i = 0; i < accepted.length(); i++)
+                        t = t.replace(""+accepted.charAt(i), "");
+                    if (!t.isEmpty())
+                        result.add(Error.quesTagHasInvalidCharacter(tag, t.charAt(0)));
+                }
+            }
+        }
+        return result;
+    }
     /**
      * Returns a short description of the servlet.
      *
