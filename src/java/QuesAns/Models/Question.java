@@ -178,6 +178,7 @@ public class Question implements Model {
  */
     public static Question getByID(int id)
     {
+        if (id < 0) return null;
         Question q = new Question();
         QAModel.prepareSQL(sql_getByID, id);
         if (!QAModel.retrieveSingleObject(q))

@@ -2,6 +2,8 @@
 package QuesAns.Servlets;
 
 import QuesAns.Models.Question;
+import QuesAns.utils.Error;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -30,17 +32,15 @@ public class QuestionServlet extends QAServlet {
         getUserFromSession(request, response);
         saveURL(request, response);
         String idParam = request.getParameter("id");
-        int id = -1;
-        try {id = Integer.parseInt(idParam);} catch (Throwable e){}
-        Question q = Question.getByID(id);
-        request.setAttribute("objectFromID", q);
+        Question q = Question.getByID(Tools.stringToInt(idParam));
         if (q == null)
         {
-            request.setAttribute("errorMessage", "Invalid ID");
+            setError(Error.invalidQues, request, response);
             response.sendRedirect("index");
         }
         else
         {
+            request.setAttribute("objectFromID", q);
             request.setAttribute("list", q.getAnswers());
             request.setAttribute("taglist", q.getTags());
             request.setAttribute("pageTitle", q.getTitle());

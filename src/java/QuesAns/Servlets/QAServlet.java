@@ -24,7 +24,7 @@ public abstract class QAServlet extends HttpServlet {
  * @throws ServletException
  * @throws IOException 
  */
-    public void preprocess(HttpServletRequest request, HttpServletResponse response)
+    protected void preprocess(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         request.setCharacterEncoding("UTF-8");
@@ -38,7 +38,7 @@ public abstract class QAServlet extends HttpServlet {
  * @throws ServletException
  * @throws IOException 
  */
-    public User getUserFromSession(HttpServletRequest request, HttpServletResponse response)
+    protected User getUserFromSession(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
@@ -53,7 +53,7 @@ public abstract class QAServlet extends HttpServlet {
  * @throws ServletException
  * @throws IOException 
  */
-    public void showPage(String jsp, HttpServletRequest request, HttpServletResponse response)
+    protected void showPage(String jsp, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         RequestDispatcher dispatcher = request.getRequestDispatcher(jsp);
@@ -70,7 +70,7 @@ public abstract class QAServlet extends HttpServlet {
  * @throws ServletException
  * @throws IOException 
  */
-    public void saveURL(HttpServletRequest request, HttpServletResponse response)
+    protected void saveURL(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
@@ -85,7 +85,7 @@ public abstract class QAServlet extends HttpServlet {
  * @throws ServletException
  * @throws IOException 
  */
-    public String getPrevURL(HttpServletRequest request, HttpServletResponse response)
+    protected String getPrevURL(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
@@ -94,7 +94,7 @@ public abstract class QAServlet extends HttpServlet {
         return prevURL;
     }
     
-    public void setNotification(String notify, HttpServletRequest request, HttpServletResponse response)
+    protected void setNotification(String notify, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
@@ -103,14 +103,23 @@ public abstract class QAServlet extends HttpServlet {
         session.setAttribute("infos", infos);
     }
     
-    public void setNotifications(List<String> infos, HttpServletRequest request, HttpServletResponse response)
+    protected void setNotifications(List<String> infos, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
         session.setAttribute("infos", infos);
     }
 
-    public void setErrors(List<String> errors, HttpServletRequest request, HttpServletResponse response)
+    protected void setError(String error, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        HttpSession session = request.getSession();
+        List<String> errors = new ArrayList<String>();
+        errors.add(error);
+        session.setAttribute("errors", errors);
+    }
+
+    protected void setErrors(List<String> errors, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();

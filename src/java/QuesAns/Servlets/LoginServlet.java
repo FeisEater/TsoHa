@@ -2,6 +2,8 @@
 package QuesAns.Servlets;
 
 import QuesAns.Models.User;
+import QuesAns.utils.Error;
+import QuesAns.utils.Info;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,18 +37,24 @@ public class LoginServlet extends QAServlet {
         User loggedIn = User.getByLoginInfo(username, password);
         if (loggedIn == null)
         {
-            if (!(username == null && password == null))
+            if (!firstTimeVisiting(request))
             {
-                request.setAttribute("errorMessage", "Log in failed. Check your username, email or password.");
+                setError(Error.loginFail, request, response);
                 request.setAttribute("givenName", username);
             }
             showPage("signin.jsp", request, response);
         }
         else
         {
+            setNotification(Info.loginSuccess(username), request, response);
             session.setAttribute("loggedIn", loggedIn);
             response.sendRedirect(getPrevURL(request, response));
         }
+    }
+
+    private boolean firstTimeVisiting(HttpServletRequest request)
+            throws ServletException, IOException {
+        return request.getParameter("username") == null || request.getParameter("password") == null;
     }
 
     /**

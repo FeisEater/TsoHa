@@ -3,7 +3,9 @@ package QuesAns.Servlets;
 
 import QuesAns.Models.Question;
 import QuesAns.Models.User;
+import QuesAns.utils.Error;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,10 +34,7 @@ public class ListServlet extends QAServlet {
         preprocess(request, response);
         getUserFromSession(request, response);
         saveURL(request, response);
-        String tagString = request.getParameter("tags");
-        String[] tagParam = null;
-        if (tagString != null)
-            tagParam = tagString.replace("+", " ").split(" ");
+        String[] tagParam = getSearchTerms(request, response);
         List<Question> questions;
         if (tagParam != null && tagParam.length > 0)
             questions = Question.getQuestionsByTags(tagParam);
@@ -45,6 +44,28 @@ public class ListServlet extends QAServlet {
         showPage("index.jsp", request, response);
     }
 
+    private String[] getSearchTerms(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String tagString = request.getParameter("tags");
+        if (tagString == null)  return null;
+        tagString = tagString.toLowerCase().replace("+", " ");
+        String t = tagString.replace(" ", "");
+        if (t.isEmpty())    return null;
+        List<String> errors = searchForErrors(tagString);
+        if (!errors.isEmpty())
+        {
+            setErrors(errors, request, response);
+            return null;
+        }
+        return tagString.split(" ");
+    }
+    
+    private List<String> searchForErrors(String search)
+    {
+        List<String> errors = new ArrayList<String>();
+        if (search.length() > 1024) errors.add(Error.searchTooLong);
+        return errors;
+    }
     /**
      * Returns a short description of the servlet.
      *

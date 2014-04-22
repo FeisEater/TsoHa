@@ -1,6 +1,7 @@
 
 package QuesAns.Servlets;
 
+import QuesAns.utils.Info;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +29,7 @@ public class LogoutServlet extends QAServlet {
         preprocess(request, response);
         HttpSession session = request.getSession();
         session.removeAttribute("loggedIn");
+        setNotification(Info.logoutSuccess ,request, response);
         response.sendRedirect(getPrevURL(request, response));
     }
 

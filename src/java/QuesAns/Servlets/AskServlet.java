@@ -37,13 +37,13 @@ public class AskServlet extends QAServlet {
         User loggedIn = getUserFromSession(request, response);
         saveURL(request, response);
         
-        if (firstTimeVisiting(request, response))
+        if (firstTimeVisiting(request))
             showPage("ask.jsp", request, response);
         else
         {
             String title = request.getParameter("title");
             String body = request.getParameter("body");
-            String[] tags = extractTags(request, response);
+            String[] tags = extractTags(request);
             List<String> errors = searchForErrors(title, body, tags);
             if (errors.isEmpty())
             {
@@ -62,13 +62,13 @@ public class AskServlet extends QAServlet {
         }
     }
     
-    public boolean firstTimeVisiting(HttpServletRequest request, HttpServletResponse response)
+    private boolean firstTimeVisiting(HttpServletRequest request)
             throws ServletException, IOException {
         return request.getParameter("title") == null || request.getParameter("body") == null ||
                 request.getParameter("tags") == null;
     }
 
-    public String[] extractTags(HttpServletRequest request, HttpServletResponse response)
+    private String[] extractTags(HttpServletRequest request)
             throws ServletException, IOException {
         String tagline = request.getParameter("tags").toLowerCase();
         String[] tags = {};
@@ -77,7 +77,7 @@ public class AskServlet extends QAServlet {
         return tags;
     }
     
-    public List<String> searchForErrors(String title, String body, String[] tags)
+    private List<String> searchForErrors(String title, String body, String[] tags)
     {
         List<String> result = new ArrayList<String>();
         if (title.isEmpty())    result.add(Error.quesTitleEmpty);
