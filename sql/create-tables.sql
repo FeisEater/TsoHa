@@ -13,8 +13,7 @@ CREATE TABLE questions (
     title varchar(96) NOT NULL CHECK (title <> ''),
     body text,
     r_id integer REFERENCES regusers ON DELETE SET NULL,
-    asked timestamp,
-    flags integer CHECK (flags > -1) DEFAULT 0
+    asked timestamp
 );
 
 CREATE TABLE tags (
@@ -32,11 +31,21 @@ CREATE TABLE tagstoquestions (
 CREATE TABLE answers (
     a_id SERIAL PRIMARY KEY,
     body text,
-    rating integer DEFAULT 0,
-    flags integer CHECK (flags > -1) DEFAULT 0,
     approvedbyasker boolean DEFAULT false,
     answered timestamp,
     lastedited timestamp,
     r_id integer REFERENCES regusers ON DELETE SET NULL,
     q_id integer REFERENCES questions ON DELETE CASCADE
+);
+
+CREATE TABLE flaggedquestions (
+    r_id integer REFERENCES regusers ON DELETE SET NULL,
+    q_id integer REFERENCES questions ON DELETE CASCADE
+);
+
+CREATE TABLE ratedflaggedanswers (
+    r_id integer REFERENCES regusers ON DELETE SET NULL,
+    a_id integer REFERENCES answers ON DELETE CASCADE,
+    flagged boolean,
+    rated integer CHECK (rated = 1 OR rated = -1) DEFAULT -1
 );

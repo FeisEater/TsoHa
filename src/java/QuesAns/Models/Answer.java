@@ -13,8 +13,6 @@ import java.util.List;
 public class Answer implements Model {
     private int id;
     private String body;
-    private int rating;
-    private int flags;
     private boolean askerApproved;
     private Timestamp answered;
     private Timestamp lastEdited;
@@ -32,13 +30,38 @@ public class Answer implements Model {
             "UPDATE answers SET body = ?, lastedited = LOCALTIMESTAMP where a_id = ?";
     
     private static final String sql_rate =
-            "UPDATE answers SET rating = ? where a_id = ?";
+            "INSERT INTO ratedflaggedanswers(r_id, a_id, flagged, rated) "
+            + "VALUES(?,?,false,?)";
+            //"UPDATE answers SET rating = ? where a_id = ?";
 
-    private static final String sql_addFlag =
-            "UPDATE answers SET flags = ? where a_id = ?";
+    private static final String sql_undoRate =
+            "DELETE FROM ratedflaggedanswers "
+            + "WHERE ctid IN (select ctid from ratedflaggedanswers "
+            + "where r_id = ? and a_id = ? and flagged = false limit 1)";
+
+    private static final String sql_undoAnonRate =
+            "DELETE FROM ratedflaggedanswers "
+            + "WHERE ctid IN (select ctid from ratedflaggedanswers "
+            + "where r_id is null and a_id = ? and flagged = false limit 1)";
+
+    private static final String sql_changeRate =
+            "UPDATE ratedflaggedanswers SET rated = ? "
+            + "WHERE ctid IN (select ctid from ratedflaggedanswers "
+            + "where r_id = ? and a_id = ? and flagged = false limit 1)";
     
+    private static final String sql_countRating =
+            "SELECT sum(rated) from ratedflaggedanswers "
+            + "WHERE a_id = ? and flagged = false";
+
+    private static final String sql_countFlags =
+            "SELECT count(*) from ratedflaggedanswers "
+            + "WHERE a_id = ? and flagged = true";
+
     private static final String sql_allAnswersByFlags =
-            "SELECT * from answers order by flags desc";
+            "select a.a_id, body, approvedbyasker, answered, lastedited, r_id, q_id "
+            + "from answers as a, (select a_id, count(*) as f from ratedflaggedanswers where flagged = true group by a_id) as fa "
+            + "where a.a_id = fa.a_id order by f desc";
+            //"SELECT * from answers order by flags desc";
 
     private static final String sql_removeFromDB =
             "DELETE FROM answers WHERE a_id = ?";
@@ -62,11 +85,17 @@ public class Answer implements Model {
     }
     public int getRating()
     {
-        return rating;
+        QAModel.prepareSQL(sql_countRating, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
     }
     public int getFlags()
     {
-        return flags;
+        QAModel.prepareSQL(sql_countFlags, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
     }
     public int getID()
     {
@@ -100,8 +129,6 @@ public class Answer implements Model {
         lastEdited = QAModel.retrieveTimestamp(2);
         QAModel.closeComponents();
         askerApproved = false;
-        rating = 0;
-        flags = 0;
         answerer = owner;
         question = q;
     }
@@ -122,18 +149,26 @@ public class Answer implements Model {
  * Changes answers rating.
  * @param up if true, rates answer up. Otherwise rate down.
  */
-    public void rate(boolean up)
+    public void getRated(User rater, boolean up)
     {
-        QAModel.prepareSQL(sql_rate, up ? ++rating : --rating, id);
+        Integer rateId = (rater == null) ? null : rater.getID();
+        QAModel.prepareSQL(sql_rate, rateId, id, up ? 1 : -1);
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
-/**
- * Adds answer's flag count by one.
- */
-    public void addFlag()
+    public void undoRate(User rater)
     {
-        QAModel.prepareSQL(sql_addFlag, ++flags, id);
+        if (rater == null)
+            QAModel.prepareSQL(sql_undoAnonRate, id);
+        else
+            QAModel.prepareSQL(sql_undoRate, rater.getID(), id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+    public void changeRate(User rater, boolean up)
+    {
+        Integer rateId = (rater == null) ? null : rater.getID();
+        QAModel.prepareSQL(sql_changeRate, up ? 1 : -1, rateId, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
@@ -168,8 +203,6 @@ public class Answer implements Model {
     {
         id = result.getInt("a_id");
         body = result.getString("body");
-        rating = result.getInt("rating");
-        flags = result.getInt("flags");
         askerApproved = result.getBoolean("approvedbyasker");
         answered = result.getTimestamp("answered");
         lastEdited = result.getTimestamp("lastedited");
@@ -182,5 +215,15 @@ public class Answer implements Model {
     public Model newModel()
     {
         return new Answer();
+    }
+    @Override
+    public boolean equals(Object o)
+    {
+        Answer a = (Answer)o;
+        return a.getID() == id;
+    }
+    public String toString()
+    {
+        return ""+id;
     }
 }

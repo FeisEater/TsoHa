@@ -1,6 +1,7 @@
 
 package QuesAns.Servlets;
 
+import QuesAns.Models.Answer;
 import QuesAns.Models.User;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -126,6 +127,13 @@ public abstract class QAServlet extends HttpServlet {
         session.setAttribute("errors", errors);
     }
 
+    protected List<Answer> getRatedAnswers(HttpSession session)
+    {
+        List<Answer> rated = (List<Answer>)session.getAttribute("rated");
+        if (rated == null)
+            return new ArrayList<Answer>();
+        return rated;
+    }
     protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException;
     

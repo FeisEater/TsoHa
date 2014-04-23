@@ -33,8 +33,7 @@ INSERT INTO questions VALUES (
     'How to dispose of a body?',
     'If there are any policemen reading this post, please be assured that I am merely joking.',
     2,
-    TIMESTAMP '2012-12-25 04:23:54',
-    13
+    TIMESTAMP '2012-12-25 04:23:54'
 );
 
 INSERT INTO questions VALUES (
@@ -42,8 +41,7 @@ INSERT INTO questions VALUES (
     'Wash away pee from pants?',
     'I got scared and peed my pants. What is the best way to unpee my pants?',
     1,
-    TIMESTAMP '2013-01-01 12:23:54',
-    0
+    TIMESTAMP '2013-01-01 12:23:54'
 );
 
 INSERT INTO tags VALUES (
@@ -98,8 +96,6 @@ INSERT INTO tagstoquestions VALUES (
 INSERT INTO answers VALUES (
     DEFAULT,
     'Talk to your parents.',
-    67,
-    0,
     true,
     TIMESTAMP '2012-12-25 05:23:54',
     TIMESTAMP '2012-12-25 06:23:54',
@@ -110,8 +106,6 @@ INSERT INTO answers VALUES (
 INSERT INTO answers VALUES (
     DEFAULT,
     'Wash your jeans with your tears.',
-    0,
-    12,
     false,
     TIMESTAMP '2013-01-01 13:23:54',
     TIMESTAMP '2013-01-01 13:23:54',

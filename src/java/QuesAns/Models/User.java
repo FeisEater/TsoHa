@@ -55,6 +55,31 @@ public class User implements Model {
 
     private static final String sql_countQuestions =
             "SELECT count(*) from questions where r_id = ?";
+    
+    private static final String sql_addAnswerFlag =
+            "INSERT INTO ratedflaggedanswers(r_id, a_id, flagged) "
+            + "VALUES(?,?,true)";
+            //"UPDATE answers SET flags = ? where a_id = ?";
+
+    private static final String sql_undoAnswerFlag =
+            "DELETE FROM ratedflaggedanswers "
+            + "WHERE r_id = ? and a_id = ? and flagged = true";
+
+    private static final String sql_hasRated =
+            "SELECT ratedflaggedanswers where r_id = ? and a_id = ? and flagged = false";
+
+    private static final String sql_hasFlaggedAnswer =
+            "SELECT ratedflaggedanswers where r_id = ? and a_id = ? and flagged = true";
+
+    private static final String sql_addQuestionFlag =
+            "INSERT INTO flaggedquestions(r_id, q_id) VALUES(?,?)";
+            //"UPDATE answers SET flags = ? where a_id = ?";
+
+    private static final String sql_undoQuestionFlag =
+            "DELETE FROM flaggedquestions WHERE r_id = ? and q_id = ?";
+
+    private static final String sql_hasFlaggedQuestion =
+            "SELECT flaggedquestions where r_id = ? and q_id = ?";
 
     public User() {}
     public User(String n, String e, String p)
@@ -220,6 +245,57 @@ public class User implements Model {
     {
         QAModel.prepareSQL(sql_countQuestions, id);
         int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
+    }
+/**
+ * Adds answer's flag count by one.
+ */
+    public void addFlagToAnswer(Answer ans)
+    {
+        QAModel.prepareSQL(sql_addAnswerFlag, id, ans.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+    public void removeFlagFromAnswer(Answer ans)
+    {
+        QAModel.prepareSQL(sql_undoAnswerFlag, id, ans.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+    public boolean hasRated(Answer ans)
+    {
+        QAModel.prepareSQL(sql_hasRated, id, ans.getID());
+        boolean result = QAModel.resultFound();
+        QAModel.closeComponents();
+        return result;
+    }
+    public boolean hasFlaggedAnswer(Answer ans)
+    {
+        QAModel.prepareSQL(sql_hasFlaggedAnswer, id, ans.getID());
+        boolean result = QAModel.resultFound();
+        QAModel.closeComponents();
+        return result;
+    }
+/**
+ * Adds question's flag count by one.
+ */
+    public void addFlagToQuestion(Question ques)
+    {
+        QAModel.prepareSQL(sql_addQuestionFlag, id, ques.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+    public void removeFlagFromQuestion(Question ques)
+    {
+        QAModel.prepareSQL(sql_undoQuestionFlag, id, ques.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+    public boolean hasFlaggedQuestion(Question ques)
+    {
+        QAModel.prepareSQL(sql_hasFlaggedQuestion, id, ques.getID());
+        boolean result = QAModel.resultFound();
         QAModel.closeComponents();
         return result;
     }

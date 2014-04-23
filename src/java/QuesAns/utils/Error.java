@@ -58,4 +58,9 @@ public class Error {
     public static final String settingsNotLoggedIn = "You must be logged in to change account settings.";
     public static final String avatarTooBig = "Avatar's file size is too big. It must be below 256 kilobytes.";
     public static final String avatarNotPicture = "Avatar was not recognized as a picture file. Supported files are .jpg, .gif, .png and .bmp";
+    public static final String rateInvalidId = "Answer you tried to rate doesn't exist.";
+    public static final String invalidUrl = "Something is wrong with the url.";
+    public static final String flagInvalidQues = "Question you tried to flag doesn't exist.";
+    public static final String flagInvalidAns = "Answer you tried to flag doesn't exist.";
+    public static final String flagNotLoggedIn = "You must be logged in to flag something.";
 }

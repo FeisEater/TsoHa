@@ -15,7 +15,6 @@ public class Question implements Model {
     private String title;
     private String body;
     private Timestamp asked;
-    private int flags;
     private User asker;
     
     private static final String sql_getQuestions =
@@ -25,24 +24,34 @@ public class Question implements Model {
             "SELECT * from questions where q_id = ?";
 
     private static final String sql_addToDB =
-            "INSERT INTO questions(title, body, r_id, asked, flags) "
-            + "VALUES(?,?,?,LOCALTIMESTAMP,0) RETURNING q_id, asked";
-
+            "INSERT INTO questions(title, body, r_id, asked) "
+            + "VALUES(?,?,?,LOCALTIMESTAMP) RETURNING q_id, asked";
+/*
     private static final String sql_addFlag =
             "UPDATE questions SET flags = ? where q_id = ?";
-    
+    */
     private static final String sql_removeFromDB =
             "DELETE FROM questions WHERE q_id = ?";
 
     private static final String sql_getQuestionsAnswers =
-        "SELECT * from answers where q_id = ? order by rating desc";
+            "select a.a_id, body, approvedbyasker, answered, lastedited, a.r_id, q_id "
+            + "from answers as a, (select a_id, count(*) as f from ratedflaggedanswers where flagged = false group by a_id) as fa "
+            + "where a.a_id = fa.a_id and q_id = ? order by f desc";
+        //"SELECT * from answers where q_id = ? order by rating desc";
 
+    private static final String sql_getUnratedAnswers =
+            "select * from answers as a "
+            + "where a.a_id not in (select a_id from ratedflaggedanswers where flagged = false) and q_id = ?";
+            
     private static final String sql_getQuestionsTags =
             "SELECT t.t_id, t.tag, t.firsttagged from tagstoquestions as tq, tags as t where q_id = ? and tq.t_id = t.t_id";
 
     private static final String sql_countAnswers =
             "SELECT count(*) from answers where q_id = ?";
-    
+
+    private static final String sql_countFlags =
+            "SELECT count(*) from flaggedquestions WHERE q_id = ?";
+
 /**
  * Forms an sql statement for finding questions that have the required set of tags
  * @param tagcount amount of tags
@@ -50,7 +59,7 @@ public class Question implements Model {
  */
     private static String sql_getQuestionByTags(int tagcount)
     {
-        String sql = "SELECT questions.q_id, title, body, r_id, asked, flags from questions";
+        String sql = "SELECT questions.q_id, title, body, r_id, asked from questions";
         for (int i = 0; i < tagcount; i++)
             sql += ", tags as t" + i + ", tagstoquestions as tq" + i;
         sql += " where ";
@@ -67,7 +76,6 @@ public class Question implements Model {
     {
         title = t;
         body = b;
-        flags = 0;
     }
     public int getID()
     {
@@ -83,7 +91,10 @@ public class Question implements Model {
     }
     public int getFlags()
     {
-        return flags;
+        QAModel.prepareSQL(sql_countFlags, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
     }
     public User getAsker()
     {
@@ -116,16 +127,6 @@ public class Question implements Model {
         QAModel.prepareSQL(sql_addToDB, title, body, ownerID);
         id = QAModel.retrieveInt(1);
         asked = QAModel.retrieveTimestamp(2);
-        flags = 0;
-        QAModel.closeComponents();
-    }
-/**
- * Adds question's flag count by one.
- */
-    public void addFlag()
-    {
-        QAModel.prepareSQL(sql_addFlag, ++flags, id);
-        QAModel.executeUpdate();
         QAModel.closeComponents();
     }
 /**
@@ -145,6 +146,9 @@ public class Question implements Model {
     {
         QAModel.prepareSQL(sql_getQuestionsAnswers, id);
         List result = QAModel.retrieveObjectList(new Answer());
+        QAModel.closeComponents();
+        QAModel.prepareSQL(sql_getUnratedAnswers, id);
+        result.addAll(QAModel.retrieveObjectList(new Answer()));
         QAModel.closeComponents();
         return result;
     }
@@ -215,7 +219,6 @@ public class Question implements Model {
         title = result.getString("title");
         body = result.getString("body");
         asked = result.getTimestamp("asked");
-        flags = result.getInt("flags");
         int askerID = result.getInt("r_id");
         asker = User.getByID(askerID);
     }
