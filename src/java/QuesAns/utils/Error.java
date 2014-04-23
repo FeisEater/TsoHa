@@ -44,4 +44,18 @@ public class Error {
     public static final String regPasswordNoUpperCase = "Password must have upper case letters.";
     public static final String regPasswordNoLowerCase = "Password must have lower case letters.";
     public static final String regPasswordSpecialCharacter = "Password must have a number or a special character.";
+    public static final String invalidQuesToAnswer = "Question you tried to answer doesn't exist.";
+    public static final String ansEmpty = "What's the point of an empty answer?";
+    public static final String ansTooLong = "Answer is too long. Keep it below 65536 characters.";
+    public static final String ansOnlyWhitespaces = "Answer only consists of whitespaces.";
+    public static final String ansNotLoggedIn = "You must be logged in to post an answer.";
+    public static final String appendNotLoggedIn = "You must be logged in to edit an answer.";
+    public static final String invalidAnswer = "Answer you tried to edit doesn't exist.";
+    public static final String appendNotYourAnswer = "This is not your answer to edit.";
+    public static final String appendEmpty = "New part of the answer is empty.";
+    public static final String appendTooLong = "New part of the answer is too long. Keep it below 65536 characters.";
+    public static final String appendOnlyWhitespace = "New part of the answer consists only of whitespace.";
+    public static final String settingsNotLoggedIn = "You must be logged in to change account settings.";
+    public static final String avatarTooBig = "Avatar's file size is too big. It must be below 256 kilobytes.";
+    public static final String avatarNotPicture = "Avatar was not recognized as a picture file. Supported files are .jpg, .gif, .png and .bmp";
 }

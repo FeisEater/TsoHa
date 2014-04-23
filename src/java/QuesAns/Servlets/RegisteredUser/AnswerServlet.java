@@ -5,8 +5,13 @@ import QuesAns.Models.Answer;
 import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
+import QuesAns.utils.Error;
+import QuesAns.utils.Info;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,23 +36,62 @@ public class AnswerServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         User loggedIn = getUserFromSession(request, response);
-        String stringId = request.getParameter("id");
-        int quesId = -1;
-        try {
-            quesId = Integer.parseInt(stringId);
-        } catch (NumberFormatException e) {}
+        if (loggedIn == null)
+        {
+            setError(Error.ansNotLoggedIn, request, response);
+            response.sendRedirect(getPrevURL(request, response));
+            return;
+        }
+        
+        int quesId = Tools.stringToInt(request.getParameter("id"));
         Question ques = Question.getByID(quesId);
+        if (ques == null)
+        {
+            setError(Error.invalidQuesToAnswer, request, response);
+            response.sendRedirect(getPrevURL(request, response));
+            return;
+        }
+        
         request.setAttribute("objectFromID", ques);
+        if (firstTimeVisiting(request))
+        {
+            showPage("answer.jsp", request, response);
+            return;
+        }
+
         String answer = request.getParameter("answer");
-        if (answer != null)
+        List<String> errors = searchForErrors(answer);
+        if (errors.isEmpty())
         {
             new Answer(answer).addToDatabase(loggedIn, ques);
+            setNotification(Info.answerSuccess, request, response);
             response.sendRedirect("question?id=" + quesId);
         }
         else
+        {
+            setErrors(errors, request, response);
             showPage("answer.jsp", request, response);
+        }
     }
 
+    private boolean firstTimeVisiting(HttpServletRequest request)
+            throws ServletException, IOException {
+        return request.getParameter("answer") == null;
+    }
+    
+    private List<String> searchForErrors(String answer)
+    {
+        List<String> errors = new ArrayList<String>();
+        if (answer.isEmpty())    errors.add(Error.ansEmpty);
+        if (answer.length() > 65536)
+            errors.add(Error.ansTooLong);
+        else
+        {
+            if (Tools.stringOnlyWhitespace(answer))
+                errors.add(Error.ansOnlyWhitespaces);
+        }
+        return errors;
+    }
     /**
      * Returns a short description of the servlet.
      *

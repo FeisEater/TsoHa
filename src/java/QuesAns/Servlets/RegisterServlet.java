@@ -4,6 +4,7 @@ package QuesAns.Servlets;
 import QuesAns.Models.User;
 import QuesAns.utils.Error;
 import QuesAns.utils.Info;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -74,44 +75,33 @@ public class RegisterServlet extends QAServlet {
         if (username.length() > 16) errors.add(Error.regNameTooLong);
         else
         {
-            String n = username.replace(" ", "");
-            if (n.isEmpty())    errors.add(Error.regNameOnlyWhitespaces);
-            String accepted = "abcdefghijklmnopqrstuvwxyzåäö_0123456789-+?!#%&/()=@£${[]},.;:|*"
-                    + "áàâãéèëêóòôõíìïîúùüûýÿÁÀÂÃÉÈËÊÓÒÔÕÍÌÏÎÚÙÜÛÝ"
-                    + "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
-            for (int i = 0; i < accepted.length(); i++)
-                n = n.replace(""+accepted.charAt(i), "");
-            if (!n.isEmpty())
-                errors.add(Error.regNameHasInvalidCharacter(n.charAt(0)));
-
+            if (Tools.stringOnlyWhitespace(username))    errors.add(Error.regNameOnlyWhitespaces);
+            String accepted = Tools.lowerCaseLetters + Tools.upperCaseLetters +
+                    Tools.foreignLatinLetters + Tools.numbers + "_-+?!#%&/()=@£${[]},.;:|*";
+            if (!Tools.stringHasOnlyDeterminedCharacters(username, accepted))
+                errors.add(Error.regNameHasInvalidCharacter(Tools.getInvalidChar(username, accepted)));
         }
         if (email.length() < 3)  errors.add(Error.regEmailTooShort);
-        if (username.length() > 64) errors.add(Error.regEmailTooLong);
+        if (email.length() > 64) errors.add(Error.regEmailTooLong);
         else
         {
             if (email.contains(" "))    errors.add(Error.regEmailHasWhitespace);
             if (!email.contains("@"))    errors.add(Error.regEmailMustHaveAt);
-            String e = email;
-            String accepted = "abcdefghijklmnopqrstuvwxyzåäö_0123456789-+?!#%&/()=@£${[]},.;:|*"
-                    + "áàâãéèëêóòôõíìïîúùüûýÿÁÀÂÃÉÈËÊÓÒÔÕÍÌÏÎÚÙÜÛÝ"
-                    + "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
-            for (int i = 0; i < accepted.length(); i++)
-                e = e.replace(""+accepted.charAt(i), "");
-            if (!e.isEmpty())
-                errors.add(Error.regEmailHasInvalidCharacter(e.charAt(0)));
+            String accepted = Tools.lowerCaseLetters + Tools.upperCaseLetters +
+                    Tools.foreignLatinLetters + Tools.numbers + "_-+?!#%&/()=@£${[]},.;:|*";
+            if (!Tools.stringHasOnlyDeterminedCharacters(email, accepted))
+                errors.add(Error.regEmailHasInvalidCharacter(Tools.getInvalidChar(email, accepted)));
         }
         if (password.length() < 7)  errors.add(Error.regPasswordTooShort);
         if (password.length() > 128)    errors.add(Error.regPasswordTooLong);
         else
         {
-            String p = password.toLowerCase();
-            if (password.equals(p)) errors.add(Error.regPasswordNoUpperCase);
-            p = password.toUpperCase();
-            if (password.equals(p)) errors.add(Error.regPasswordNoLowerCase);
-            String eliminate = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
-            for (int i = 0; i < eliminate.length(); i++)
-                p = p.replace(""+eliminate.charAt(i), "");
-            if (p.isEmpty())    errors.add(Error.regPasswordSpecialCharacter);
+            if (!Tools.stringHasUpperCaseCharacters(password))
+                errors.add(Error.regPasswordNoUpperCase);
+            if (!Tools.stringHasLowerCaseCharacters(password))
+                errors.add(Error.regPasswordNoLowerCase);
+            if (Tools.stringHasOnlyDeterminedCharacters(password, Tools.lowerCaseLetters + Tools.upperCaseLetters))
+                errors.add(Error.regPasswordSpecialCharacter);
             if (!password.equals(password2))    errors.add(Error.regPasswordMismatch);
         }
         return errors;

@@ -6,6 +6,7 @@ import QuesAns.Models.Tag;
 import QuesAns.Models.User;
 import QuesAns.utils.Error;
 import QuesAns.utils.Info;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,14 +82,13 @@ public class AskServlet extends QAServlet {
     {
         List<String> result = new ArrayList<String>();
         if (title.isEmpty())    result.add(Error.quesTitleEmpty);
-        else
-        {
-            String t = title;
-            t = t.replace(" ", "");
-            if (t.isEmpty())    result.add(Error.quesTitleOnlyWhitespaces);
-        }
         if (title.length() > 96)
             result.add(Error.quesTitleTooLong);
+        else
+        {
+            if (Tools.stringOnlyWhitespace(title))
+                result.add(Error.quesTitleOnlyWhitespaces);
+        }
         if (body.length() > 65536)
             result.add(Error.quesBodyTooLong);
         if (tags.length > 1024)
@@ -101,12 +101,9 @@ public class AskServlet extends QAServlet {
                     result.add(Error.quesTagTooLong(tag.substring(0, 32)));
                 else
                 {
-                    String accepted = "abcdefghijklmnopqrstuvwxyzåäö_0123456789";
-                    String t = tag;
-                    for (int i = 0; i < accepted.length(); i++)
-                        t = t.replace(""+accepted.charAt(i), "");
-                    if (!t.isEmpty())
-                        result.add(Error.quesTagHasInvalidCharacter(tag, t.charAt(0)));
+                    String accepted = Tools.lowerCaseLetters + Tools.numbers + "_";
+                    if (!Tools.stringHasOnlyDeterminedCharacters(tag, accepted))
+                        result.add(Error.quesTagHasInvalidCharacter(tag, Tools.getInvalidChar(tag, accepted)));
                 }
             }
         }

@@ -36,7 +36,7 @@ public class QuestionServlet extends QAServlet {
         if (q == null)
         {
             setError(Error.invalidQues, request, response);
-            response.sendRedirect("index");
+            response.sendRedirect(getPrevURL(request, response));
         }
         else
         {
