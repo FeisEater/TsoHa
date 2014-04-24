@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="cu" uri="/WEB-INF/custom.tld"%>
 <t:base pageTitle="${objectFromID.title}">
     <div class="container">
         <div class="row">
@@ -63,11 +64,19 @@
                                 <td width="60%">${unit.body}</td>
                                 <td width="10%">${unit.rating}</td>
                                 <td width="10%">
-                                    <a href="rate?type=t&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-up"></span></a>
-                                    <a href="rate?type=f&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-down"></span></a>
+                                    <c:if test="${loggedIn != null}">
+                                        <cu:Rate loggedIn="${loggedIn}" answer="${unit}" />
+                                    </c:if>
+                                    <c:if test="${loggedIn == null}">
+                                        <cu:Rate rateList="${rated}" answer="${unit}" />
+                                    </c:if>
+                                    <!--a href="rate?type=t&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-up"></span></a>
+                                    <a href="rate?type=f&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-down"></span></a-->
                                 </td>
                                 <c:if test="${loggedIn != null}">
-                                    <td width="5%"><a href="flag?type=ans&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-flag"></span></a></td>
+                                    <td width="5%"><a href="flag?type=ans&id=${unit.ID}" type="button" class="btn btn-xs btn-default">
+                                        <cu:FlagAnswer loggedIn="${loggedIn}" answer="${unit}" />
+                                    </a></td>
                                 </c:if>
                             </tr>
                         </c:forEach>
@@ -76,11 +85,11 @@
             </div>
             <div class="col-md-2">
                 <div class="col-md-12">
-                    <c:if test="${userName != null}">
+                    <c:if test="${loggedIn != null}">
                         <a href="answer?id=${objectFromID.ID}" type="button" class="btn btn-primary btn-lg">Give an answer</a>
                         <div class="col-md-12"><br></div>
                         <a href="flag?type=ques&id=${objectFromID.ID}" type="button" class="btn btn-default pull-left btn-xs">
-                            Flag as inappropriate <span class="glyphicon glyphicon-flag"></span>
+                            <cu:FlagQuestion loggedIn="${loggedIn}" question="${objectFromID}" />
                         </a>
                     </c:if>
                 </div>

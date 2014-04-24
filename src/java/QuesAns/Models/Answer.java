@@ -83,6 +83,12 @@ public class Answer implements Model {
     {
         return body;
     }
+    public String getShortBody()
+    {
+        if (body.length() <= 64)
+            return body.replace("<br>", " ");
+        return body.replace("<br>", " ").substring(0, 64);
+    }
     public int getRating()
     {
         QAModel.prepareSQL(sql_countRating, id);

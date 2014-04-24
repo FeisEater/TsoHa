@@ -19,6 +19,15 @@ public class Question implements Model {
     
     private static final String sql_getQuestions =
             "SELECT * from questions ";
+    
+    private static final String sql_getQuestionsByFlags =
+            "select q.q_id, title, body, q.r_id, asked "
+            + "from questions as q, (select q_id, count(*) as f from flaggedquestions group by q_id) as fa "
+            + "where q.q_id = fa.q_id order by f desc";
+    
+    private static final String sql_getUnflaggedQuestions =
+            "select * from questions as q "
+            + "where q.q_id not in (select q_id from flaggedquestions)";
 
     private static final String sql_getByID =
             "SELECT * from questions where q_id = ?";
@@ -210,6 +219,15 @@ public class Question implements Model {
     {
         QAModel.prepareSQL(sql_getQuestionByTags(tags.length), (Object[]) tags);
         List result = QAModel.retrieveObjectList(new Question());
+        QAModel.closeComponents();
+        return result;
+    }
+    public static List<Question> getQuestionsSortedByFlags()
+    {
+        QAModel.prepareSQL(sql_getQuestionsByFlags);
+        List result = QAModel.retrieveObjectList(new Question());
+        QAModel.prepareSQL(sql_getUnflaggedQuestions);
+        result.addAll(QAModel.retrieveObjectList(new Question()));
         QAModel.closeComponents();
         return result;
     }

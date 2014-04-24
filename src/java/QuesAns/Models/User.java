@@ -79,7 +79,7 @@ public class User implements Model {
             "DELETE FROM flaggedquestions WHERE r_id = ? and q_id = ?";
 
     private static final String sql_hasFlaggedQuestion =
-            "SELECT flaggedquestions where r_id = ? and q_id = ?";
+            "SELECT * from flaggedquestions where r_id = ? and q_id = ?";
 
     public User() {}
     public User(String n, String e, String p)

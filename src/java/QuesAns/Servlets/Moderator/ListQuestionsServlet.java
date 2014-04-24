@@ -30,7 +30,7 @@ public class ListQuestionsServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         getUserFromSession(request, response);
-        List<Question> questions = Question.getQuestions("order by flags desc");
+        List<Question> questions = Question.getQuestionsSortedByFlags();
         request.setAttribute("list", questions);
         showPage("modquestions.jsp", request, response);
     }
