@@ -14,6 +14,7 @@
                 <tr>
                     <th>Answer</th>
                     <th>Question</th>
+                    <th>Answered</th>
                     <th>Rating</th>
                     <th>Show question</th>
                     <th>Edit answer</th>
@@ -24,6 +25,7 @@
                     <tr>
                         <td width="40%">${unit.shortBody}</td>
                         <td width="40%">${unit.question.title}</td>
+                        <td width="10%">${unit.answered}</td>
                         <td width="10%">${unit.rating}</td>
                         <td width="5%"><a href="question?id=${unit.question.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
                         <td width="5%"><a href="append?id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-pencil"></span></a></td>

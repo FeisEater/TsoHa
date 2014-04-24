@@ -12,7 +12,7 @@
         <div class="row" style="background-color:#FFDDFF">
             <div class="col-md-12"><br></div>
             <div class="col-md-1">
-                <c:set var="avatar" value="${objectFromID.asker.avatar}"/>
+                <c:set var="avatar" value="${objectFromID.question.asker.avatar}"/>
                 <c:if test="${avatar == null}">
                     <img src="defavatar.png" alt="avatar" class="avatar" height="128" width="128" align="right">
                 </c:if>

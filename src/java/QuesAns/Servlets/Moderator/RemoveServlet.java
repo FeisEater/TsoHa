@@ -6,6 +6,9 @@ import QuesAns.Models.Question;
 import QuesAns.Models.Tag;
 import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
+import QuesAns.utils.Error;
+import QuesAns.utils.Info;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -31,36 +34,68 @@ public class RemoveServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
+        User loggedIn = getUserFromSession(request, response);
+        if (loggedIn == null || !loggedIn.getModerator())
+        {
+            setError(Error.modCantRemove, request, response);
+            prevPage(request, response);
+            return;
+        }
         String typeParam = request.getParameter("type");
-        String idParam = request.getParameter("id");
-        int id = -1;
-        try {id = Integer.parseInt(idParam);} catch (Throwable e){}
+        int id = Tools.stringToInt(request.getParameter("id"));
         if (typeParam.equals("ques"))
         {
             Question q = Question.getByID(id);
-            if (q != null)  q.removeFromDatabase();
-            response.sendRedirect("modquestions");
+            if (q == null)
+                setError(Error.modNoQues, request, response);
+            else
+            {
+                q.removeFromDatabase();
+                setNotification(Info.modQuesRemoved(q.getTitle()), request, response);
+            }
         }
-        if (typeParam.equals("ans"))
+        else if (typeParam.equals("ans"))
         {
             Answer a = Answer.getByID(id);
-            if (a != null)  a.removeFromDatabase();
-            response.sendRedirect("modanswers");
+            if (a == null)
+                setError(Error.modNoAns, request, response);
+            else
+            {
+                a.removeFromDatabase();
+                setNotification(Info.modAnsRemoved(a.getShortBody()), request, response);
+            }
         }
-        if (typeParam.equals("user"))
+        else if (typeParam.equals("user"))
         {
             User u = User.getByID(id);
-            if (u != null)  u.removeFromDatabase();
-            response.sendRedirect("modusers");
+            if (u == null)
+                setError(Error.modNoUser, request, response);
+            else
+            {
+                u.removeFromDatabase();
+                setNotification(Info.modUserBanned(u.getName()), request, response);
+            }
         }
-        if (typeParam.equals("tags"))
+        else if (typeParam.equals("tags"))
         {
             Tag t = Tag.getByID(id);
-            if (t != null)  t.removeFromDatabase();
-            response.sendRedirect("modtags");
+            if (t == null)
+                setError(Error.modNoTag, request, response);
+            else
+            {
+                t.removeFromDatabase();
+                setNotification(Info.modTagRemoved(t.getText()), request, response);
+            }
         }
+        else
+            setError(Error.invalidUrl, request, response);
+        prevPage(request, response);
     }
 
+    private void prevPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendRedirect(getPrevURL(request, response));
+    }
     /**
      * Returns a short description of the servlet.
      *

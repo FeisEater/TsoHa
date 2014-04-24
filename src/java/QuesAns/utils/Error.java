@@ -63,4 +63,10 @@ public class Error {
     public static final String flagInvalidQues = "Question you tried to flag doesn't exist.";
     public static final String flagInvalidAns = "Answer you tried to flag doesn't exist.";
     public static final String flagNotLoggedIn = "You must be logged in to flag something.";
+    public static final String modPage = "You are required to have a moderator status to visit this page.";
+    public static final String modCantRemove = "You are required to have a moderator status to perform this action.";
+    public static final String modNoUser = "The user you tried to ban doesn't exist.";
+    public static final String modNoQues = "The question you tried to remove doesn't exist.";
+    public static final String modNoAns = "The answer you tried to remove doesn't exist.";
+    public static final String modNoTag = "The tag you tried to remove doesn't exist.";
 }

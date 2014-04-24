@@ -15,25 +15,27 @@
                     <tr>
                         <th>Answer</th>
                         <th>Question</th>
+                        <th>Answered</th>
                         <th>Rating</th>
                         <th>Flags</th>
                         <th>Show question</th>
-                        <th>Remove question</th>
+                        <th>Remove answer</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="unit" items="${list}">
                         <tr>
-                            <td class="unit" width="35%">${unit.body}</td>
-                            <td class="unit" width="35%">${unit.question.title}</td>
+                            <td width="30%">${unit.shortBody}</td>
+                            <td width="30%">${unit.question.title}</td>
+                            <td width="10%">${unit.answered}</td>
                             <td width="10%">${unit.rating}</td>
                             <td width="10%">${unit.flags}</td>
-                            <td class="unit" width="5%">
+                            <td width="5%">
                                 <a href="question?id=${unit.question.ID}" type="button" class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-arrow-left"></span>
                                 </a>
                             </td>
-                            <td class="unit" width="5%">
+                            <td width="5%">
                                 <a href="modremove?type=ans&id=${unit.ID}" type="button" class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>

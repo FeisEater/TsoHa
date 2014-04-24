@@ -30,7 +30,14 @@ public class ListUsersServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        getUserFromSession(request, response);
+        saveURL(request, response);
+        User loggedIn = getUserFromSession(request, response);
+        if (loggedIn == null || !loggedIn.getModerator())
+        {
+            setError(QuesAns.utils.Error.modPage, request, response);
+            response.sendRedirect(getPrevURL(request, response));
+            return;
+        }
         List<User> users = User.getUsers();
         request.setAttribute("list", users);
         showPage("modusers.jsp", request, response);

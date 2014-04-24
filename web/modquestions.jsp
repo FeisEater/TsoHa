@@ -14,6 +14,7 @@
                 <thead>
                     <tr>
                         <th>Question</th>
+                        <th>Asked</th>
                         <th>Flags</th>
                         <th>Show question</th>
                         <th>Remove question</th>
@@ -22,14 +23,15 @@
                 <tbody>
                     <c:forEach var="unit" items="${list}">
                         <tr>
-                            <td class="unit" width="80%">${unit.title}</td>
-                            <td width="15%">${unit.flags}</td>
-                            <td class="unit" width="5%">
+                            <td width="70%">${unit.title}</td>
+                            <td width="10%">${unit.asked}</td>
+                            <td width="10%">${unit.flags}</td>
+                            <td width="5%">
                                 <a href="question?id=${unit.ID}" type="button" class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-arrow-left"></span>
                                 </a>
                             </td>
-                            <td class="unit" width="5%">
+                            <td width="5%">
                                 <a href="modremove?type=ques&id=${unit.ID}" type="button" class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </a>

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import org.apache.catalina.util.Base64;
 
@@ -66,10 +67,10 @@ public class User implements Model {
             + "WHERE r_id = ? and a_id = ? and flagged = true";
 
     private static final String sql_hasRated =
-            "SELECT ratedflaggedanswers where r_id = ? and a_id = ? and flagged = false";
+            "SELECT * from ratedflaggedanswers where r_id = ? and a_id = ? and flagged = false";
 
     private static final String sql_hasFlaggedAnswer =
-            "SELECT ratedflaggedanswers where r_id = ? and a_id = ? and flagged = true";
+            "SELECT * from ratedflaggedanswers where r_id = ? and a_id = ? and flagged = true";
 
     private static final String sql_addQuestionFlag =
             "INSERT INTO flaggedquestions(r_id, q_id) VALUES(?,?)";
@@ -111,7 +112,7 @@ public class User implements Model {
     }
     public String getJoined()
     {
-        return joined.toString();
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(joined);
     }
     public boolean getModerator()
     {

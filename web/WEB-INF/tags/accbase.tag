@@ -22,7 +22,8 @@
             <c:if test="${avatar != null}">
                 <img src="data:image/jpg;base64,${avatar}" class="avatar" width="256" height="256" alt="avatar">
             </c:if>
-            <a href="">${loggedIn.email}</a>
+            <a href="">${loggedIn.email}</a><br><br>
+            <label>Joined: ${loggedIn.joined}</label>
         </div>
         <div class="col-md-9">
             <ul class="nav nav-pills">

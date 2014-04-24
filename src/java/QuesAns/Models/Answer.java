@@ -4,6 +4,7 @@ package QuesAns.Models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -36,13 +37,12 @@ public class Answer implements Model {
 
     private static final String sql_undoRate =
             "DELETE FROM ratedflaggedanswers "
-            + "WHERE ctid IN (select ctid from ratedflaggedanswers "
-            + "where r_id = ? and a_id = ? and flagged = false limit 1)";
+            + "WHERE r_id = ? and a_id = ? and flagged = false";
 
     private static final String sql_undoAnonRate =
             "DELETE FROM ratedflaggedanswers "
             + "WHERE ctid IN (select ctid from ratedflaggedanswers "
-            + "where r_id is null and a_id = ? and flagged = false limit 1)";
+            + "where r_id is null and a_id = ? and flagged = false and rated = ? limit 1)";
 
     private static final String sql_changeRate =
             "UPDATE ratedflaggedanswers SET rated = ? "
@@ -62,6 +62,10 @@ public class Answer implements Model {
             + "from answers as a, (select a_id, count(*) as f from ratedflaggedanswers where flagged = true group by a_id) as fa "
             + "where a.a_id = fa.a_id order by f desc";
             //"SELECT * from answers order by flags desc";
+
+    private static final String sql_getUnflaggedAnswers =
+            "select * from answers a "
+            + "where a.a_id not in (select a_id from ratedflaggedanswers where flagged = true)";
 
     private static final String sql_removeFromDB =
             "DELETE FROM answers WHERE a_id = ?";
@@ -87,7 +91,7 @@ public class Answer implements Model {
     {
         if (body.length() <= 64)
             return body.replace("<br>", " ");
-        return body.replace("<br>", " ").substring(0, 64);
+        return body.substring(0, 64).replace("<br>", " ");
     }
     public int getRating()
     {
@@ -106,6 +110,10 @@ public class Answer implements Model {
     public int getID()
     {
         return id;
+    }
+    public String getAnswered()
+    {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(answered);
     }
 /**
  * Formats string in a way that html-code won't confuse it as a set of html-elements.
@@ -145,7 +153,8 @@ public class Answer implements Model {
     public void appendAnswer(String s)
     {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        s = "<br><br> Update " + ts + ":<br>" + reformatString(s);
+        s = "<br><br> Update: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(ts)
+                + "<br>" + reformatString(s);
         body += s;
         QAModel.prepareSQL(sql_append, body, id);
         QAModel.executeUpdate();
@@ -161,15 +170,17 @@ public class Answer implements Model {
         QAModel.prepareSQL(sql_rate, rateId, id, up ? 1 : -1);
         QAModel.executeUpdate();
         QAModel.closeComponents();
+        System.out.println("rated " + (up ? "up" : "down"));
     }
-    public void undoRate(User rater)
+    public void undoRate(User rater, boolean up)
     {
         if (rater == null)
-            QAModel.prepareSQL(sql_undoAnonRate, id);
+            QAModel.prepareSQL(sql_undoAnonRate, id, up ? 1 : -1);
         else
             QAModel.prepareSQL(sql_undoRate, rater.getID(), id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
+        System.out.println("removed rate " + (up ? "up" : "down"));
     }
     public void changeRate(User rater, boolean up)
     {
@@ -196,6 +207,8 @@ public class Answer implements Model {
     {
         QAModel.prepareSQL(sql_allAnswersByFlags);
         List result = QAModel.retrieveObjectList(new Answer());
+        QAModel.prepareSQL(sql_getUnflaggedAnswers);
+        result.addAll(QAModel.retrieveObjectList(new Answer()));
         QAModel.closeComponents();
         return result;
     }
@@ -227,6 +240,12 @@ public class Answer implements Model {
     {
         Answer a = (Answer)o;
         return a.getID() == id;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return id;
     }
     public String toString()
     {

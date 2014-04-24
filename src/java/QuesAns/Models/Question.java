@@ -4,6 +4,7 @@ package QuesAns.Models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -42,10 +43,12 @@ public class Question implements Model {
     private static final String sql_removeFromDB =
             "DELETE FROM questions WHERE q_id = ?";
 
-    private static final String sql_getQuestionsAnswers =
-            "select a.a_id, body, approvedbyasker, answered, lastedited, a.r_id, q_id "
-            + "from answers as a, (select a_id, count(*) as f from ratedflaggedanswers where flagged = false group by a_id) as fa "
-            + "where a.a_id = fa.a_id and q_id = ? order by f desc";
+    private static String sql_getQuestionsAnswers(boolean pos)
+    {
+            return "select a.a_id, body, approvedbyasker, answered, lastedited, a.r_id, q_id "
+            + "from answers as a, (select a_id, sum(rated) as f from ratedflaggedanswers where flagged = false group by a_id) as fa "
+            + "where a.a_id = fa.a_id and q_id = ? and f " + (pos ? ">=" : "<") + " 0 order by f desc";
+    }
         //"SELECT * from answers where q_id = ? order by rating desc";
 
     private static final String sql_getUnratedAnswers =
@@ -109,6 +112,10 @@ public class Question implements Model {
     {
         return asker;
     }
+    public String getAsked()
+    {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(asked);
+    }
 /**
  * Formats string in a way that html-code won't confuse it as a set of html-elements.
  * @param s String to be formatted.
@@ -153,10 +160,12 @@ public class Question implements Model {
  */
     public List<Answer> getAnswers()
     {
-        QAModel.prepareSQL(sql_getQuestionsAnswers, id);
+        QAModel.prepareSQL(sql_getQuestionsAnswers(true), id);
         List result = QAModel.retrieveObjectList(new Answer());
         QAModel.closeComponents();
         QAModel.prepareSQL(sql_getUnratedAnswers, id);
+        result.addAll(QAModel.retrieveObjectList(new Answer()));
+        QAModel.prepareSQL(sql_getQuestionsAnswers(false), id);
         result.addAll(QAModel.retrieveObjectList(new Answer()));
         QAModel.closeComponents();
         return result;

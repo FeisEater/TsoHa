@@ -28,4 +28,20 @@ public class Info {
         return "Email changed to " + email;
     }
     public static final String avatarChanged = "Avatar changed succesfully.";
+    public static String modUserBanned(String user)
+    {
+        return "User " + user + " banned succesfully.";
+    }
+    public static String modQuesRemoved(String ques)
+    {
+        return "Question '" + ques + "' removed succesfully.";
+    }
+    public static String modAnsRemoved(String ans)
+    {
+        return "Answer '" + ans + "' removed succesfully.";
+    }
+    public static String modTagRemoved(String tag)
+    {
+        return "Tag " + tag + " removed succesfully.";
+    }
 }

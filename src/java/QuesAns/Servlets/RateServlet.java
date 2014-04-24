@@ -9,6 +9,7 @@ import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,23 +47,23 @@ public class RateServlet extends QAServlet {
         User loggedIn = (User)session.getAttribute("loggedIn");
         if (loggedIn == null)
         {
-            List<Answer> rated = getRatedAnswers(session);
-            if (rated.contains(a))
+            Map<Answer, Boolean> rated = getRatedAnswers(session);
+            if (rated.containsKey(a))
             {
-                a.undoRate(null);
+                a.undoRate(null, rated.get(a));
                 rated.remove(a);
             }
             else
             {
                 a.getRated(null, !typeParam.equals("f"));
-                rated.add(a);
+                rated.put(a, !typeParam.equals("f"));
             }
             session.setAttribute("rated", rated);
             response.sendRedirect(getPrevURL(request, response));
             return;
         }
         if (loggedIn.hasRated(a))
-            a.undoRate(loggedIn);
+            a.undoRate(loggedIn, !typeParam.equals("f"));
         else
             a.getRated(loggedIn, !typeParam.equals("f"));
         response.sendRedirect(getPrevURL(request, response));

@@ -5,7 +5,9 @@ import QuesAns.Models.Answer;
 import QuesAns.Models.User;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -127,11 +129,11 @@ public abstract class QAServlet extends HttpServlet {
         session.setAttribute("errors", errors);
     }
 
-    protected List<Answer> getRatedAnswers(HttpSession session)
+    protected Map<Answer, Boolean> getRatedAnswers(HttpSession session)
     {
-        List<Answer> rated = (List<Answer>)session.getAttribute("rated");
+        Map<Answer, Boolean> rated = (Map<Answer, Boolean>)session.getAttribute("rated");
         if (rated == null)
-            return new ArrayList<Answer>();
+            return new HashMap<Answer, Boolean>();
         return rated;
     }
     protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response)

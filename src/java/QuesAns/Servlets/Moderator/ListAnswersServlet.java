@@ -3,7 +3,9 @@ package QuesAns.Servlets.Moderator;
 
 import QuesAns.Models.Answer;
 import QuesAns.Models.Question;
+import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
+import QuesAns.utils.Error;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -30,7 +32,14 @@ public class ListAnswersServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        getUserFromSession(request, response);
+        saveURL(request, response);
+        User loggedIn = getUserFromSession(request, response);
+        if (loggedIn == null || !loggedIn.getModerator())
+        {
+            setError(Error.modPage, request, response);
+            response.sendRedirect(getPrevURL(request, response));
+            return;
+        }
         List<Answer> answers = Answer.getAnswersSortedByFlags();
         request.setAttribute("list", answers);
         showPage("modanswers.jsp", request, response);

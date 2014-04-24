@@ -13,3 +13,13 @@
   -webkit-transition: all .2s ease-in-out;
           transition: all .2s ease-in-out;
 }
+
+.answertext {
+    word-wrap: break-word;
+    max-width: 600px;
+}
+
+.questiontext {
+    word-wrap: break-word;
+    max-width: 950px;
+}

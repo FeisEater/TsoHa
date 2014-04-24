@@ -40,18 +40,28 @@
                         <th>Question</th>
                         <th>Amount of answers</th>
                         <th>Show question</th>
+                        <c:if test="${loggedIn.moderator == true}">
+                            <th>Remove question</th>
+                        </c:if>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="unit" items="${list}">
                         <tr>
-                            <td class="unit" width="80%">${unit.title}</td>
-                            <td width="15%">${unit.answerCount}</td>
-                            <td class="unit" width="5%">
+                            <td width="80%">${unit.title}</td>
+                            <td width="10%">${unit.answerCount}</td>
+                            <td width="5%">
                                 <a href="question?id=${unit.ID}" type="button" class="btn btn-xs btn-default">
                                     <span class="glyphicon glyphicon-arrow-left"></span>
                                 </a>
                             </td>
+                            <c:if test="${loggedIn.moderator == true}">
+                                <td width="5%">
+                                    <a href="modremove?type=ques&id=${unit.ID}" type="button" class="btn btn-xs btn-default">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </td>
+                            </c:if>
                         </tr>
                     </c:forEach>
                 </tbody>
