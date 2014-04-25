@@ -30,14 +30,14 @@ public class ListQuestionsServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        saveURL(request, response);
         User loggedIn = getUserFromSession(request, response);
         if (loggedIn == null || !loggedIn.getModerator())
         {
             setError(QuesAns.utils.Error.modPage, request, response);
-            response.sendRedirect(getPrevURL(request, response));
+            response.sendRedirect("index");
             return;
         }
+        saveURL(request, response);
         List<Question> questions = Question.getQuestionsSortedByFlags();
         request.setAttribute("list", questions);
         showPage("modquestions.jsp", request, response);

@@ -30,7 +30,6 @@ public class QuestionServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         getUserFromSession(request, response);
-        saveURL(request, response);
         String idParam = request.getParameter("id");
         Question q = Question.getByID(Tools.stringToInt(idParam));
         if (q == null)
@@ -40,6 +39,7 @@ public class QuestionServlet extends QAServlet {
         }
         else
         {
+            saveURL(request, response);
             request.setAttribute("objectFromID", q);
             request.setAttribute("list", q.getAnswers());
             request.setAttribute("taglist", q.getTags());

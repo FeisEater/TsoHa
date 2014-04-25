@@ -5,6 +5,7 @@ import QuesAns.Models.Answer;
 import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
+import QuesAns.utils.Error;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -32,6 +33,13 @@ public class UsersAnswersServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         User loggedIn = getUserFromSession(request, response);
+        if (loggedIn == null)
+        {
+            setError(Error.accNotLoggedIn, request, response);
+            response.sendRedirect(getPrevURL(request, response));
+            return;
+        }
+        saveURL(request, response);
         List<Answer> answers = loggedIn.getAnswers();
         request.setAttribute("list", answers);
         showPage("accanswers.jsp", request, response);

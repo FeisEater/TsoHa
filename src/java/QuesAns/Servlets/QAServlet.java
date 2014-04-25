@@ -46,6 +46,11 @@ public abstract class QAServlet extends HttpServlet {
     {
         HttpSession session = request.getSession();
         User loggedIn = (User)session.getAttribute("loggedIn");
+        if (loggedIn != null && !loggedIn.stillExists())
+        {
+            session.removeAttribute("loggedIn");
+            return null;
+        }
         return loggedIn;
     }
 /**

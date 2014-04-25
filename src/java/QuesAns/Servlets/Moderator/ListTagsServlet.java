@@ -31,14 +31,14 @@ public class ListTagsServlet extends QAServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         preprocess(request, response);
-        saveURL(request, response);
         User loggedIn = getUserFromSession(request, response);
         if (loggedIn == null || !loggedIn.getModerator())
         {
             setError(QuesAns.utils.Error.modPage, request, response);
-            response.sendRedirect(getPrevURL(request, response));
+            response.sendRedirect("index");
             return;
         }
+        saveURL(request, response);
         List<Tag> tags = Tag.getAllTags();
         request.setAttribute("taglist", tags);
         showPage("modtags.jsp", request, response);

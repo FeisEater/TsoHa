@@ -69,4 +69,5 @@ public class Error {
     public static final String modNoQues = "The question you tried to remove doesn't exist.";
     public static final String modNoAns = "The answer you tried to remove doesn't exist.";
     public static final String modNoTag = "The tag you tried to remove doesn't exist.";
+    public static final String accNotLoggedIn = "You have to be logged in to visit this page.";
 }

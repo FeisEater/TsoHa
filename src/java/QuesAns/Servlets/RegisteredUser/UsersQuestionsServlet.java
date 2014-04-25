@@ -31,6 +31,13 @@ public class UsersQuestionsServlet extends QAServlet {
             throws ServletException, IOException {
         preprocess(request, response);
         User loggedIn = getUserFromSession(request, response);
+        if (loggedIn == null)
+        {
+            setError(QuesAns.utils.Error.accNotLoggedIn, request, response);
+            response.sendRedirect(getPrevURL(request, response));
+            return;
+        }
+        saveURL(request, response);
         List<Question> questions = loggedIn.getQuestions();
         request.setAttribute("list", questions);
         showPage("accquestions.jsp", request, response);

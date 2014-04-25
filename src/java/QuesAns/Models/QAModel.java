@@ -18,11 +18,11 @@ import javax.sql.DataSource;
  * @author Pavel
  */
 public class QAModel {
-    private static Connection c;
-    private static PreparedStatement ps;
-    private static Result result = new Result();
-    private static boolean resultRetrieved;
-    private static class Result {
+    private Connection c;
+    private PreparedStatement ps;
+    private Result result;
+    private boolean resultRetrieved;
+    private class Result {
         private Stack<ResultSet> results;
         private Result()
         {
@@ -45,11 +45,15 @@ public class QAModel {
             return results.empty();
         }
     }
+    public QAModel()
+    {
+        result = new Result();
+    }
 /**
  * Gets connection with database.
  * @return connection object.
  */
-    private static Connection getConnection() throws SQLException {
+    private Connection getConnection() throws SQLException {
         try {
             InitialContext cxt = new InitialContext();
             DataSource ds = (DataSource) cxt.lookup("java:/comp/env/jdbc/tietokanta");
@@ -63,7 +67,7 @@ public class QAModel {
 /**
  * Closes components requiring connection with database.
  */
-    public static void closeComponents()
+    public void closeComponents()
     {
         try {
             if (!result.allclosed())     result.close();
@@ -79,7 +83,7 @@ public class QAModel {
         }
     }
 
-    public static void prepareSQL(String sql, Object... param)
+    public void prepareSQL(String sql, Object... param)
     {
         try {
             if (c == null)   c = getConnection();
@@ -91,7 +95,7 @@ public class QAModel {
             System.out.println(ex);
         }
     }
-    public static void executeUpdate()
+    public void executeUpdate()
     {
         try {
             ps.executeUpdate();
@@ -100,7 +104,7 @@ public class QAModel {
         }
     }
 
-    private static boolean getResult() throws SQLException
+    private boolean getResult() throws SQLException
     {
         if (resultRetrieved)
             return true;
@@ -111,7 +115,7 @@ public class QAModel {
         resultRetrieved = true;
         return true;
     }
-    public static int retrieveInt(int index)
+    public int retrieveInt(int index)
     {
         try {
             getResult();
@@ -121,7 +125,7 @@ public class QAModel {
         }
         return -1;
     }
-    public static String retrieveString(int index)
+    public String retrieveString(int index)
     {
         try {
             getResult();
@@ -131,7 +135,7 @@ public class QAModel {
         }
         return null;
     }
-    public static Timestamp retrieveTimestamp(int index)
+    public Timestamp retrieveTimestamp(int index)
     {
         try {
             getResult();
@@ -141,7 +145,7 @@ public class QAModel {
         }
         return null;
     }
-    public static byte[] retrieveByteArray(int index)
+    public byte[] retrieveByteArray(int index)
     {
         try {
             getResult();
@@ -151,7 +155,7 @@ public class QAModel {
         }
         return null;
     }
-    public static boolean retrieveSingleObject(Model m)
+    public boolean retrieveSingleObject(Model m)
     {
         try {
             if (!getResult())
@@ -163,7 +167,7 @@ public class QAModel {
         }
         return false;
     }
-    public static List<Model> retrieveObjectList(Model m)
+    public List<Model> retrieveObjectList(Model m)
     {
         List<Model> list = new ArrayList<Model>();
         try {
@@ -179,7 +183,7 @@ public class QAModel {
         }
         return list;
     }
-    public static boolean resultFound()
+    public boolean resultFound()
     {
         try {
             return getResult();
