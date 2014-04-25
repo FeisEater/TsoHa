@@ -54,6 +54,16 @@
        <rtexprvalue>true</rtexprvalue>
     </attribute>
   </tag>
+  <tag>
+    <name>CountPages</name>
+    <tag-class>QuesAns.CustomJSPTags.CountPagesTag</tag-class>
+    <body-content>scriptless</body-content>
+    <attribute>
+       <name>size</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
   <!-- A validator verifies that the tags are used correctly at JSP
           translation time. Validator entries look like this: 
        <validator>

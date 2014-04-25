@@ -8,7 +8,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:base pageTitle="Change account settings">
-    <t:accbase page="2">
+    <t:accbase site="2">
         <div class="col-md-12"><br></div>
         <div class="col-md-12">
             <p>

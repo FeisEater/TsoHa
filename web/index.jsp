@@ -7,6 +7,8 @@
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <t:base pageTitle="QuesAns">
     <div class="container-fluid" style="background-color:#EEFFDD">
         <br>
@@ -22,7 +24,7 @@
             <div class="col-md-offset-6 col-md-5">
                 <form class="form-horizontal" role="form" action="index" method="POST">
                     <div class="input-group">
-                        <input type="text" class="form-control" id="search" name="tags" placeholder="Search...">
+                        <input type="text" class="form-control" id="search" name="tags" placeholder="Search by tags..." value="${param.tags}">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-default pull-left"><span class="glyphicon glyphicon-search"></span></button>
                         </span>
@@ -34,7 +36,7 @@
     </div>
     <div class="container">
         <div class="row">
-            <t:list>
+            <t:list curUrl="index?tags=${fn:replace(param.tags, ' ', '+')}&">
                 <thead>
                     <tr>
                         <th>Question</th>

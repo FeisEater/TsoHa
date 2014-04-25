@@ -8,8 +8,8 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:base pageTitle="User's questions">
-    <t:accbase page="0">
-        <t:list>
+    <t:accbase site="0">
+        <t:list curUrl="accquestions?" size="${loggedIn.quescount}">
             <thead>
                 <tr>
                     <th>Question</th>

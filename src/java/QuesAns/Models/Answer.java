@@ -57,18 +57,26 @@ public class Answer implements Model {
             "SELECT count(*) from ratedflaggedanswers "
             + "WHERE a_id = ? and flagged = true";
 
-    private static final String sql_allAnswersByFlags =
-            "select a.a_id, body, approvedbyasker, answered, lastedited, r_id, q_id "
+    private static final String sql_flaggedAnswers =
+            "select a.a_id, body, approvedbyasker, answered, lastedited, r_id, q_id, fa.f "
             + "from answers as a, (select a_id, count(*) as f from ratedflaggedanswers where flagged = true group by a_id) as fa "
-            + "where a.a_id = fa.a_id order by f desc";
+            + "where a.a_id = fa.a_id";
             //"SELECT * from answers order by flags desc";
 
     private static final String sql_getUnflaggedAnswers =
-            "select * from answers a "
+            "select *, 0 as f from answers a "
             + "where a.a_id not in (select a_id from ratedflaggedanswers where flagged = true)";
+
+    private static String sql_allAnswersByFlags =
+            "SELECT x.a_id, x.body, x.approvedbyasker, x.answered, x.lastedited, x.r_id, x.q_id FROM (" + 
+            sql_flaggedAnswers + " UNION " + sql_getUnflaggedAnswers + 
+            " ORDER BY f DESC) AS x limit ? offset ?";
 
     private static final String sql_removeFromDB =
             "DELETE FROM answers WHERE a_id = ?";
+    
+    private static final String sql_countAnswers =
+            "SELECT count(*) from answers";
 
     public Answer() {}
     public Answer(String answer)
@@ -170,7 +178,6 @@ public class Answer implements Model {
         QAModel.prepareSQL(sql_rate, rateId, id, up ? 1 : -1);
         QAModel.executeUpdate();
         QAModel.closeComponents();
-        System.out.println("rated " + (up ? "up" : "down"));
     }
     public void undoRate(User rater, boolean up)
     {
@@ -180,7 +187,6 @@ public class Answer implements Model {
             QAModel.prepareSQL(sql_undoRate, rater.getID(), id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
-        System.out.println("removed rate " + (up ? "up" : "down"));
     }
     public void changeRate(User rater, boolean up)
     {
@@ -203,12 +209,10 @@ public class Answer implements Model {
         QAModel.closeComponents();
         return a;
     }
-    public static List<Answer> getAnswersSortedByFlags()
+    public static List<Answer> getAnswersSortedByFlags(int page)
     {
-        QAModel.prepareSQL(sql_allAnswersByFlags);
+        QAModel.prepareSQL(sql_allAnswersByFlags, 10, (page - 1) * 10);
         List result = QAModel.retrieveObjectList(new Answer());
-        QAModel.prepareSQL(sql_getUnflaggedAnswers);
-        result.addAll(QAModel.retrieveObjectList(new Answer()));
         QAModel.closeComponents();
         return result;
     }
@@ -217,6 +221,13 @@ public class Answer implements Model {
         QAModel.prepareSQL(sql_removeFromDB, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
+    }
+    public static int countAnswers()
+    {
+        QAModel.prepareSQL(sql_countAnswers);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
     }
     public void getObjectFromResults(ResultSet result) throws SQLException
     {

@@ -35,15 +35,27 @@ public class ListTagsServlet extends QAServlet {
         if (loggedIn == null || !loggedIn.getModerator())
         {
             setError(QuesAns.utils.Error.modPage, request, response);
-            response.sendRedirect("index");
+            response.sendRedirect(getPrevURL(request, response, true));
             return;
         }
         saveURL(request, response);
         List<Tag> tags = Tag.getAllTags();
-        request.setAttribute("taglist", tags);
+        int colheight = (int)Math.ceil((double)(tags.size() / 6.0));
+        request.setAttribute("taglist", subList(tags, 0, colheight));
+        request.setAttribute("taglist2", subList(tags, colheight, 2*colheight));
+        request.setAttribute("taglist3", subList(tags, 2*colheight, 3*colheight));
+        request.setAttribute("taglist4", subList(tags, 3*colheight, 4*colheight));
+        request.setAttribute("taglist5", subList(tags, 4*colheight, 5*colheight));
+        request.setAttribute("taglist6", subList(tags, 5*colheight, tags.size()));
         showPage("modtags.jsp", request, response);
     }
 
+    private List<Tag> subList(List<Tag> tags, int begin, int end)
+    {
+        if (begin >= tags.size())   return null;
+        if (end > tags.size()) end = tags.size();
+        return tags.subList(begin, end);
+    }
     /**
      * Returns a short description of the servlet.
      *

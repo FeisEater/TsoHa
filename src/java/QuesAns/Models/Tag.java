@@ -34,7 +34,7 @@ public class Tag implements Model {
     private static final String sql_removeFromDB =
             "DELETE FROM tags WHERE t_id = ?";
 
-    public Tag() {}
+    public Tag()    {}
     public Tag(String tag)
     {
         this.tag = tag;

@@ -8,6 +8,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="taglist"%>
+<%@attribute name="taglist2"%>
+<%@attribute name="taglist3"%>
+<%@attribute name="taglist4"%>
+<%@attribute name="taglist5"%>
+<%@attribute name="taglist6"%>
 
 <%-- any content can be specified here e.g.: --%>
 <div class="btn-group-vertical">

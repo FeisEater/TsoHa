@@ -4,6 +4,7 @@ package QuesAns.Servlets;
 import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import QuesAns.utils.Error;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +35,16 @@ public class ListServlet extends QAServlet {
         preprocess(request, response);
         getUserFromSession(request, response);
         saveURL(request, response);
+        int page = Tools.stringToInt(request.getParameter("page"));
+        if (page <= 0)  page = 1;
         String[] tagParam = getSearchTerms(request, response);
         List<Question> questions;
         if (tagParam != null && tagParam.length > 0)
-            questions = Question.getQuestionsByTags(tagParam);
+            questions = Question.getQuestionsByTags(tagParam, page);
         else
-            questions = Question.getQuestions("order by asked desc");
+            questions = Question.getQuestions(page);
         request.setAttribute("list", questions);
+        request.setAttribute("size", Question.countQuestionsByTags(tagParam));
         showPage("index.jsp", request, response);
     }
 

@@ -47,7 +47,7 @@ public class TestServlet extends HttpServlet {
             out.println("<p>Servlet path " + request.getRequestURL() + "</p>");
 
             out.println("<ul>");
-            for (User u : User.getUsers())
+            for (User u : User.getUsers(1))
                 out.println("<li>" + u + "</li>");
             out.println("</ul>");
             out.println("</body>");

@@ -20,9 +20,10 @@ public class User implements Model {
     private String password;
     private Timestamp joined;
     private boolean moderator;
-    private QAModel db;
     
-    private static final String sql_getAllUsers = "SELECT * from regusers order by joined desc";
+    private static final String sql_getAllUsers = "SELECT * from regusers order by joined desc limit ? offset ?";
+    
+    private static final String sql_countUsers = "SELECT count(*) from regusers";
     
     private static final String sql_getUserByLogin = "SELECT * from regusers "
                 + "where (nick = ? or email = ?) and password = ?";
@@ -38,10 +39,10 @@ public class User implements Model {
             "SELECT * from regusers where r_id = ?";
 
     private static final String sql_getQuestions =
-            "SELECT * from questions where r_id = ?";
+            "SELECT * from questions where r_id = ? order by asked desc limit ? offset ?";
 
     private static final String sql_getAnswers =
-            "SELECT * from answers where r_id = ?";
+            "SELECT * from answers where r_id = ? order by answered desc limit ? offset ?";
     
     private static final String sql_getAvatar =
             "SELECT avatar from regusers where r_id = ?";
@@ -51,6 +52,9 @@ public class User implements Model {
 
     private static final String sql_removeFromDB =
             "DELETE FROM regusers WHERE r_id = ?";
+    
+    private static final String sql_notifyQuestionsAboutBan =
+            "UPDATE questions SET askerbanned = true where r_id = ?";
     
     private static final String sql_countAnswers =
             "SELECT count(*) from answers where r_id = ?";
@@ -86,13 +90,9 @@ public class User implements Model {
     private static final String sql_userExists =
             "SELECT r_id from regusers where r_id = ?";
 
-    public User()
-    {
-        db = new QAModel();
-    }
+    public User()   {}
     public User(String n, String e, String p)
     {
-        this();
         nick = n;
         email = e;
         password = p;
@@ -146,59 +146,58 @@ public class User implements Model {
  */
     public void register()
     {
-        db.prepareSQL(sql_registerUser, nick, email, password);
-        id = db.retrieveInt(1);
-        joined = db.retrieveTimestamp(2);
+        QAModel.prepareSQL(sql_registerUser, nick, email, password);
+        id = QAModel.retrieveInt(1);
+        joined = QAModel.retrieveTimestamp(2);
         moderator = false;
-        db.closeComponents();
+        QAModel.closeComponents();
     }
 /**
  * Edits user's information in the database.
  */
     public void changeSettings()
     {
-        db.prepareSQL(sql_changeSettings, nick, email, password, id);
-        db.executeUpdate();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_changeSettings, nick, email, password, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public void setAvatar(byte[] avatar)
     {
-        db.prepareSQL(sql_setAvatar, avatar, id);
-        db.executeUpdate();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_setAvatar, avatar, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
 /**
  * Finds all questions asked by this user.
  * @return List of Questions.
  */
-    public List<Question> getQuestions()
+    public List<Question> getQuestions(int page)
     {
-        db.prepareSQL(sql_getQuestions, id);
-        List result = db.retrieveObjectList(new Question());
-        db.closeComponents();
+        QAModel.prepareSQL(sql_getQuestions, id, 10, (page - 1) * 10);
+        List result = QAModel.retrieveObjectList(new Question());
+        QAModel.closeComponents();
         return result;
     }
 /**
  * Finds all answers made by this user.
  * @return List of Answers.
  */
-    public List<Answer> getAnswers()
+    public List<Answer> getAnswers(int page)
     {
-        db.prepareSQL(sql_getAnswers, id);
-        List result = db.retrieveObjectList(new Answer());
-        db.closeComponents();
+        QAModel.prepareSQL(sql_getAnswers, id, 10, (page - 1) * 10);
+        List result = QAModel.retrieveObjectList(new Answer());
+        QAModel.closeComponents();
         return result;
     }
 /**
  * Finds all users.
  * @return List of Users.
  */
-    public static List<User> getUsers()
+    public static List<User> getUsers(int page)
     {
-        QAModel d = new QAModel();
-        d.prepareSQL(sql_getAllUsers);
-        List result = d.retrieveObjectList(new User());
-        d.closeComponents();
+        QAModel.prepareSQL(sql_getAllUsers, 10, (page - 1) * 10);
+        List result = QAModel.retrieveObjectList(new User());
+        QAModel.closeComponents();
         return result;
     }
 /**
@@ -209,12 +208,11 @@ public class User implements Model {
  */
     public static User getByLoginInfo(String nameoremail, String password)
     {
-        QAModel d = new QAModel();
         User u = new User();
-        d.prepareSQL(sql_getUserByLogin, nameoremail, nameoremail, password);
-        if (!d.retrieveSingleObject(u))
+        QAModel.prepareSQL(sql_getUserByLogin, nameoremail, nameoremail, password);
+        if (!QAModel.retrieveSingleObject(u))
             u = null;
-        d.closeComponents();
+        QAModel.closeComponents();
         return u;
     }
 /**
@@ -224,40 +222,41 @@ public class User implements Model {
  */
     public static User getByID(int id)
     {
-        QAModel d = new QAModel();
         User u = new User();
-        d.prepareSQL(sql_getByID, id);
-        if (!d.retrieveSingleObject(u))
+        QAModel.prepareSQL(sql_getByID, id);
+        if (!QAModel.retrieveSingleObject(u))
             u = null;
-        d.closeComponents();
+        QAModel.closeComponents();
         return u;
     }
     public String getAvatar()
     {
-        db.prepareSQL(sql_getAvatar, id);
-        byte[] bytearray = db.retrieveByteArray(1);
-        db.closeComponents();
+        QAModel.prepareSQL(sql_getAvatar, id);
+        byte[] bytearray = QAModel.retrieveByteArray(1);
+        QAModel.closeComponents();
         if (bytearray == null)  return null;
         return new String(Base64.encode(bytearray));
     }
     public void removeFromDatabase()
     {
-        db.prepareSQL(sql_removeFromDB, id);
-        db.executeUpdate();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_notifyQuestionsAboutBan, id);
+        QAModel.executeUpdate();
+        QAModel.prepareSQL(sql_removeFromDB, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public int getAnscount()
     {
-        db.prepareSQL(sql_countAnswers, id);
-        int result = db.retrieveInt(1);
-        db.closeComponents();
+        QAModel.prepareSQL(sql_countAnswers, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
         return result;
     }
     public int getQuescount()
     {
-        db.prepareSQL(sql_countQuestions, id);
-        int result = db.retrieveInt(1);
-        db.closeComponents();
+        QAModel.prepareSQL(sql_countQuestions, id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
         return result;
     }
 /**
@@ -265,28 +264,28 @@ public class User implements Model {
  */
     public void addFlagToAnswer(Answer ans)
     {
-        db.prepareSQL(sql_addAnswerFlag, id, ans.getID());
-        db.executeUpdate();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_addAnswerFlag, id, ans.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public void removeFlagFromAnswer(Answer ans)
     {
-        db.prepareSQL(sql_undoAnswerFlag, id, ans.getID());
-        db.executeUpdate();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_undoAnswerFlag, id, ans.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public boolean hasRated(Answer ans)
     {
-        db.prepareSQL(sql_hasRated, id, ans.getID());
-        boolean result = db.resultFound();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_hasRated, id, ans.getID());
+        boolean result = QAModel.resultFound();
+        QAModel.closeComponents();
         return result;
     }
     public boolean hasFlaggedAnswer(Answer ans)
     {
-        db.prepareSQL(sql_hasFlaggedAnswer, id, ans.getID());
-        boolean result = db.resultFound();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_hasFlaggedAnswer, id, ans.getID());
+        boolean result = QAModel.resultFound();
+        QAModel.closeComponents();
         return result;
     }
 /**
@@ -294,31 +293,37 @@ public class User implements Model {
  */
     public void addFlagToQuestion(Question ques)
     {
-        db.prepareSQL(sql_addQuestionFlag, id, ques.getID());
-        db.executeUpdate();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_addQuestionFlag, id, ques.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public void removeFlagFromQuestion(Question ques)
     {
-        db.prepareSQL(sql_undoQuestionFlag, id, ques.getID());
-        db.executeUpdate();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_undoQuestionFlag, id, ques.getID());
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
     }
     public boolean hasFlaggedQuestion(Question ques)
     {
-        db.prepareSQL(sql_hasFlaggedQuestion, id, ques.getID());
-        boolean result = db.resultFound();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_hasFlaggedQuestion, id, ques.getID());
+        boolean result = QAModel.resultFound();
+        QAModel.closeComponents();
         return result;
     }
     public boolean stillExists()
     {
-        db.prepareSQL(sql_userExists, id);
-        boolean result = db.resultFound();
-        db.closeComponents();
+        QAModel.prepareSQL(sql_userExists, id);
+        boolean result = QAModel.resultFound();
+        QAModel.closeComponents();
         return result;
     }
-
+    public static int countUsers()
+    {
+        QAModel.prepareSQL(sql_countUsers);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        return result;
+    }
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("r_id");

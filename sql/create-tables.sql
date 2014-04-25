@@ -13,6 +13,7 @@ CREATE TABLE questions (
     title varchar(96) NOT NULL CHECK (title <> ''),
     body text,
     r_id integer REFERENCES regusers ON DELETE SET NULL,
+    askerbanned boolean DEFAULT false,
     asked timestamp
 );
 

@@ -10,7 +10,7 @@
 <t:base pageTitle="Flagged answers">
     <div class="container">
         <div class="row">
-            <t:list>
+            <t:list curUrl="modanswers?">
                 <thead>
                     <tr>
                         <th>Answer</th>

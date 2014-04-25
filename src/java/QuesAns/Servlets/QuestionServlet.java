@@ -35,13 +35,15 @@ public class QuestionServlet extends QAServlet {
         if (q == null)
         {
             setError(Error.invalidQues, request, response);
-            response.sendRedirect(getPrevURL(request, response));
+            response.sendRedirect(getPrevURL(request, response, true));
         }
         else
         {
+            int page = Tools.stringToInt(request.getParameter("page"));
+            if (page <= 0)  page = 1;
             saveURL(request, response);
             request.setAttribute("objectFromID", q);
-            request.setAttribute("list", q.getAnswers());
+            request.setAttribute("list", q.getAnswers(page));
             request.setAttribute("taglist", q.getTags());
             request.setAttribute("pageTitle", q.getTitle());
             showPage("question.jsp", request, response);

@@ -23,7 +23,17 @@
                         <img src="data:image/jpg;base64,${avatar}" alt="avatar" class="avatar" height="128" width="128">
                     </c:if>
                     <div class="caption">
-                        <a href="accquestions" type="button" class="btn btn-link text-left">${objectFromID.asker.name}</a>
+                        <c:if test="${objectFromID.asker == null}">
+                            <c:if test="${objectFromID.askerBanned == true}">
+                                <label><i><font color="red">Banned</font></i></label>
+                            </c:if>
+                            <c:if test="${objectFromID.askerBanned == false}">
+                                <label><i>Guest</i></label>
+                            </c:if>
+                        </c:if>
+                        <c:if test="${objectFromID.asker != null}">
+                            <a href="accquestions" type="button" class="btn btn-link text-left">${objectFromID.asker.name}</a>
+                        </c:if>
                         <c:if test="${loggedIn.moderator == true}">
                             <a href="modremove?type=user&id=${objectFromID.asker.ID}" type="button" class="btn btn-xs btn-danger">
                                 Ban user <span class="glyphicon glyphicon-remove"></span>
@@ -43,7 +53,7 @@
                         <div class="well questiontext">${objectFromID.body}</div>
                     </div>
                 </c:if>
-                <t:list>
+                <t:list curUrl="question?id=${objectFromID.ID}&" size="${objectFromID.answerCount}">
                     <c:if test="${fn:length(list) > 0}">
                         <thead>
                             <tr>
@@ -68,7 +78,12 @@
                                             <img src="data:image/jpg;base64,${avatar}" alt="avatar" class="avatar" height="80" width="80">
                                         </c:if>
                                         <div class="caption">
-                                            <a href="accquestions" type="button" class="btn btn-link text-left">${unit.answerer.name}</a>
+                                            <c:if test="${unit.answerer == null}">
+                                                <label><i><font color="red">Banned</font></i></label>
+                                            </c:if>
+                                            <c:if test="${unit.answerer != null}">
+                                                <a href="accquestions" type="button" class="btn btn-link text-left">${unit.answerer.name}</a>
+                                            </c:if>
                                             <c:if test="${loggedIn.moderator == true}">
                                                 <a href="modremove?type=user&id=${unit.ID}" type="button" class="btn btn-xs btn-danger">
                                                     Ban user <span class="glyphicon glyphicon-remove"></span>

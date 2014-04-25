@@ -93,13 +93,20 @@ public abstract class QAServlet extends HttpServlet {
  * @throws ServletException
  * @throws IOException 
  */
-    protected String getPrevURL(HttpServletRequest request, HttpServletResponse response)
+    protected String getPrevURL(HttpServletRequest request, HttpServletResponse response, boolean checkRedirectLoop)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
         String prevURL = (String)session.getAttribute("prevURL");
         if (prevURL == null)    return "index";
+        if (prevURL.contains(request.getRequestURI()) && checkRedirectLoop)
+            return "index";
         return prevURL;
+    }
+    protected String getPrevURL(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        return getPrevURL(request, response, false);
     }
     
     protected void setNotification(String notify, HttpServletRequest request, HttpServletResponse response)

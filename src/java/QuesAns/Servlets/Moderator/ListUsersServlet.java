@@ -1,9 +1,11 @@
 
 package QuesAns.Servlets.Moderator;
 
+import QuesAns.Models.Question;
 import QuesAns.Models.Tag;
 import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -34,11 +36,14 @@ public class ListUsersServlet extends QAServlet {
         if (loggedIn == null || !loggedIn.getModerator())
         {
             setError(QuesAns.utils.Error.modPage, request, response);
-            response.sendRedirect("index");
+            response.sendRedirect(getPrevURL(request, response, true));
             return;
         }
         saveURL(request, response);
-        List<User> users = User.getUsers();
+        int page = Tools.stringToInt(request.getParameter("page"));
+        if (page <= 0)  page = 1;
+        List<User> users = User.getUsers(page);
+        request.setAttribute("size", User.countUsers());
         request.setAttribute("list", users);
         showPage("modusers.jsp", request, response);
     }

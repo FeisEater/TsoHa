@@ -33,6 +33,7 @@ INSERT INTO questions VALUES (
     'How to dispose of a body?',
     'If there are any policemen reading this post, please be assured that I am merely joking.',
     2,
+    false,
     TIMESTAMP '2012-12-25 04:23:54'
 );
 
@@ -41,6 +42,7 @@ INSERT INTO questions VALUES (
     'Wash away pee from pants?',
     'I got scared and peed my pants. What is the best way to unpee my pants?',
     1,
+    false,
     TIMESTAMP '2013-01-01 12:23:54'
 );
 

@@ -18,11 +18,11 @@ import javax.sql.DataSource;
  * @author Pavel
  */
 public class QAModel {
-    private Connection c;
-    private PreparedStatement ps;
-    private Result result;
-    private boolean resultRetrieved;
-    private class Result {
+    private static Connection c;
+    private static PreparedStatement ps;
+    private static Result result = new Result();
+    private static boolean resultRetrieved;
+    private static class Result {
         private Stack<ResultSet> results;
         private Result()
         {
@@ -31,6 +31,7 @@ public class QAModel {
         private void add(ResultSet res)
         {
             results.push(res);
+            System.out.println("resultset added: " + results.size());
         }
         private ResultSet get()
         {
@@ -39,24 +40,22 @@ public class QAModel {
         private void close() throws SQLException
         {
             results.pop().close();
+            System.out.println("resultset closed: " + results.size());
         }
         private boolean allclosed()
         {
             return results.empty();
         }
     }
-    public QAModel()
-    {
-        result = new Result();
-    }
 /**
  * Gets connection with database.
  * @return connection object.
  */
-    private Connection getConnection() throws SQLException {
+    private static Connection getConnection() throws SQLException {
         try {
             InitialContext cxt = new InitialContext();
             DataSource ds = (DataSource) cxt.lookup("java:/comp/env/jdbc/tietokanta");
+            System.out.println("got connection");
             return ds.getConnection();
         } catch (NamingException e) {
             System.out.println(e);
@@ -67,14 +66,18 @@ public class QAModel {
 /**
  * Closes components requiring connection with database.
  */
-    public void closeComponents()
+    public static void closeComponents()
     {
         try {
             if (!result.allclosed())     result.close();
             if (result.allclosed())
             {
                 if (ps != null)         ps.close();
-                if (c != null)          c.close();
+                if (c != null)
+                {
+                    c.close();
+                    System.out.println("connection closed");
+                }
                 c = null;
                 ps = null;
             }
@@ -83,7 +86,7 @@ public class QAModel {
         }
     }
 
-    public void prepareSQL(String sql, Object... param)
+    public static void prepareSQL(String sql, Object... param)
     {
         try {
             if (c == null)   c = getConnection();
@@ -95,7 +98,7 @@ public class QAModel {
             System.out.println(ex);
         }
     }
-    public void executeUpdate()
+    public static void executeUpdate()
     {
         try {
             ps.executeUpdate();
@@ -104,7 +107,7 @@ public class QAModel {
         }
     }
 
-    private boolean getResult() throws SQLException
+    private static boolean getResult() throws SQLException
     {
         if (resultRetrieved)
             return true;
@@ -115,7 +118,7 @@ public class QAModel {
         resultRetrieved = true;
         return true;
     }
-    public int retrieveInt(int index)
+    public static int retrieveInt(int index)
     {
         try {
             getResult();
@@ -125,7 +128,7 @@ public class QAModel {
         }
         return -1;
     }
-    public String retrieveString(int index)
+    public static String retrieveString(int index)
     {
         try {
             getResult();
@@ -135,7 +138,7 @@ public class QAModel {
         }
         return null;
     }
-    public Timestamp retrieveTimestamp(int index)
+    public static Timestamp retrieveTimestamp(int index)
     {
         try {
             getResult();
@@ -145,7 +148,7 @@ public class QAModel {
         }
         return null;
     }
-    public byte[] retrieveByteArray(int index)
+    public static byte[] retrieveByteArray(int index)
     {
         try {
             getResult();
@@ -155,7 +158,7 @@ public class QAModel {
         }
         return null;
     }
-    public boolean retrieveSingleObject(Model m)
+    public static boolean retrieveSingleObject(Model m)
     {
         try {
             if (!getResult())
@@ -167,7 +170,7 @@ public class QAModel {
         }
         return false;
     }
-    public List<Model> retrieveObjectList(Model m)
+    public static List<Model> retrieveObjectList(Model m)
     {
         List<Model> list = new ArrayList<Model>();
         try {
@@ -183,7 +186,7 @@ public class QAModel {
         }
         return list;
     }
-    public boolean resultFound()
+    public static boolean resultFound()
     {
         try {
             return getResult();

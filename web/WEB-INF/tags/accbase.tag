@@ -7,7 +7,7 @@
 <%@tag description="base html code for account pages" pageEncoding="UTF-8"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="page"%>
+<%@attribute name="site"%>
 
 <%-- any content can be specified here e.g.: --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -27,11 +27,11 @@
         </div>
         <div class="col-md-9">
             <ul class="nav nav-pills">
-                <li class="${page == 0 ? 'active' : ''}"><a href="accquestions">Asked questions</a></li>
-                <li class="${page == 1 ? 'active' : ''}"><a href="accanswers">Given answers</a></li>
-                <li class="${page == 2 ? 'active' : ''}"><a href="accsettings">Change account settings</a></li>
+                <li class="${site == 0 ? 'active' : ''}"><a href="accquestions">Asked questions</a></li>
+                <li class="${site == 1 ? 'active' : ''}"><a href="accanswers">Given answers</a></li>
+                <li class="${site == 2 ? 'active' : ''}"><a href="accsettings">Change account settings</a></li>
                 <c:if test="${loggedIn.moderator == true}">
-                    <li class="${page == 3 ? 'active' : ''}"><a href="modquestions">Delete flagged questions</a></li>
+                    <li class="${site == 3 ? 'active' : ''}"><a href="modquestions">Delete flagged questions</a></li>
                 </c:if>
             </ul>
             <jsp:doBody/>

@@ -10,7 +10,7 @@
 <t:base pageTitle="Users starting from newly joined">
     <div class="container">
         <div class="row">
-            <t:list>
+            <t:list curUrl="modusers?">
                 <thead>
                     <tr>
                         <th></th>

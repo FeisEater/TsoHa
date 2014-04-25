@@ -6,6 +6,7 @@ import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
 import QuesAns.utils.Error;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -36,11 +37,14 @@ public class ListAnswersServlet extends QAServlet {
         if (loggedIn == null || !loggedIn.getModerator())
         {
             setError(Error.modPage, request, response);
-            response.sendRedirect("index");
+            response.sendRedirect(getPrevURL(request, response, true));
             return;
         }
         saveURL(request, response);
-        List<Answer> answers = Answer.getAnswersSortedByFlags();
+        int page = Tools.stringToInt(request.getParameter("page"));
+        if (page <= 0)  page = 1;
+        List<Answer> answers = Answer.getAnswersSortedByFlags(page);
+        request.setAttribute("size", Answer.countAnswers());
         request.setAttribute("list", answers);
         showPage("modanswers.jsp", request, response);
     }

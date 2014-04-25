@@ -4,6 +4,7 @@ package QuesAns.Servlets.RegisteredUser;
 import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
+import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -38,7 +39,9 @@ public class UsersQuestionsServlet extends QAServlet {
             return;
         }
         saveURL(request, response);
-        List<Question> questions = loggedIn.getQuestions();
+        int page = Tools.stringToInt(request.getParameter("page"));
+        if (page <= 0)  page = 1;
+        List<Question> questions = loggedIn.getQuestions(page);
         request.setAttribute("list", questions);
         showPage("accquestions.jsp", request, response);
     }
