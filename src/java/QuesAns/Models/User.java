@@ -2,11 +2,19 @@
 package QuesAns.Models;
 
 import java.io.InputStream;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import org.apache.catalina.util.Base64;
 
 /**
@@ -140,6 +148,34 @@ public class User implements Model {
     {
         if (!p.isEmpty())
             password = p;
+    }
+    private byte[] encryptPassword(String password, byte[] salt)
+    {
+        try {
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            return f.generateSecret(spec).getEncoded();
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println(ex);
+        } catch (InvalidKeySpecException ex) {
+            System.out.println(ex);
+        }
+        return null;
+    }
+    private boolean hashMatch(byte[] hash1, byte[] hash2)
+    {
+        if (hash1.length != hash2.length)   return false;
+        boolean matches = true;
+        for (int i = 0; i < hash1.length; i++)
+            if (hash1[i] != hash2[i])   matches = false;
+        return matches;
+    }
+    private byte[] newSalt()
+    {
+        Random random = new Random();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        return salt;
     }
 /**
  * Adds a User to the database.

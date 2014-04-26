@@ -2,7 +2,8 @@ CREATE TABLE regusers (
     r_id SERIAL PRIMARY KEY,
     nick varchar(16) NOT NULL CHECK (nick <> '') UNIQUE,
     email varchar(64),
-    password varchar(128) NOT NULL CHECK (password <> ''),
+    password bytea NOT NULL,
+    salt bytea NOT NULL,
     joined timestamp,
     moderator boolean DEFAULT false,
     avatar bytea DEFAULT NULL
