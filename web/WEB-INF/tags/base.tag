@@ -8,8 +8,8 @@
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="pageTitle"%>
-<%@attribute name="givenName"%>
 <%@attribute name="objectFromID"%>
+<%@attribute name="modpage"%>
 
 <%-- any content can be specified here e.g.: --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -33,10 +33,10 @@
                     <c:if test="${loggedIn.moderator}">
                         <p align="center">Moderate content:</p>
                         <ul class="nav nav-pills">
-                            <li class="${page == 0 ? 'active' : ''}"><a href="modusers">Users</a></li>
-                            <li class="${page == 1 ? 'active' : ''}"><a href="modquestions">Questions</a></li>
-                            <li class="${page == 2 ? 'active' : ''}"><a href="modanswers">Answers</a></li>
-                            <li class="${page == 3 ? 'active' : ''}"><a href="modtags">Tags</a></li>
+                            <li class="${modpage == 0 ? 'active' : ''}"><a href="modusers">Users</a></li>
+                            <li class="${modpage == 1 ? 'active' : ''}"><a href="modquestions">Questions</a></li>
+                            <li class="${modpage == 2 ? 'active' : ''}"><a href="modanswers">Answers</a></li>
+                            <li class="${modpage == 3 ? 'active' : ''}"><a href="modtags">Tags</a></li>
                         </ul>
                     </c:if>
                 </div>

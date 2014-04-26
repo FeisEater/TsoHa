@@ -1,6 +1,7 @@
 
 package QuesAns.Models;
 
+import QuesAns.utils.Tools;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -33,7 +34,6 @@ public class Answer implements Model {
     private static final String sql_rate =
             "INSERT INTO ratedflaggedanswers(r_id, a_id, flagged, rated) "
             + "VALUES(?,?,false,?)";
-            //"UPDATE answers SET rating = ? where a_id = ?";
 
     private static final String sql_undoRate =
             "DELETE FROM ratedflaggedanswers "
@@ -61,7 +61,6 @@ public class Answer implements Model {
             "select a.a_id, body, approvedbyasker, answered, lastedited, r_id, q_id, fa.f "
             + "from answers as a, (select a_id, count(*) as f from ratedflaggedanswers where flagged = true group by a_id) as fa "
             + "where a.a_id = fa.a_id";
-            //"SELECT * from answers order by flags desc";
 
     private static final String sql_getUnflaggedAnswers =
             "select *, 0 as f from answers a "
@@ -124,27 +123,13 @@ public class Answer implements Model {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(answered);
     }
 /**
- * Formats string in a way that html-code won't confuse it as a set of html-elements.
- * @param s String to be formatted.
- * @return Formatted version of the string.
- */
-    public String reformatString(String s)
-    {
-        s = s.replace("&", "&amp");
-        s = s.replace("<", "&lt");
-        s = s.replace(">", "&gt");
-        s = s.replace("\n", "<br>");
-        s = s.replace(" ", "&nbsp");
-        return s;
-    }
-/**
  * Adds an answer to the database.
  * @param owner User that made the answer.
  * @param q Question, which this answers.
  */
     public void addToDatabase(User owner, Question q)
     {
-        body = reformatString(body);
+        body = Tools.formatHTMLsafe(body);
         QAModel.prepareSQL(sql_addToDB, body, owner.getID(), q.getID());
         id = QAModel.retrieveInt(1);
         answered = QAModel.retrieveTimestamp(2);
@@ -162,7 +147,7 @@ public class Answer implements Model {
     {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         s = "<br><br> Update: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(ts)
-                + "<br>" + reformatString(s);
+                + "<br>" + Tools.formatHTMLsafe(s);
         body += s;
         QAModel.prepareSQL(sql_append, body, id);
         QAModel.executeUpdate();
@@ -211,7 +196,7 @@ public class Answer implements Model {
     }
     public static List<Answer> getAnswersSortedByFlags(int page)
     {
-        QAModel.prepareSQL(sql_allAnswersByFlags, 10, (page - 1) * 10);
+        QAModel.prepareSQL(sql_allAnswersByFlags, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
         List result = QAModel.retrieveObjectList(new Answer());
         QAModel.closeComponents();
         return result;

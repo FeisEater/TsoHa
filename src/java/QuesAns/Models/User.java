@@ -1,7 +1,7 @@
 
 package QuesAns.Models;
 
-import java.io.InputStream;
+import QuesAns.utils.Tools;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -11,8 +11,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import org.apache.catalina.util.Base64;
@@ -25,26 +23,31 @@ public class User implements Model {
     private int id;
     private String nick;
     private String email;
-    private String password;
     private Timestamp joined;
     private boolean moderator;
     
-    private static final String sql_getAllUsers = "SELECT * from regusers order by joined desc limit ? offset ?";
+    private static final String sql_getAllUsers =
+            "SELECT r_id, nick, email, joined, moderator from regusers order by joined desc limit ? offset ?";
     
     private static final String sql_countUsers = "SELECT count(*) from regusers";
     
-    private static final String sql_getUserByLogin = "SELECT * from regusers "
-                + "where (nick = ? or email = ?) and password = ?";
+    private static final String sql_getSalt = "SELECT salt from regusers where (nick = ? or email = ?)";
+    
+    private static final String sql_getUserByPassword =
+            "SELECT r_id, nick, email, joined, moderator from regusers where password = ?";
 
     private static final String sql_registerUser =
-            "INSERT INTO regusers(nick, email, password, joined) "
-            + "VALUES(?,?,?,LOCALTIMESTAMP) RETURNING r_id, joined";
+            "INSERT INTO regusers(nick, email, password, salt, joined) "
+            + "VALUES(?,?,?,?,LOCALTIMESTAMP) RETURNING r_id, joined";
     
     private static final String sql_changeSettings =
-            "UPDATE regusers SET nick = ?, email = ?, password = ? where r_id = ?";
+            "UPDATE regusers SET nick = ?, email = ? where r_id = ?";
+
+    private static final String sql_changePassword =
+            "UPDATE regusers SET password = ?, salt = ? where r_id = ?";
 
     private static final String sql_getByID =
-            "SELECT * from regusers where r_id = ?";
+            "SELECT r_id, nick, email, joined, moderator from regusers where r_id = ?";
 
     private static final String sql_getQuestions =
             "SELECT * from questions where r_id = ? order by asked desc limit ? offset ?";
@@ -73,7 +76,6 @@ public class User implements Model {
     private static final String sql_addAnswerFlag =
             "INSERT INTO ratedflaggedanswers(r_id, a_id, flagged) "
             + "VALUES(?,?,true)";
-            //"UPDATE answers SET flags = ? where a_id = ?";
 
     private static final String sql_undoAnswerFlag =
             "DELETE FROM ratedflaggedanswers "
@@ -87,7 +89,6 @@ public class User implements Model {
 
     private static final String sql_addQuestionFlag =
             "INSERT INTO flaggedquestions(r_id, q_id) VALUES(?,?)";
-            //"UPDATE answers SET flags = ? where a_id = ?";
 
     private static final String sql_undoQuestionFlag =
             "DELETE FROM flaggedquestions WHERE r_id = ? and q_id = ?";
@@ -99,16 +100,15 @@ public class User implements Model {
             "SELECT r_id from regusers where r_id = ?";
 
     public User()   {}
-    public User(String n, String e, String p)
+    public User(String n, String e)
     {
         nick = n;
         email = e;
-        password = p;
     }
     @Override
     public String toString()
     {
-        return ""+nick+" ("+email+") - "+password+" - joined: " + joined;
+        return ""+nick+" ("+email+") - joined: " + joined;
     }
     public int getID()
     {
@@ -121,10 +121,6 @@ public class User implements Model {
     public String getEmail()
     {
         return email;
-    }
-    public String getPassword()
-    {
-        return password;
     }
     public String getJoined()
     {
@@ -144,12 +140,7 @@ public class User implements Model {
         if (!e.isEmpty())
             email = e;
     }
-    public void setPassword(String p)
-    {
-        if (!p.isEmpty())
-            password = p;
-    }
-    private byte[] encryptPassword(String password, byte[] salt)
+    private static byte[] encryptPassword(String password, byte[] salt)
     {
         try {
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
@@ -162,15 +153,7 @@ public class User implements Model {
         }
         return null;
     }
-    private boolean hashMatch(byte[] hash1, byte[] hash2)
-    {
-        if (hash1.length != hash2.length)   return false;
-        boolean matches = true;
-        for (int i = 0; i < hash1.length; i++)
-            if (hash1[i] != hash2[i])   matches = false;
-        return matches;
-    }
-    private byte[] newSalt()
+    private static byte[] newSalt()
     {
         Random random = new Random();
         byte[] salt = new byte[16];
@@ -180,9 +163,10 @@ public class User implements Model {
 /**
  * Adds a User to the database.
  */
-    public void register()
+    public void register(String password)
     {
-        QAModel.prepareSQL(sql_registerUser, nick, email, password);
+        byte[] salt = newSalt();
+        QAModel.prepareSQL(sql_registerUser, nick, email, encryptPassword(password, salt), salt);
         id = QAModel.retrieveInt(1);
         joined = QAModel.retrieveTimestamp(2);
         moderator = false;
@@ -193,7 +177,14 @@ public class User implements Model {
  */
     public void changeSettings()
     {
-        QAModel.prepareSQL(sql_changeSettings, nick, email, password, id);
+        QAModel.prepareSQL(sql_changeSettings, nick, email, id);
+        QAModel.executeUpdate();
+        QAModel.closeComponents();
+    }
+    public void changePassword(String password)
+    {
+        byte[] salt = newSalt();
+        QAModel.prepareSQL(sql_changePassword, encryptPassword(password, salt), salt, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
@@ -209,7 +200,7 @@ public class User implements Model {
  */
     public List<Question> getQuestions(int page)
     {
-        QAModel.prepareSQL(sql_getQuestions, id, 10, (page - 1) * 10);
+        QAModel.prepareSQL(sql_getQuestions, id, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
         List result = QAModel.retrieveObjectList(new Question());
         QAModel.closeComponents();
         return result;
@@ -220,7 +211,7 @@ public class User implements Model {
  */
     public List<Answer> getAnswers(int page)
     {
-        QAModel.prepareSQL(sql_getAnswers, id, 10, (page - 1) * 10);
+        QAModel.prepareSQL(sql_getAnswers, id, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
         List result = QAModel.retrieveObjectList(new Answer());
         QAModel.closeComponents();
         return result;
@@ -231,7 +222,7 @@ public class User implements Model {
  */
     public static List<User> getUsers(int page)
     {
-        QAModel.prepareSQL(sql_getAllUsers, 10, (page - 1) * 10);
+        QAModel.prepareSQL(sql_getAllUsers, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
         List result = QAModel.retrieveObjectList(new User());
         QAModel.closeComponents();
         return result;
@@ -245,7 +236,9 @@ public class User implements Model {
     public static User getByLoginInfo(String nameoremail, String password)
     {
         User u = new User();
-        QAModel.prepareSQL(sql_getUserByLogin, nameoremail, nameoremail, password);
+        QAModel.prepareSQL(sql_getSalt, nameoremail, nameoremail);
+        byte[] salt = QAModel.retrieveByteArray(1);
+        QAModel.prepareSQL(sql_getUserByPassword, encryptPassword(password, salt));
         if (!QAModel.retrieveSingleObject(u))
             u = null;
         QAModel.closeComponents();
@@ -365,7 +358,6 @@ public class User implements Model {
         id = result.getInt("r_id");
         nick = result.getString("nick");
         email = result.getString("email");
-        password = result.getString("password");
         joined = result.getTimestamp("joined");
         moderator = result.getBoolean("moderator");
     }

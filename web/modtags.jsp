@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<t:base pageTitle="Tags">
+<t:base pageTitle="Tags" modpage="3">
     <div class="container">
         <div class="row">
             <div class="col-md-2">
@@ -17,7 +17,9 @@
                             <li class="list-group-item">
                                 <div class="btn-group btn-group-xs">
                                     <a href="index?tags=${tag.text}" type="button" class="btn btn-info">${tag.text}</a>
-                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
                                 </div>
                             </li>
                         </c:forEach>
@@ -31,7 +33,9 @@
                             <li class="list-group-item">
                                 <div class="btn-group btn-group-xs">
                                     <a href="index?tags=${tag.text}" type="button" class="btn btn-info">${tag.text}</a>
-                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
                                 </div>
                             </li>
                         </c:forEach>
@@ -45,7 +49,9 @@
                             <li class="list-group-item">
                                 <div class="btn-group btn-group-xs">
                                     <a href="index?tags=${tag.text}" type="button" class="btn btn-info">${tag.text}</a>
-                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
                                 </div>
                             </li>
                         </c:forEach>
@@ -59,7 +65,9 @@
                             <li class="list-group-item">
                                 <div class="btn-group btn-group-xs">
                                     <a href="index?tags=${tag.text}" type="button" class="btn btn-info">${tag.text}</a>
-                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
                                 </div>
                             </li>
                         </c:forEach>
@@ -73,7 +81,9 @@
                             <li class="list-group-item">
                                 <div class="btn-group btn-group-xs">
                                     <a href="index?tags=${tag.text}" type="button" class="btn btn-info">${tag.text}</a>
-                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
                                 </div>
                             </li>
                         </c:forEach>
@@ -87,7 +97,9 @@
                             <li class="list-group-item">
                                 <div class="btn-group btn-group-xs">
                                     <a href="index?tags=${tag.text}" type="button" class="btn btn-info">${tag.text}</a>
-                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="modremove?type=tags&id=${tag.ID}" type="button" class="btn btn-info">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
                                 </div>
                             </li>
                         </c:forEach>

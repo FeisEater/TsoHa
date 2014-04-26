@@ -6,11 +6,9 @@ import QuesAns.utils.Error;
 import QuesAns.utils.Info;
 import QuesAns.utils.Tools;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -48,8 +46,8 @@ public class RegisterServlet extends QAServlet {
             List<String> errors = searchForErrors(username, email, password, password2);
             if (errors.isEmpty())
             {
-                User registering = new User(username, email, password);
-                registering.register();
+                User registering = new User(username, email);
+                registering.register(password);
                 session.setAttribute("loggedIn", registering);
                 setNotification(Info.registerSuccess(username), request, response);
                 response.sendRedirect("index");

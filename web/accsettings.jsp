@@ -48,15 +48,6 @@
                 <input type="file" name="avatar" id="avatar">
                 <p class="help-block">Choose a picture file you have stored locally.</p>
             </div>
-            <!--div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"> Muista kirjautuminen
-                        </label>
-                    </div>
-                </div>
-            </div-->
             <div class="form-group">
                 <div class="col-md-offset-6 col-md-3">
                     <button type="submit" class="btn btn-primary">Confirm changes</button>

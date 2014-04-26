@@ -1,6 +1,7 @@
 
 package QuesAns.Models;
 
+import QuesAns.utils.Tools;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -42,10 +43,7 @@ public class Question implements Model {
     private static final String sql_addToDB =
             "INSERT INTO questions(title, body, r_id, asked) "
             + "VALUES(?,?,?,LOCALTIMESTAMP) RETURNING q_id, asked";
-/*
-    private static final String sql_addFlag =
-            "UPDATE questions SET flags = ? where q_id = ?";
-    */
+
     private static final String sql_removeFromDB =
             "DELETE FROM questions WHERE q_id = ?";
     
@@ -55,7 +53,6 @@ public class Question implements Model {
             + "from answers as a, (select a_id, sum(rated) as f from ratedflaggedanswers where flagged = false group by a_id) as fa "
             + "where a.a_id = fa.a_id and f " + (pos ? ">=" : "<") + " 0";
     }
-        //"SELECT * from answers where q_id = ? order by rating desc";
 
     private static final String sql_getUnratedAnswers =
             "select *, 0 as f from answers as a "
@@ -133,28 +130,14 @@ public class Question implements Model {
         return askerBanned;
     }
 /**
- * Formats string in a way that html-code won't confuse it as a set of html-elements.
- * @param s String to be formatted.
- * @return Formatted version of the string.
- */
-    public String reformatString(String s)
-    {
-        s = s.replace("&", "&amp");
-        s = s.replace("<", "&lt");
-        s = s.replace(">", "&gt");
-        s = s.replace("\n", "<br>");
-        s = s.replace(" ", "&nbsp");
-        return s;
-    }
-/**
  * Adds a question to the database.
  * @param owner User that made the question.
  */
     public void addToDatabase(User owner)
     {
         asker = owner;
-        title = reformatString(title);
-        body = reformatString(body);
+        title = Tools.formatHTMLsafe(title);
+        body = Tools.formatHTMLsafe(body);
         Integer ownerID = (owner == null) ? null : owner.getID();
         QAModel.prepareSQL(sql_addToDB, title, body, ownerID);
         id = QAModel.retrieveInt(1);
@@ -176,7 +159,7 @@ public class Question implements Model {
  */
     public List<Answer> getAnswers(int page)
     {
-        QAModel.prepareSQL(sql_getQuestionsAnswers, id, 10, (page - 1) * 10);
+        QAModel.prepareSQL(sql_getQuestionsAnswers, id, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
         List result = QAModel.retrieveObjectList(new Answer());
         QAModel.closeComponents();
         return result;
@@ -199,7 +182,7 @@ public class Question implements Model {
  */
     public static List<Question> getQuestions(int page)
     {
-        QAModel.prepareSQL(sql_getQuestions, 10, (page - 1) * 10);
+        QAModel.prepareSQL(sql_getQuestions, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
         List result = QAModel.retrieveObjectList(new Question());
         QAModel.closeComponents();
         return result;
@@ -240,8 +223,8 @@ public class Question implements Model {
         Object[] params = new Object[tags.length + 2];
         for (int i = 0; i < tags.length; i++)
             params[i] = tags[i];
-        params[tags.length] = 10;
-        params[tags.length + 1] = (page - 1) * 10;
+        params[tags.length] = Tools.elementsPerPage;
+        params[tags.length + 1] = (page - 1) * Tools.elementsPerPage;
         QAModel.prepareSQL(sql_getQuestionByTags(tags.length, false), params);
         List result = QAModel.retrieveObjectList(new Question());
         QAModel.closeComponents();
@@ -249,7 +232,7 @@ public class Question implements Model {
     }
     public static List<Question> getQuestionsSortedByFlags(int page)
     {
-        QAModel.prepareSQL(sql_getQuestionsByFlags, 10, (page - 1) * 10);
+        QAModel.prepareSQL(sql_getQuestionsByFlags, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
         List result = QAModel.retrieveObjectList(new Question());
         QAModel.closeComponents();
         return result;

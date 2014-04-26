@@ -26,7 +26,9 @@
                     <div class="input-group">
                         <input type="text" class="form-control" id="search" name="tags" placeholder="Search by tags..." value="${param.tags}">
                         <span class="input-group-btn">
-                            <button type="submit" class="btn btn-default pull-left"><span class="glyphicon glyphicon-search"></span></button>
+                            <button type="submit" class="btn btn-default pull-left">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
                         </span>
                     </div>
                 </form>

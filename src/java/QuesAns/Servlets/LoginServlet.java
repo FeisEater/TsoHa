@@ -5,9 +5,7 @@ import QuesAns.Models.User;
 import QuesAns.utils.Error;
 import QuesAns.utils.Info;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,21 +32,23 @@ public class LoginServlet extends QAServlet {
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        User loggedIn = User.getByLoginInfo(username, password);
-        if (loggedIn == null)
+        if (firstTimeVisiting(request))
+            showPage("signin.jsp", request, response);
+        else
         {
-            if (!firstTimeVisiting(request))
+            User loggedIn = User.getByLoginInfo(username, password);
+            if (loggedIn == null)
             {
                 setError(Error.loginFail, request, response);
                 request.setAttribute("givenName", username);
+                showPage("signin.jsp", request, response);
             }
-            showPage("signin.jsp", request, response);
-        }
-        else
-        {
-            setNotification(Info.loginSuccess(username), request, response);
-            session.setAttribute("loggedIn", loggedIn);
-            response.sendRedirect(getPrevURL(request, response));
+            else
+            {
+                setNotification(Info.loginSuccess(username), request, response);
+                session.setAttribute("loggedIn", loggedIn);
+                response.sendRedirect(getPrevURL(request, response));
+            }
         }
     }
 

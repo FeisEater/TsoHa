@@ -100,7 +100,10 @@ public abstract class QAServlet extends HttpServlet {
         String prevURL = (String)session.getAttribute("prevURL");
         if (prevURL == null)    return "index";
         if (prevURL.contains(request.getRequestURI()) && checkRedirectLoop)
+        {
+            session.removeAttribute("errors");
             return "index";
+        }
         return prevURL;
     }
     protected String getPrevURL(HttpServletRequest request, HttpServletResponse response)

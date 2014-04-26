@@ -31,7 +31,6 @@ public class QAModel {
         private void add(ResultSet res)
         {
             results.push(res);
-            System.out.println("resultset added: " + results.size());
         }
         private ResultSet get()
         {
@@ -40,7 +39,6 @@ public class QAModel {
         private void close() throws SQLException
         {
             results.pop().close();
-            System.out.println("resultset closed: " + results.size());
         }
         private boolean allclosed()
         {
@@ -55,7 +53,6 @@ public class QAModel {
         try {
             InitialContext cxt = new InitialContext();
             DataSource ds = (DataSource) cxt.lookup("java:/comp/env/jdbc/tietokanta");
-            System.out.println("got connection");
             return ds.getConnection();
         } catch (NamingException e) {
             System.out.println(e);
@@ -73,11 +70,7 @@ public class QAModel {
             if (result.allclosed())
             {
                 if (ps != null)         ps.close();
-                if (c != null)
-                {
-                    c.close();
-                    System.out.println("connection closed");
-                }
+                if (c != null)          c.close();
                 c = null;
                 ps = null;
             }

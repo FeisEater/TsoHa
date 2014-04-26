@@ -1,8 +1,6 @@
 
 package QuesAns.CustomJSPTags;
 
-import QuesAns.Models.Answer;
-import QuesAns.Models.User;
 import java.io.IOException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;

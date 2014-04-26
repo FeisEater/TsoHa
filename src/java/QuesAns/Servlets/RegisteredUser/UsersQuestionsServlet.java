@@ -6,10 +6,8 @@ import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
 import QuesAns.utils.Tools;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,7 +33,7 @@ public class UsersQuestionsServlet extends QAServlet {
         if (loggedIn == null)
         {
             setError(QuesAns.utils.Error.accNotLoggedIn, request, response);
-            response.sendRedirect(getPrevURL(request, response));
+            response.sendRedirect(getPrevURL(request, response, true));
             return;
         }
         saveURL(request, response);

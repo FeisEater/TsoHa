@@ -112,8 +112,6 @@
                                         <c:if test="${loggedIn == null}">
                                             <cu:Rate rateList="${rated}" answer="${unit}" />
                                         </c:if>
-                                        <!--a href="rate?type=t&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-up"></span></a>
-                                        <a href="rate?type=f&id=${unit.ID}" type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-thumbs-down"></span></a-->
                                     </td>
                                     <c:if test="${loggedIn != null}">
                                         <td width="5%"><a href="flag?type=ans&id=${unit.ID}" type="button" class="btn btn-xs btn-default">

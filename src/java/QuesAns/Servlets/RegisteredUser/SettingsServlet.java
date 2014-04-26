@@ -7,16 +7,11 @@ import QuesAns.utils.Error;
 import QuesAns.utils.Info;
 import QuesAns.utils.Tools;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -46,7 +41,7 @@ public class SettingsServlet extends QAServlet {
         if (loggedIn == null)
         {
             setError(Error.settingsNotLoggedIn, request, response);
-            response.sendRedirect(getPrevURL(request, response));
+            response.sendRedirect(getPrevURL(request, response, true));
             return;
         }
         
@@ -117,8 +112,8 @@ public class SettingsServlet extends QAServlet {
             errors.addAll(e);
             if (e.isEmpty())
             {
+                loggedIn.changePassword(password);
                 infos.add(Info.passwordChanged);
-                loggedIn.setPassword(password);
             }
         }
         if (!errors.isEmpty())

@@ -6,6 +6,7 @@ package QuesAns.utils;
  * @author FeisEater
  */
 public class Tools {
+    public static final int elementsPerPage = 10;
     public static int stringToInt(String s)
     {
         int i;
@@ -46,5 +47,19 @@ public class Tools {
     {
         String t = s.toUpperCase();
         return !t.equals(s);
+    }
+/**
+ * Formats string in a way that html-code won't confuse it as a set of html-elements.
+ * @param s String to be formatted.
+ * @return Formatted version of the string.
+ */
+    public static String formatHTMLsafe(String s)
+    {
+        s = s.replace("&", "&amp");
+        s = s.replace("<", "&lt");
+        s = s.replace(">", "&gt");
+        s = s.replace("\n", "<br>");
+        s = s.replace(" ", "&nbsp");
+        return s;
     }
 }

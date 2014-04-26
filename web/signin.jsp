@@ -24,15 +24,6 @@
                     <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password">
                 </div>
             </div>
-            <!--div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"> Muista kirjautuminen
-                        </label>
-                    </div>
-                </div>
-            </div-->
             <div class="col-md-12"><br></div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
