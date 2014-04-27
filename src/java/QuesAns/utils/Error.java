@@ -2,7 +2,7 @@
 package QuesAns.utils;
 
 /**
- *
+ * Error strings in a separate file to make localisation easier.
  * @author FeisEater
  */
 public class Error {

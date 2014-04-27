@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for listing user's answers.
  * @author FeisEater
  */
 public class UsersAnswersServlet extends QAServlet {
@@ -52,7 +52,7 @@ public class UsersAnswersServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for listing user's answers.";
     }
 
 }

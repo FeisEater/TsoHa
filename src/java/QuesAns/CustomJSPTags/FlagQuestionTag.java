@@ -9,7 +9,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 /**
- *
+ * Tag decides whether to show 'flag' or 'undo flag' button for question.
  * @author Pavel
  */
 public class FlagQuestionTag extends SimpleTagSupport {

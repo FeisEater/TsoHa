@@ -6,3 +6,5 @@
 \contentsline {section}{\numberline {6}User interface}{10}
 \contentsline {section}{\numberline {7}Installation}{12}
 \contentsline {section}{\numberline {8}How to run and use the app}{12}
+\contentsline {section}{\numberline {9}Testing, ideas to improve the app}{12}
+\contentsline {section}{\numberline {10}Experiences while developing this app}{13}

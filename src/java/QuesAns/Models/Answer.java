@@ -38,7 +38,9 @@ public class Answer implements Model {
     private static final String sql_undoRate =
             "DELETE FROM ratedflaggedanswers "
             + "WHERE r_id = ? and a_id = ? and flagged = false";
-
+/**
+ * If rated anonymously, removes some anonymous rating.
+ */
     private static final String sql_undoAnonRate =
             "DELETE FROM ratedflaggedanswers "
             + "WHERE ctid IN (select ctid from ratedflaggedanswers "
@@ -65,7 +67,9 @@ public class Answer implements Model {
     private static final String sql_getUnflaggedAnswers =
             "select *, 0 as f from answers a "
             + "where a.a_id not in (select a_id from ratedflaggedanswers where flagged = true)";
-
+/**
+ * Joins two subqueries, list of flagged and unflagged answers.
+ */
     private static String sql_allAnswersByFlags =
             "SELECT x.a_id, x.body, x.approvedbyasker, x.answered, x.lastedited, x.r_id, x.q_id FROM (" + 
             sql_flaggedAnswers + " UNION " + sql_getUnflaggedAnswers + 
@@ -76,6 +80,24 @@ public class Answer implements Model {
     
     private static final String sql_countAnswers =
             "SELECT count(*) from answers";
+    
+    private static final String sql_getRatedAnswers
+            = "select a.a_id, body, approvedbyasker, answered, lastedited, a.r_id, q_id, fa.f "
+            + "from answers as a, (select a_id, sum(rated) as f from ratedflaggedanswers where flagged = false group by a_id) as fa "
+            + "where a.a_id = fa.a_id";
+
+    private static final String sql_getUnratedAnswers =
+            "select *, 0 as f from answers as a "
+            + "where a.a_id not in (select a_id from ratedflaggedanswers where flagged = false)";
+/**
+ * Joins two subqueries, rated and unrated answers.
+ */
+    private static final String sql_getQuestionsAnswers =
+            "SELECT row_number() over () as row, x.a_id, x.body, x.approvedbyasker, x.answered, x.lastedited, x.r_id, x.q_id FROM (" + 
+            sql_getRatedAnswers + " UNION " + sql_getUnratedAnswers + " ORDER BY f DESC) AS x WHERE x.q_id = ?";
+
+    private static final String sql_getPage =
+            "SELECT y.row from (" + sql_getQuestionsAnswers + ") as y where y.a_id = ?";
 
     public Answer() {}
     public Answer(String answer)
@@ -94,12 +116,20 @@ public class Answer implements Model {
     {
         return body;
     }
+/**
+ * Shortened body that fits in search results.
+ * @return answer body up to 64 characters.
+ */
     public String getShortBody()
     {
         if (body.length() <= 64)
             return body.replace("<br>", " ");
         return body.substring(0, 64).replace("<br>", " ");
     }
+/**
+ * Counts rating for the answer.
+ * @return answer's rating.
+ */
     public int getRating()
     {
         QAModel.prepareSQL(sql_countRating, id);
@@ -107,6 +137,10 @@ public class Answer implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Counts flags for the answer.
+ * @return answer's flag count.
+ */
     public int getFlags()
     {
         QAModel.prepareSQL(sql_countFlags, id);
@@ -155,6 +189,7 @@ public class Answer implements Model {
     }
 /**
  * Changes answers rating.
+ * @param rater User that rated the answer. Can be null.
  * @param up if true, rates answer up. Otherwise rate down.
  */
     public void getRated(User rater, boolean up)
@@ -164,6 +199,11 @@ public class Answer implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Undoes rating for the answer
+ * @param rater User that rated the answer. Can be null.
+ * @param up If rater is null, checks if rating was up or down.
+ */
     public void undoRate(User rater, boolean up)
     {
         if (rater == null)
@@ -173,6 +213,11 @@ public class Answer implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Changes existing rater.
+ * @param rater User that rated the answer. Can be null.
+ * @param up Rating's new value.
+ */
     public void changeRate(User rater, boolean up)
     {
         Integer rateId = (rater == null) ? null : rater.getID();
@@ -194,6 +239,11 @@ public class Answer implements Model {
         QAModel.closeComponents();
         return a;
     }
+/**
+ * Gets answer list limited to fit a page. Answers are sorted by flag count
+ * @param page the number of the page, for which the sublist of answers is to be retrieved.
+ * @return sublist of all answers.
+ */
     public static List<Answer> getAnswersSortedByFlags(int page)
     {
         QAModel.prepareSQL(sql_allAnswersByFlags, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
@@ -201,12 +251,19 @@ public class Answer implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Removes answer from database.
+ */
     public void removeFromDatabase()
     {
         QAModel.prepareSQL(sql_removeFromDB, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Counts all answers.
+ * @return number of answers in the database.
+ */
     public static int countAnswers()
     {
         QAModel.prepareSQL(sql_countAnswers);
@@ -214,6 +271,23 @@ public class Answer implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Finds in which page the answer is located.
+ * @return page at which answer is located.
+ */
+    public int getPage()
+    {
+        QAModel.prepareSQL(sql_getPage, question.getID(), id);
+        int result = QAModel.retrieveInt(1);
+        QAModel.closeComponents();
+        result = ((int)Math.floor((result-1)/Tools.elementsPerPage) + 1);
+        return result;
+    }
+/**
+ * Forms an answer object from query results.
+ * @param result query result.
+ * @throws SQLException 
+ */
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("a_id");

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for listing questions for moderator to see.
  * @author Pavel
  */
 public class ListQuestionsServlet extends QAServlet {
@@ -52,7 +52,7 @@ public class ListQuestionsServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for listing questions for moderator to see.";
     }
 
 }

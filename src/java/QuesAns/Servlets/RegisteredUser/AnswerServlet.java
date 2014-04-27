@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for answering question.
  * @author FeisEater
  */
 public class AnswerServlet extends QAServlet {
@@ -71,12 +71,22 @@ public class AnswerServlet extends QAServlet {
             showPage("answer.jsp", request, response);
         }
     }
-
+/**
+ * Checks if site is first visited and there's no form to process.
+ * @param request
+ * @return true if form is not to be processed.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private boolean firstTimeVisiting(HttpServletRequest request)
             throws ServletException, IOException {
         return request.getParameter("answer") == null;
     }
-    
+/**
+ * Finds errors from the posted form.
+ * @param answer answer text
+ * @return list of errors.
+ */
     private List<String> searchForErrors(String answer)
     {
         List<String> errors = new ArrayList<String>();
@@ -97,7 +107,7 @@ public class AnswerServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for answering question.";
     }
 
 }

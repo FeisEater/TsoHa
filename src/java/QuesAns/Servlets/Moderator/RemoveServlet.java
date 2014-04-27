@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet of removing a model object.
  * @author Pavel
  */
 public class RemoveServlet extends QAServlet {
@@ -89,7 +89,13 @@ public class RemoveServlet extends QAServlet {
             setError(Error.invalidUrl, request, response);
         prevPage(request, response);
     }
-
+/**
+ * Redirects to previously saved page.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     private void prevPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.sendRedirect(getPrevURL(request, response));
@@ -101,7 +107,7 @@ public class RemoveServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet of removing a model object.";
     }
 
 }

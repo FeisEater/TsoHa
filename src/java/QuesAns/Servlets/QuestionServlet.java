@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for showing question.
  * @author Pavel
  */
 public class QuestionServlet extends QAServlet {
@@ -55,7 +55,7 @@ public class QuestionServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for showing question.";
     }
 
 }

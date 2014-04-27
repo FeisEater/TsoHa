@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Servlet for registering a user.
  * @author FeisEater
  */
 public class RegisterServlet extends QAServlet {
@@ -59,13 +59,26 @@ public class RegisterServlet extends QAServlet {
             }
         }
     }
-
+/**
+ * Checks if site is first visited and there's no form to process.
+ * @param request
+ * @return true if form is not to be processed.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private boolean firstTimeVisiting(HttpServletRequest request)
             throws ServletException, IOException {
         return request.getParameter("username") == null || request.getParameter("email") == null ||
                 request.getParameter("password") == null || request.getParameter("password2") == null;
     }
-
+/**
+ * Finds errors from the posted form.
+ * @param username User nickname
+ * @param email User email
+ * @param password User password
+ * @param password2 Retyped password
+ * @return list of errors.
+ */
     private List<String> searchForErrors(String username, String email, String password, String password2)
     {
         List<String> errors = new ArrayList<String>();
@@ -111,7 +124,7 @@ public class RegisterServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for registering a user.";
     }
 
 }

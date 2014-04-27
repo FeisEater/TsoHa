@@ -2,7 +2,7 @@
 package QuesAns.utils;
 
 /**
- *
+ * Notification strings in a separate file to make localisation easier.
  * @author FeisEater
  */
 public class Info {
@@ -44,4 +44,14 @@ public class Info {
     {
         return "Tag " + tag + " removed succesfully.";
     }
+    public static final String flagQuestion = "You have notified that this question is inappropriate. Thank you for your concern.";
+    public static final String flagAnswer = "You have notified that this answer is inappropriate. Thank you for your concern.";
+    public static final String flagQuestionUndo = "Your question flag was removed.";
+    public static final String flagAnswerUndo = "You answer flag was removed.";
+    public static String rate(boolean up)
+    {
+        return "The answer was rated " + (up ? "up." : "down.");
+    }
+    public static final String undoRate = "Your rating was undone.";
+
 }

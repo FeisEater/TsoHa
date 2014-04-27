@@ -18,13 +18,13 @@
                     </div>
                     <br>
                         <label for="title" class="control-label">Short title for your question. This text will show up in the search results. A good title fits within one line.</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Question title">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Question title" value="${param.title}">
                     <br>
                         <label for="tags" class="control-label">Add tags to help your question show up in relevant searches. Separate tags with space.</label>
-                        <textarea class="form-control" id="tags" name="tags" spellcheck="false" placeholder="Tags"></textarea>
+                        <textarea class="form-control" id="tags" name="tags" spellcheck="false" placeholder="Tags" value="${param.tags}"></textarea>
                     <br>
                         <label for="body" class="control-label">Write your overall question here.</label>
-                        <textarea class="form-control" id="body" name="body" rows="20" spellcheck="false" placeholder="Question body"></textarea>
+                        <textarea class="form-control" id="body" name="body" rows="20" spellcheck="false" placeholder="Question body" value="${param.body}"></textarea>
                 </form>
                 <br>
                 <br>

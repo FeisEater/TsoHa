@@ -46,22 +46,21 @@ public class Question implements Model {
 
     private static final String sql_removeFromDB =
             "DELETE FROM questions WHERE q_id = ?";
-    
-    private static String sql_getRatedAnswers(boolean pos)
-    {
-            return "select a.a_id, body, approvedbyasker, answered, lastedited, a.r_id, q_id, fa.f "
+
+    private static final String sql_getRatedAnswers
+            = "select a.a_id, body, approvedbyasker, answered, lastedited, a.r_id, q_id, fa.f "
             + "from answers as a, (select a_id, sum(rated) as f from ratedflaggedanswers where flagged = false group by a_id) as fa "
-            + "where a.a_id = fa.a_id and f " + (pos ? ">=" : "<") + " 0";
-    }
+            + "where a.a_id = fa.a_id";
 
     private static final String sql_getUnratedAnswers =
             "select *, 0 as f from answers as a "
             + "where a.a_id not in (select a_id from ratedflaggedanswers where flagged = false)";
-
-    private static String sql_getQuestionsAnswers =
-            "SELECT x.a_id, x.body, x.approvedbyasker, x.answered, x.lastedited, x.r_id, x.q_id FROM (" + 
-            sql_getRatedAnswers(true) + " UNION " + sql_getUnratedAnswers + " UNION " +
-            sql_getRatedAnswers(false) + " ORDER BY f DESC) AS x WHERE x.q_id = ? limit ? offset ?";
+/**
+ * Joins two subqueries, rated and unrated answers.
+ */
+    private static final String sql_getQuestionsAnswers =
+            "SELECT row_number() over () as row, x.a_id, x.body, x.approvedbyasker, x.answered, x.lastedited, x.r_id, x.q_id FROM (" + 
+            sql_getRatedAnswers + " UNION " + sql_getUnratedAnswers + " ORDER BY f DESC) AS x WHERE x.q_id = ? limit ? offset ?";
 
     private static final String sql_getQuestionsTags =
             "SELECT t.t_id, t.tag, t.firsttagged from tagstoquestions as tq, tags as t where q_id = ? and tq.t_id = t.t_id";
@@ -110,6 +109,10 @@ public class Question implements Model {
     {
         return body;
     }
+/**
+ * Counts flags for question.
+ * @return question's flag count.
+ */
     public int getFlags()
     {
         QAModel.prepareSQL(sql_countFlags, id);
@@ -154,8 +157,9 @@ public class Question implements Model {
         QAModel.closeComponents();
     }
 /**
- * Finds all answers for the question.
- * @return List of answers.
+ * Finds all answers for the question limited to fit a page.
+ * @param page The number of the page, for which the sublist of answers is to be retrieved.
+ * @return Sublist of answers.
  */
     public List<Answer> getAnswers(int page)
     {
@@ -176,9 +180,9 @@ public class Question implements Model {
         return result;
     }
 /**
- * Finds all questions.
- * @param order final part of the sql statement, can be used for specifying the order to be listed.
- * @return List of questions
+ * Finds all questions limited to fit a page.
+ * @param page The number of the page, for which the sublist of questions is to be retrieved.
+ * @return Sublist of questions
  */
     public static List<Question> getQuestions(int page)
     {
@@ -203,7 +207,7 @@ public class Question implements Model {
         return q;
     }
 /**
- * Counts the amount of answer for this question.
+ * Counts the amount of answers for this question.
  * @return answer count.
  */
     public int getAnswerCount()
@@ -214,9 +218,10 @@ public class Question implements Model {
         return result;
     }
 /**
- * Finds question that have the specified set of tags.
+ * Finds question that have the specified set of tags limited to fit a page.
  * @param tags set of tags.
- * @return Questions that pass the filter.
+ * @param page The number of the page, for which the sublist of question is to be retrieved.
+ * @return Sublist of questions that pass the filter.
  */
     public static List<Question> getQuestionsByTags(String[] tags, int page)
     {
@@ -230,6 +235,11 @@ public class Question implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Gets questions sorted by flag count limited to fit a page.
+ * @param page The number of the page, for which the sublist of questions is to be retrieved.
+ * @return Sublist of questions sorted by flag count.
+ */
     public static List<Question> getQuestionsSortedByFlags(int page)
     {
         QAModel.prepareSQL(sql_getQuestionsByFlags, Tools.elementsPerPage, (page - 1) * Tools.elementsPerPage);
@@ -237,6 +247,11 @@ public class Question implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Counts questions that include the tag set.
+ * @param tags tag set.
+ * @return question count.
+ */
     public static int countQuestionsByTags(String[] tags)
     {
         if (tags == null)
@@ -247,6 +262,11 @@ public class Question implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Forms a question object from query results.
+ * @param result query result.
+ * @throws SQLException 
+ */
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("q_id");

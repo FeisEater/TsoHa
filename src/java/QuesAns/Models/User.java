@@ -16,7 +16,7 @@ import javax.crypto.spec.PBEKeySpec;
 import org.apache.catalina.util.Base64;
 
 /**
- *
+ * Model class for users database table.
  * @author FeisEater
  */
 public class User implements Model {
@@ -140,6 +140,12 @@ public class User implements Model {
         if (!e.isEmpty())
             email = e;
     }
+/**
+ * Encrypts password by SHA-1 hashing algorithm.
+ * @param password password to be hashed.
+ * @param salt hashing salt.
+ * @return byte array of encrypted password.
+ */
     private static byte[] encryptPassword(String password, byte[] salt)
     {
         try {
@@ -153,6 +159,10 @@ public class User implements Model {
         }
         return null;
     }
+/**
+ * Gets new salt.
+ * @return 16 random bytes.
+ */
     private static byte[] newSalt()
     {
         Random random = new Random();
@@ -162,6 +172,7 @@ public class User implements Model {
     }
 /**
  * Adds a User to the database.
+ * @param password Registering user's password.
  */
     public void register(String password)
     {
@@ -181,6 +192,10 @@ public class User implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Changes user's password.
+ * @param password new password.
+ */
     public void changePassword(String password)
     {
         byte[] salt = newSalt();
@@ -188,6 +203,10 @@ public class User implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Sets avatar for user.
+ * @param avatar byte array of the picture file.
+ */
     public void setAvatar(byte[] avatar)
     {
         QAModel.prepareSQL(sql_setAvatar, avatar, id);
@@ -195,7 +214,8 @@ public class User implements Model {
         QAModel.closeComponents();
     }
 /**
- * Finds all questions asked by this user.
+ * Finds all questions asked by this user limited to fit a page.
+ * @param page The number of the page, for which the sublist of questions is to be retrieved.
  * @return List of Questions.
  */
     public List<Question> getQuestions(int page)
@@ -206,7 +226,8 @@ public class User implements Model {
         return result;
     }
 /**
- * Finds all answers made by this user.
+ * Finds all answers made by this user limited to fit a page.
+ * @param page The number of the page, for which the sublist of answers is to be retrieved.
  * @return List of Answers.
  */
     public List<Answer> getAnswers(int page)
@@ -217,7 +238,8 @@ public class User implements Model {
         return result;
     }
 /**
- * Finds all users.
+ * Finds all users limited to fit a page.
+ * @param page The number of the page, for which the sublist of users is to be retrieved.
  * @return List of Users.
  */
     public static List<User> getUsers(int page)
@@ -258,6 +280,10 @@ public class User implements Model {
         QAModel.closeComponents();
         return u;
     }
+/**
+ * User's avatar.
+ * @return Picture file encoded in base 64 to put directly into html.
+ */
     public String getAvatar()
     {
         QAModel.prepareSQL(sql_getAvatar, id);
@@ -266,6 +292,9 @@ public class User implements Model {
         if (bytearray == null)  return null;
         return new String(Base64.encode(bytearray));
     }
+/**
+ * Removes user from database.
+ */
     public void removeFromDatabase()
     {
         QAModel.prepareSQL(sql_notifyQuestionsAboutBan, id);
@@ -274,6 +303,10 @@ public class User implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Counts answers made by the user.
+ * @return answer count.
+ */
     public int getAnscount()
     {
         QAModel.prepareSQL(sql_countAnswers, id);
@@ -281,6 +314,10 @@ public class User implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Counts questions made by the user.
+ * @return question count.
+ */
     public int getQuescount()
     {
         QAModel.prepareSQL(sql_countQuestions, id);
@@ -289,7 +326,8 @@ public class User implements Model {
         return result;
     }
 /**
- * Adds answer's flag count by one.
+ * Flag answer.
+ * @param ans answer to be flagged.
  */
     public void addFlagToAnswer(Answer ans)
     {
@@ -297,12 +335,21 @@ public class User implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Unflag answer.
+ * @param ans answer to be unflagged.
+ */
     public void removeFlagFromAnswer(Answer ans)
     {
         QAModel.prepareSQL(sql_undoAnswerFlag, id, ans.getID());
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Checks if user has rated the answer
+ * @param ans answer that is checked.
+ * @return true if user has rated answer.
+ */
     public boolean hasRated(Answer ans)
     {
         QAModel.prepareSQL(sql_hasRated, id, ans.getID());
@@ -310,6 +357,11 @@ public class User implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Checks if user has flagged the answer
+ * @param ans answer that is checked.
+ * @return true if user has flagged answer.
+ */
     public boolean hasFlaggedAnswer(Answer ans)
     {
         QAModel.prepareSQL(sql_hasFlaggedAnswer, id, ans.getID());
@@ -318,7 +370,8 @@ public class User implements Model {
         return result;
     }
 /**
- * Adds question's flag count by one.
+ * Flags question.
+ * @param ques question to be flagged.
  */
     public void addFlagToQuestion(Question ques)
     {
@@ -326,12 +379,21 @@ public class User implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Unflag question.
+ * @param ques question to be unflagged.
+ */
     public void removeFlagFromQuestion(Question ques)
     {
         QAModel.prepareSQL(sql_undoQuestionFlag, id, ques.getID());
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Checks if user has flagged the question.
+ * @param ques question that is checked.
+ * @return true if user has flagged question.
+ */
     public boolean hasFlaggedQuestion(Question ques)
     {
         QAModel.prepareSQL(sql_hasFlaggedQuestion, id, ques.getID());
@@ -339,6 +401,10 @@ public class User implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Checks if this user still exists in the database.
+ * @return true if user still exists.
+ */
     public boolean stillExists()
     {
         QAModel.prepareSQL(sql_userExists, id);
@@ -346,6 +412,10 @@ public class User implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Counts all users in the database.
+ * @return user count.
+ */
     public static int countUsers()
     {
         QAModel.prepareSQL(sql_countUsers);
@@ -353,6 +423,11 @@ public class User implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Forms a user object from query results.
+ * @param result query result.
+ * @throws SQLException 
+ */
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("r_id");

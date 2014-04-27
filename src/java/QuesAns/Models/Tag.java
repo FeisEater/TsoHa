@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- *
+ * Model class for tags database table.
  * @author Pavel
  */
 public class Tag implements Model {
@@ -76,6 +76,10 @@ public class Tag implements Model {
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
+/**
+ * Gets list of all tags.
+ * @return all tags in the database.
+ */
     public static List<Tag> getAllTags()
     {
         QAModel.prepareSQL(sql_getAllTags);
@@ -83,13 +87,20 @@ public class Tag implements Model {
         QAModel.closeComponents();
         return result;
     }
+/**
+ * Removes tag from the database.
+ */
     public void removeFromDatabase()
     {
         QAModel.prepareSQL(sql_removeFromDB, id);
         QAModel.executeUpdate();
         QAModel.closeComponents();
     }
-
+/**
+ * Forms a tag object from query results.
+ * @param result query result.
+ * @throws SQLException 
+ */
     public void getObjectFromResults(ResultSet result) throws SQLException
     {
         id = result.getInt("t_id");

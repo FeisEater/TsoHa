@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for listing tags for moderator to see.
  * @author FeisEater
  */
 public class ListTagsServlet extends QAServlet {
@@ -46,7 +46,13 @@ public class ListTagsServlet extends QAServlet {
         request.setAttribute("taglist6", subList(tags, 5*colheight, tags.size()));
         showPage("modtags.jsp", request, response);
     }
-
+/**
+ * Same as List.subList(begin, end), except it is 'out of bounds'-proof.
+ * @param tags List of tags.
+ * @param begin beginning index.
+ * @param end ending index
+ * @return sublist.
+ */
     private List<Tag> subList(List<Tag> tags, int begin, int end)
     {
         if (begin >= tags.size())   return null;
@@ -60,7 +66,7 @@ public class ListTagsServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for listing tags for moderator to see.";
     }
 
 }

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for listing users for moderator to see.
  * @author FeisEater
  */
 public class ListUsersServlet extends QAServlet {
@@ -51,7 +51,7 @@ public class ListUsersServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for listing users for moderator to see.";
     }
 
 }

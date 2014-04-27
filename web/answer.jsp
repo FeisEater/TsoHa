@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <t:base pageTitle="Answer to ${objectFromID.title}">
     <div class="container">
         <div class="row" style="background-color:#FFDDFF">
@@ -20,15 +22,17 @@
                     <img src="data:image/jpg;base64,${avatar}" alt="avatar" class="avatar" height="128" width="128" align="right">
                 </c:if>
                 <div class="caption">
-                    <a href="accquestions" type="button" class="btn btn-link text-left">${objectFromID.asker.name}</a>
+                    <label>${objectFromID.asker.name}</label>
                 </div>
             </div>
             <div class="col-md-offset-1 col-md-10">
                 <h1>${objectFromID.title}</h1>
             </div>
-            <div class="col-md-12">
-                <div class="well">${objectFromID.body}</div>
-            </div>
+            <c:if test="${fn:length(objectFromID.body) > 0}">
+                <div class="col-md-12">
+                    <div class="well">${objectFromID.body}</div>
+                </div>
+            </c:if>
             <form class="form-horizontal" role="form" action="answer?id=${objectFromID.ID}" method="POST">
                 <div class="col-md-12" style="background-color:#FFFFFF">
                     <div class="col-md-12"><br></div>
@@ -36,7 +40,7 @@
                         <button type="submit" class="btn btn-primary btn-lg">Post answer</button>
                     </div>
                     <label for="answer" class="control-label">Write your answer here.</label>
-                    <textarea class="form-control" id="answer" name="answer" rows="20" spellcheck="false" placeholder="Your answer"></textarea>
+                    <textarea class="form-control" id="answer" name="answer" rows="20" spellcheck="false" placeholder="Your answer" value="${param.answer}"></textarea>
                 </div>
             </form>
         </div>

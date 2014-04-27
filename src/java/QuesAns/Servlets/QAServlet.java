@@ -89,6 +89,7 @@ public abstract class QAServlet extends HttpServlet {
  * Gets the previously stored url.
  * @param request
  * @param response
+ * @param checkRedirectLoop if true, will check if redirection may cause a loop. If so, redirects to main page.
  * @return String of the previously stored URL. If none was stored, return index.
  * @throws ServletException
  * @throws IOException 
@@ -106,12 +107,20 @@ public abstract class QAServlet extends HttpServlet {
         }
         return prevURL;
     }
+
     protected String getPrevURL(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         return getPrevURL(request, response, false);
     }
-    
+/**
+ * Shows notification.
+ * @param notify notification string.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     protected void setNotification(String notify, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
@@ -120,14 +129,28 @@ public abstract class QAServlet extends HttpServlet {
         infos.add(notify);
         session.setAttribute("infos", infos);
     }
-    
+/**
+ * Shows set of notifications.
+ * @param infos list of notification.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     protected void setNotifications(List<String> infos, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
         session.setAttribute("infos", infos);
     }
-
+/**
+ * Shows error text.
+ * @param error error text.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     protected void setError(String error, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
@@ -136,14 +159,25 @@ public abstract class QAServlet extends HttpServlet {
         errors.add(error);
         session.setAttribute("errors", errors);
     }
-
+/**
+ * Shows set of errors.
+ * @param errors list of errors.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     protected void setErrors(List<String> errors, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         HttpSession session = request.getSession();
         session.setAttribute("errors", errors);
     }
-
+/**
+ * Gets a map of answers rated anonymously.
+ * @param session
+ * @return map of answers, whether they were rated up or down.
+ */
     protected Map<Answer, Boolean> getRatedAnswers(HttpSession session)
     {
         Map<Answer, Boolean> rated = (Map<Answer, Boolean>)session.getAttribute("rated");
@@ -151,6 +185,13 @@ public abstract class QAServlet extends HttpServlet {
             return new HashMap<Answer, Boolean>();
         return rated;
     }
+/**
+ * Main code for the servlet.
+ * @param request
+ * @param response
+ * @throws ServletException
+ * @throws IOException 
+ */
     protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException;
     

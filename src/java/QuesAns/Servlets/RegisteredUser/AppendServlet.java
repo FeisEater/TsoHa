@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for appending answer.
  * @author FeisEater
  */
 public class AppendServlet extends QAServlet {
@@ -75,12 +75,22 @@ public class AppendServlet extends QAServlet {
             showPage("append.jsp", request, response);
         }
     }
-
+/**
+ * Checks if site is first visited and there's no form to process.
+ * @param request
+ * @return true if form is not to be processed.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private boolean firstTimeVisiting(HttpServletRequest request)
             throws ServletException, IOException {
         return request.getParameter("answer") == null;
     }
-
+/**
+ * Finds errors from the posted form.
+ * @param answer answer text
+ * @return list of errors.
+ */
     private List<String> searchForErrors(String append)
     {
         List<String> errors = new ArrayList<String>();
@@ -102,7 +112,7 @@ public class AppendServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for appending answer.";
     }
 
 }

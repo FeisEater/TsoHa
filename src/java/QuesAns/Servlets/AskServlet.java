@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Servlet for asking a question.
  * @author FeisEater
  */
 public class AskServlet extends QAServlet {
@@ -59,13 +59,25 @@ public class AskServlet extends QAServlet {
             }
         }
     }
-    
+/**
+ * Checks if site is first visited and there's no form to process.
+ * @param request
+ * @return true if form is not to be processed.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private boolean firstTimeVisiting(HttpServletRequest request)
             throws ServletException, IOException {
         return request.getParameter("title") == null || request.getParameter("body") == null ||
                 request.getParameter("tags") == null;
     }
-
+/**
+ * Extracts tag array from string.
+ * @param request
+ * @return tag array.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private String[] extractTags(HttpServletRequest request)
             throws ServletException, IOException {
         String tagline = request.getParameter("tags").toLowerCase();
@@ -74,7 +86,13 @@ public class AskServlet extends QAServlet {
             tags = tagline.split(" ");
         return tags;
     }
-    
+/**
+ * Finds errors from the posted form.
+ * @param title question title
+ * @param body question body
+ * @param tags question tags
+ * @return list of errors.
+ */
     private List<String> searchForErrors(String title, String body, String[] tags)
     {
         List<String> result = new ArrayList<String>();
@@ -95,7 +113,7 @@ public class AskServlet extends QAServlet {
             for (String tag : tags)
             {
                 if (tag.length() > 12)
-                    result.add(Error.quesTagTooLong(tag.substring(0, 32)));
+                    result.add(Error.quesTagTooLong(tag.substring(0, 12)));
                 else
                 {
                     String accepted = Tools.lowerCaseLetters + Tools.numbers + "_";
@@ -113,7 +131,7 @@ public class AskServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for asking a question.";
     }
     
 }

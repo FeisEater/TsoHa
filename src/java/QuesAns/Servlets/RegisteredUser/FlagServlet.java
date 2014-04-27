@@ -6,6 +6,7 @@ import QuesAns.Models.Question;
 import QuesAns.Models.User;
 import QuesAns.Servlets.QAServlet;
 import QuesAns.utils.Error;
+import QuesAns.utils.Info;
 import QuesAns.utils.Tools;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Servlet for flagging a question or answer.
  * @author Pavel
  */
 public class FlagServlet extends QAServlet {
@@ -50,9 +51,15 @@ public class FlagServlet extends QAServlet {
             else
             {
                 if (loggedIn.hasFlaggedQuestion(q))
+                {
                     loggedIn.removeFlagFromQuestion(q);
+                    setNotification(Info.flagQuestionUndo, request, response);
+                }
                 else
+                {
                     loggedIn.addFlagToQuestion(q);
+                    setNotification(Info.flagQuestion, request, response);
+                }
             }
         }
         else if (typeParam.equals("ans"))
@@ -63,9 +70,15 @@ public class FlagServlet extends QAServlet {
             else
             {
                 if (loggedIn.hasFlaggedAnswer(a))
+                {
                     loggedIn.removeFlagFromAnswer(a);
+                    setNotification(Info.flagAnswerUndo, request, response);
+                }
                 else
+                {
                     loggedIn.addFlagToAnswer(a);
+                    setNotification(Info.flagAnswer, request, response);
+                }
             }
         }
         else
@@ -80,7 +93,7 @@ public class FlagServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for flagging a question or answer.";
     }
 
 }

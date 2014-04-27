@@ -14,7 +14,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
- *
+ * Class for managing connections with database and queries.
  * @author Pavel
  */
 public class QAModel {
@@ -22,6 +22,9 @@ public class QAModel {
     private static PreparedStatement ps;
     private static Result result = new Result();
     private static boolean resultRetrieved;
+/**
+ * Stack of query results.
+ */
     private static class Result {
         private Stack<ResultSet> results;
         private Result()
@@ -78,7 +81,11 @@ public class QAModel {
             System.out.println(e);
         }
     }
-
+/**
+ * Prepares injection-proof query.
+ * @param sql query string.
+ * @param param parameters to be inserted to the string.
+ */
     public static void prepareSQL(String sql, Object... param)
     {
         try {
@@ -91,6 +98,9 @@ public class QAModel {
             System.out.println(ex);
         }
     }
+/**
+ * Executes an update for query.
+ */
     public static void executeUpdate()
     {
         try {
@@ -99,7 +109,11 @@ public class QAModel {
             System.out.println(ex);
         }
     }
-
+/**
+ * Executes query to access results.
+ * @return query returned results.
+ * @throws SQLException 
+ */
     private static boolean getResult() throws SQLException
     {
         if (resultRetrieved)
@@ -111,6 +125,11 @@ public class QAModel {
         resultRetrieved = true;
         return true;
     }
+/**
+ * Retrieves integer from result.
+ * @param index index of result.
+ * @return integer
+ */
     public static int retrieveInt(int index)
     {
         try {
@@ -121,6 +140,11 @@ public class QAModel {
         }
         return -1;
     }
+/**
+ * Retrieves string from result.
+ * @param index index of result.
+ * @return string
+ */
     public static String retrieveString(int index)
     {
         try {
@@ -131,6 +155,11 @@ public class QAModel {
         }
         return null;
     }
+/**
+ * Retrieves timestamp from result.
+ * @param index index of result.
+ * @return timestamp
+ */
     public static Timestamp retrieveTimestamp(int index)
     {
         try {
@@ -141,6 +170,11 @@ public class QAModel {
         }
         return null;
     }
+/**
+ * Retrieves byte array from result.
+ * @param index index of result.
+ * @return byte array
+ */
     public static byte[] retrieveByteArray(int index)
     {
         try {
@@ -151,6 +185,11 @@ public class QAModel {
         }
         return null;
     }
+/**
+ * Retrieves a single model object from result.
+ * @param m model object to access correct class.
+ * @return model object.
+ */
     public static boolean retrieveSingleObject(Model m)
     {
         try {
@@ -163,6 +202,11 @@ public class QAModel {
         }
         return false;
     }
+/**
+ * Retrieves a model object list from results.
+ * @param m model object to access correct class.
+ * @return model object list.
+ */
     public static List<Model> retrieveObjectList(Model m)
     {
         List<Model> list = new ArrayList<Model>();
@@ -179,6 +223,10 @@ public class QAModel {
         }
         return list;
     }
+/**
+ * Checks if query returned any result.
+ * @return query returned even one result.
+ */
     public static boolean resultFound()
     {
         try {

@@ -20,7 +20,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 
 /**
- *
+ * Servlet for changing user settings.
  * @author FeisEater
  */
 public class SettingsServlet extends QAServlet {
@@ -53,7 +53,6 @@ public class SettingsServlet extends QAServlet {
 
         String password = "";
         String password2 = "";
-        byte[] avatar = null;
         List<String> errors = new ArrayList<String>();
         List<String> infos = new ArrayList<String>();
         List<FileItem> items = getItems(request, errors);
@@ -63,76 +62,56 @@ public class SettingsServlet extends QAServlet {
             response.sendRedirect("accsettings");
             return;
         }
+        
         for (FileItem item : items)
         {
             if (item.isFormField())
             {
                 if (item.getFieldName().equals("username") && !item.getString().isEmpty())
-                {
-                    String username = item.getString();
-                    List<String> e = searchForUsernameErrors(username);
-                    errors.addAll(e);
-                    if (e.isEmpty())
-                    {
-                        infos.add(Info.nameChanged(username));
-                        loggedIn.setName(username);
-                    }
-                }
+                    changeName(loggedIn, item, errors, infos);
                 if (item.getFieldName().equals("email") && !item.getString().isEmpty())
-                {
-                    String email = item.getString();
-                    List<String> e = searchForEmailErrors(email);
-                    errors.addAll(e);
-                    if (e.isEmpty())
-                    {
-                        infos.add(Info.emailChanged(email));
-                        loggedIn.setEmail(email);
-                    }
-                }
+                    changeEmail(loggedIn, item, errors, infos);
                 if (item.getFieldName().equals("password"))
                     password = item.getString();
                 if (item.getFieldName().equals("password2"))
                     password2 = item.getString();
             }
             else
-            {
-                List<String> e = searchForAvatarErrors(item);
-                errors.addAll(e);
-                if (e.isEmpty())
-                {
-                    avatar = item.get();
-                    if (avatarChanged(avatar))
-                        infos.add(Info.avatarChanged);
-                }
-            }
+                changeAvatar(loggedIn, item, errors, infos);
         }
         if (!password.isEmpty())
-        {
-            List<String> e = searchForPasswordErrors(password, password2);
-            errors.addAll(e);
-            if (e.isEmpty())
-            {
-                loggedIn.changePassword(password);
-                infos.add(Info.passwordChanged);
-            }
-        }
+            changePassword(loggedIn, password, password2, errors, infos);
+        
         if (!errors.isEmpty())
             setErrors(errors, request, response);
         if (!infos.isEmpty())
             setNotifications(infos, request, response);
         loggedIn.changeSettings();
-        if (avatarChanged(avatar))    loggedIn.setAvatar(avatar);
+        
         if (errors.isEmpty())
             response.sendRedirect("accquestions");
         else
             showPage("accsettings.jsp", request, response);
     }
-
+/**
+ * Checks if site is first visited and there's no form to process.
+ * @param request
+ * @return true if form is not to be processed.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private boolean firstTimeVisiting(HttpServletRequest request)
             throws ServletException, IOException {
         return !ServletFileUpload.isMultipartContent(request);
     }
-
+/**
+ * Retrieves all form items in the page.
+ * @param request
+ * @param errors error list.
+ * @return form item list.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private List<FileItem> getItems(HttpServletRequest request, List<String> errors)
             throws ServletException, IOException {
         FileItemFactory factory = new DiskFileItemFactory();
@@ -148,12 +127,94 @@ public class SettingsServlet extends QAServlet {
             return null;
         }
     }
-    
+/**
+ * Checks if avatar was changed.
+ * @param avatar byte array of picture file.
+ * @return true if avatar was changed.
+ */
     private boolean avatarChanged(byte[] avatar)
     {
         return avatar != null && avatar.length > 0;
     }
-    
+/**
+ * Changes username.
+ * @param loggedIn logged in user.
+ * @param item form item.
+ * @param errors error list.
+ * @param infos info list.
+ */
+    private void changeName(User loggedIn, FileItem item, List<String> errors, List<String> infos)
+    {
+        String username = item.getString();
+        List<String> e = searchForUsernameErrors(username);
+        errors.addAll(e);
+        if (e.isEmpty())
+        {
+            infos.add(Info.nameChanged(username));
+            loggedIn.setName(username);
+        }
+    }
+/**
+ * Changes email.
+ * @param loggedIn logged in user.
+ * @param item form item.
+ * @param errors error list.
+ * @param infos info list.
+ */
+    private void changeEmail(User loggedIn, FileItem item, List<String> errors, List<String> infos)
+    {
+        String email = item.getString();
+        List<String> e = searchForEmailErrors(email);
+        errors.addAll(e);
+        if (e.isEmpty())
+        {
+            infos.add(Info.emailChanged(email));
+            loggedIn.setEmail(email);
+        }
+    }
+/**
+ * Changes avatar.
+ * @param loggedIn logged in user.
+ * @param item form item.
+ * @param errors error list.
+ * @param infos info list.
+ */
+    private void changeAvatar(User loggedIn, FileItem item, List<String> errors, List<String> infos)
+    {
+        List<String> e = searchForAvatarErrors(item);
+        errors.addAll(e);
+        if (e.isEmpty())
+        {
+            if (avatarChanged(item.get()))
+            {
+                loggedIn.setAvatar(item.get());
+                infos.add(Info.avatarChanged);
+            }
+        }
+    }
+/**
+ * Changes password.
+ * @param loggedIn logged in user.
+ * @param password password string.
+ * @param password2 retyped password.
+ * @param errors error list.
+ * @param infos info list.
+ */
+    private void changePassword(User loggedIn, String password, String password2, List<String> errors, List<String> infos)
+    {
+        List<String> e = searchForPasswordErrors(password, password2);
+        errors.addAll(e);
+        if (e.isEmpty())
+        {
+            loggedIn.changePassword(password);
+            infos.add(Info.passwordChanged);
+        }
+    }
+/**
+ * Searches errors from username string.
+ * @param username username string.
+ * @return list of errors.
+ */
     private List<String> searchForUsernameErrors(String username)
     {
         List<String> errors = new ArrayList<String>();
@@ -169,6 +230,11 @@ public class SettingsServlet extends QAServlet {
         }
         return errors;
     }
+/**
+ * Searches errors from email string.
+ * @param email email string.
+ * @return list of errors.
+ */
     private List<String> searchForEmailErrors(String email)
     {
         List<String> errors = new ArrayList<String>();
@@ -185,6 +251,12 @@ public class SettingsServlet extends QAServlet {
         }
         return errors;
     }
+/**
+ * Searches errors from password strings.
+ * @param password password string.
+ * @param password2 retyped password.
+ * @return list of errors.
+ */
     private List<String> searchForPasswordErrors(String password, String password2)
     {
         List<String> errors = new ArrayList<String>();
@@ -202,6 +274,11 @@ public class SettingsServlet extends QAServlet {
         }
         return errors;
     }
+/**
+ * Searches errors from avatar byte array.
+ * @param item avatar file.
+ * @return list of errors.
+ */
     private List<String> searchForAvatarErrors(FileItem item)
     {
         List<String> errors = new ArrayList<String>();
@@ -217,7 +294,7 @@ public class SettingsServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for changing user settings.";
     }
 
 }

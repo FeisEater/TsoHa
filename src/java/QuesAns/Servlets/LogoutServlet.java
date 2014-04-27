@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Servlet for logging out.
  * @author FeisEater
  */
 public class LogoutServlet extends QAServlet {
@@ -39,7 +39,7 @@ public class LogoutServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for logging out.";
     }
 
 }

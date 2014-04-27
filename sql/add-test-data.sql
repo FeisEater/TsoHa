@@ -1,3 +1,4 @@
+-- Deprecated. Please use app itself to add test-data.
 INSERT INTO regusers VALUES (
     DEFAULT,
     'FeisEater',

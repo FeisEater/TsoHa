@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * Main page, where questions are listed.
  * @author FeisEater
  */
 public class ListServlet extends QAServlet {
@@ -43,7 +43,14 @@ public class ListServlet extends QAServlet {
         request.setAttribute("size", Question.countQuestionsByTags(tagParam));
         showPage("index.jsp", request, response);
     }
-
+/**
+ * Takes tags parameter and extracts tag array.
+ * @param request
+ * @param response
+ * @return tag array
+ * @throws ServletException
+ * @throws IOException 
+ */
     private String[] getSearchTerms(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String tagString = request.getParameter("tags");
@@ -59,7 +66,11 @@ public class ListServlet extends QAServlet {
         }
         return tagString.split(" ");
     }
-    
+/**
+ * Finds errors from the posted form.
+ * @param search search terms
+ * @return list of errors.
+ */
     private List<String> searchForErrors(String search)
     {
         List<String> errors = new ArrayList<String>();
@@ -73,7 +84,7 @@ public class ListServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Main page, where questions are listed.";
     }
 
 }

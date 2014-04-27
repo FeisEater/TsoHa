@@ -14,13 +14,13 @@
             <div class="form-group">
                 <label for="inputNick" class="col-md-2 control-label">User Name</label>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" id="inputNick" name="username" placeholder="User Name">
+                    <input type="text" class="form-control" id="inputNick" name="username" placeholder="User Name" value="${param.username}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputEmail" class="col-md-2 control-label">E-mail</label>
                 <div class="col-md-8">
-                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email">
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email" value="${param.email}">
                 </div>
             </div>
             <div class="form-group">

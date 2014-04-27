@@ -7,6 +7,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <t:base pageTitle="Append answer">
     <div class="container">
         <div class="row" style="background-color:#FFDDFF">
@@ -20,15 +22,17 @@
                     <img src="data:image/jpg;base64,${avatar}" alt="avatar" class="avatar" height="128" width="128" align="right">
                 </c:if>
                 <div class="caption">
-                    <a href="accquestions" type="button" class="btn btn-link text-left">${objectFromID.question.asker.name}</a>
+                    <label>${objectFromID.answerer.name}</label>
                 </div>
             </div>
             <div class="col-md-offset-1 col-md-10">
                 <h1>${objectFromID.question.title}</h1>
             </div>
-            <div class="col-md-12">
-                <div class="well">${objectFromID.question.body}</div>
-            </div>
+            <c:if test="${fn:length(objectFromID.question.body) > 0}">
+                <div class="col-md-12">
+                    <div class="well">${objectFromID.question.body}</div>
+                </div>
+            </c:if>
             <form class="form-horizontal" role="form" action="append?id=${objectFromID.ID}" method="POST">
                 <div class="col-md-12" style="background-color:#FFFFFF">
                     <div class="col-md-12"><br></div>
@@ -38,7 +42,7 @@
                     <label for="original" class="control-label">Your answer in original form.</label>
                     <div class="well" id="original">${objectFromID.body}</div>
                     <label for="answer" class="control-label">Write stuff you wish to add.</label>
-                    <textarea class="form-control" id="answer" name="answer" rows="20" spellcheck="false" placeholder="Added stuff (Don't worry about writing a date for the update)."></textarea>
+                    <textarea class="form-control" id="answer" name="answer" rows="20" spellcheck="false" placeholder="Added stuff (Don't worry about writing a date for the update)." value="${param.answer}"></textarea>
                 </div>
             </form>
         </div>

@@ -4,6 +4,7 @@ package QuesAns.Servlets;
 import QuesAns.Models.Answer;
 import QuesAns.Models.User;
 import QuesAns.utils.Error;
+import QuesAns.utils.Info;
 import QuesAns.utils.Tools;
 import java.io.IOException;
 import java.util.Map;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Servlet for rating an answer.
  * @author FeisEater
  */
 public class RateServlet extends QAServlet {
@@ -48,20 +49,28 @@ public class RateServlet extends QAServlet {
             {
                 a.undoRate(null, rated.get(a));
                 rated.remove(a);
+                setNotification(Info.undoRate, request, response);
             }
             else
             {
                 a.getRated(null, !typeParam.equals("f"));
                 rated.put(a, !typeParam.equals("f"));
+                setNotification(Info.rate(!typeParam.equals("f")), request, response);
             }
             session.setAttribute("rated", rated);
             response.sendRedirect(getPrevURL(request, response));
             return;
         }
         if (loggedIn.hasRated(a))
+        {
             a.undoRate(loggedIn, !typeParam.equals("f"));
+            setNotification(Info.undoRate, request, response);
+        }
         else
+        {
             a.getRated(loggedIn, !typeParam.equals("f"));
+            setNotification(Info.rate(!typeParam.equals("f")), request, response);
+        }
         response.sendRedirect(getPrevURL(request, response));
     }
 
@@ -72,7 +81,7 @@ public class RateServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for rating an answer.";
     }
 
 }

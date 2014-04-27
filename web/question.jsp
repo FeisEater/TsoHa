@@ -32,7 +32,7 @@
                             </c:if>
                         </c:if>
                         <c:if test="${objectFromID.asker != null}">
-                            <a href="accquestions" type="button" class="btn btn-link text-left">${objectFromID.asker.name}</a>
+                            <label>${objectFromID.asker.name}</label>
                         </c:if>
                         <c:if test="${loggedIn.moderator == true}">
                             <a href="modremove?type=user&id=${objectFromID.asker.ID}" type="button" class="btn btn-xs btn-danger">
@@ -82,7 +82,7 @@
                                                 <label><i><font color="red">Banned</font></i></label>
                                             </c:if>
                                             <c:if test="${unit.answerer != null}">
-                                                <a href="accquestions" type="button" class="btn btn-link text-left">${unit.answerer.name}</a>
+                                                <label>${unit.answerer.name}</label>
                                             </c:if>
                                             <c:if test="${loggedIn.moderator == true}">
                                                 <a href="modremove?type=user&id=${unit.ID}" type="button" class="btn btn-xs btn-danger">

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Servlet for logging in.
  * @author FeisEater
  */
 public class LoginServlet extends QAServlet {
@@ -51,7 +51,13 @@ public class LoginServlet extends QAServlet {
             }
         }
     }
-
+/**
+ * Checks if site is first visited and there's no form to process.
+ * @param request
+ * @return true if form is not to be processed.
+ * @throws ServletException
+ * @throws IOException 
+ */
     private boolean firstTimeVisiting(HttpServletRequest request)
             throws ServletException, IOException {
         return request.getParameter("username") == null || request.getParameter("password") == null;
@@ -64,7 +70,7 @@ public class LoginServlet extends QAServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for logging in.";
     }
 
 }
